@@ -11,70 +11,81 @@ import me.yushi.inventorymanagementsystem.Dto.IInventoryTransactionDto;
  *
  * @author yushi
  */
-public class InventoryTransaction implements IInventoryTransaction{
+public class InventoryTransaction implements IInventoryTransaction {
+
     private int transactionID;
     private int productID;
     private int quantity;
     private Date date;
-    private TransactionType TransactionType;
-    public InventoryTransaction(IInventoryTransactionDto inventoryTransactionDto){
-        this.transactionID=inventoryTransactionDto.getProductID();
-        this.productID=inventoryTransactionDto.getProductID();
-        this.quantity=inventoryTransactionDto.getProductID();
-        this.date=inventoryTransactionDto.getDate();
-        this.TransactionType=inventoryTransactionDto.getTransactionType();
-        
+    private TransactionType transactionType;
+
+    public InventoryTransaction(IInventoryTransactionDto inventoryTransactionDto) {
+        this.transactionID = inventoryTransactionDto.getTransactionID();
+        this.productID = inventoryTransactionDto.getProductID();
+        this.quantity = inventoryTransactionDto.getQuantity();
+        this.date = inventoryTransactionDto.getDate();
+        this.transactionType = IInventoryTransaction.TransactionType
+                .valueOf(inventoryTransactionDto.getTransactionType().name());
+
     }
 
-
-    @Override;
+    @Override
     public int getTransactionID() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.transactionID;
+        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void setTransactionID(int transctionID) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        this.transactionID = transctionID;
+        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public int getProductID() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.productID;
     }
 
     @Override
     public void setProductID(int productID) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        this.productID = productID;
+        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public int getQuantity() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.quantity;
+        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void setQuantity(int quantity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        this.quantity = quantity;
+        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public Date getDate() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.date;
+        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void setDate(Date date) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        this.date = date;
+        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public TransactionType getTransactionType() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.transactionType;
+        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void setTransactionType(TransactionType type) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
+        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
 }

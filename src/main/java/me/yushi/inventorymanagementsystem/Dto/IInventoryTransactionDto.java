@@ -21,7 +21,7 @@ public interface IInventoryTransactionDto {
 
     TransactionType getTransactionType();
 
-    enum TransactionType{
+    enum TransactionType {
         PURCHASE,
         SALE,
         SPOILAGE

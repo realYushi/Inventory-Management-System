@@ -12,21 +12,26 @@ import java.util.Date;
  */
 public interface IInventoryTransaction {
     int getTransactionID();
+
     void setTransactionID(int transctionID);
 
     int getProductID();
+
     void setProductID(int productID);
 
     int getQuantity();
+
     void setQuantity(int quantity);
 
     Date getDate();
+
     void setDate(Date date);
 
     TransactionType getTransactionType();
-    void setTransactionType(TransactionType type); 
 
-    enum TransactionType{
+    void setTransactionType(TransactionType type);
+
+    enum TransactionType {
         PURCHASE,
         SALE,
         SPOILAGE
