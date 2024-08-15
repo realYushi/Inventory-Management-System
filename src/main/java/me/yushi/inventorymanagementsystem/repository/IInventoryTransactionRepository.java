@@ -18,4 +18,5 @@ public interface IInventoryTransactionRepository {
     boolean deleteInventoryTransaction(int inventoryTransationID); 
 
     List<IInventoryTransaction> getAllInventoryTransations();
+    boolean setUp();
 }

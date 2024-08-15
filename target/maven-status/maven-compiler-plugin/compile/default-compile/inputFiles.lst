@@ -1,11 +1,13 @@
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/Dto/ProductDto.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/Dto/IInventoryTransactionDto.java
+/Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/repository/FileHandler.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/contoller/ISupplierController.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/Dto/ISupplierDto.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/Dto/InventorySummaryDto.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/repository/IInventoryTransactionRepository.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/repository/IProductRepository.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/model/IInventorySummary.java
+/Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/repository/IFileHandler.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/model/ISupplier.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/model/IFinancialSummary.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/model/Product.java

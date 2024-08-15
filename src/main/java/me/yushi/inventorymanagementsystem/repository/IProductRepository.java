@@ -18,4 +18,5 @@ public interface IProductRepository {
     boolean deleteProduct(int productID);
 
     List<IProduct> getAllProducts();
+    boolean setUp();
 }

@@ -3,4 +3,5 @@
 /Users/yushi/Dev/inventoryManagementSystem/src/test/java/me/yushi/inventorymanagementsystem/model/InventoryTransactionTest.java
 /Users/yushi/Dev/inventoryManagementSystem/src/test/java/me/yushi/inventorymanagementsystem/model/ProductTest.java
 /Users/yushi/Dev/inventoryManagementSystem/src/test/java/me/yushi/inventorymanagementsystem/model/InventorySummaryTest.java
+/Users/yushi/Dev/inventoryManagementSystem/src/test/java/me/yushi/inventorymanagementsystem/repository/FileHandlerTest.java
 /Users/yushi/Dev/inventoryManagementSystem/src/test/java/me/yushi/inventorymanagementsystem/model/SupplierTest.java

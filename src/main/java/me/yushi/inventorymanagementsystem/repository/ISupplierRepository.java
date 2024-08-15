@@ -18,5 +18,6 @@ public interface ISupplierRepository {
     boolean deleteSupplier(int supplierID);
 
     List<ISupplier>getAllSuppliers();
+    boolean setUp();
     
 }

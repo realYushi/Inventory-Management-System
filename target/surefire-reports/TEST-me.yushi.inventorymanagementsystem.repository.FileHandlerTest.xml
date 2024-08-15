@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="me.yushi.inventorymanagementsystem.model.SupplierTest" time="0.0" tests="4" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="me.yushi.inventorymanagementsystem.repository.FileHandlerTest" time="0.6" tests="2" errors="0" skipped="0" failures="0">
   <properties>
     <property name="gopherProxySet" value="false"/>
     <property name="awt.toolkit" value="sun.lwawt.macosx.LWCToolkit"/>
@@ -10,7 +10,7 @@
     <property name="java.vm.vendor" value="Eclipse Adoptium"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.vendor.url" value="https://adoptium.net/"/>
-    <property name="user.timezone" value="Pacific/Auckland"/>
+    <property name="user.timezone" value=""/>
     <property name="java.vm.specification.version" value="11"/>
     <property name="os.name" value="Mac OS X"/>
     <property name="user.country" value="NZ"/>
@@ -63,8 +63,6 @@
     <property name="java.class.version" value="55.0"/>
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
   </properties>
-  <testcase name="testGetSupplierName" classname="me.yushi.inventorymanagementsystem.model.SupplierTest" time="0.0"/>
-  <testcase name="testSetSupplierName" classname="me.yushi.inventorymanagementsystem.model.SupplierTest" time="0.0"/>
-  <testcase name="testGetSupplierID" classname="me.yushi.inventorymanagementsystem.model.SupplierTest" time="0.0"/>
-  <testcase name="testSetSupplierID" classname="me.yushi.inventorymanagementsystem.model.SupplierTest" time="0.0"/>
+  <testcase name="testReadFromFile" classname="me.yushi.inventorymanagementsystem.repository.FileHandlerTest" time="0.557"/>
+  <testcase name="testWriteToFile" classname="me.yushi.inventorymanagementsystem.repository.FileHandlerTest" time="0.0"/>
 </testsuite>

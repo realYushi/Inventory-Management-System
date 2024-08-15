@@ -5,6 +5,7 @@
 package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
+import me.yushi.inventorymanagementsystem.Dto.IFinancialSummaryDto;
 import me.yushi.inventorymanagementsystem.Dto.IInventorySummaryDto;
 import me.yushi.inventorymanagementsystem.Dto.IProductDto;
 
@@ -16,10 +17,5 @@ public interface IDashBoardController {
     IInventorySummaryDto getInventorySummaryDto(int timeRange);
     List<IProductDto> getLowStockProduct();
     List<IProductDto> getExpiratedSoonProduct();
-    
-    
-    
-    
-    
-    
+    IFinancialSummaryDto getFinancialSummaryDto();
 }

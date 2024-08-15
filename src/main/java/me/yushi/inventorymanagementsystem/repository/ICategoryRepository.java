@@ -18,4 +18,5 @@ public interface ICategoryRepository {
     boolean deleteCategory(int categoryID);
 
     List<ICategory> getAllCategorys();
+    boolean setUp();
 }
