@@ -5,7 +5,6 @@
 package me.yushi.inventorymanagementsystem.model;
 
 import java.util.Date;
-import me.yushi.inventorymanagementsystem.Dto.IInventoryTransactionDto;
 
 /**
  *
@@ -19,14 +18,12 @@ public class InventoryTransaction implements IInventoryTransaction {
     private Date date;
     private TransactionType transactionType;
 
-    public InventoryTransaction(IInventoryTransactionDto inventoryTransactionDto) {
-        this.transactionID = inventoryTransactionDto.getTransactionID();
-        this.productID = inventoryTransactionDto.getProductID();
-        this.quantity = inventoryTransactionDto.getQuantity();
-        this.date = inventoryTransactionDto.getDate();
-        this.transactionType = IInventoryTransaction.TransactionType
-                .valueOf(inventoryTransactionDto.getTransactionType().name());
-
+    public InventoryTransaction(int transactionID, int productID, int quantity, Date date, TransactionType transactionType) {
+        this.transactionID = transactionID;
+        this.productID = productID;
+        this.quantity = quantity;
+        this.date = date;
+        this.transactionType =transactionType; 
     }
 
     @Override

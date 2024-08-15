@@ -4,8 +4,6 @@
  */
 package me.yushi.inventorymanagementsystem.model;
 
-import me.yushi.inventorymanagementsystem.Dto.ISupplierDto;
-
 /**
  *
  * @author yushi
@@ -15,9 +13,9 @@ public class Supplier implements ISupplier {
     private int supplierID;
     private String supplierName;
 
-    public Supplier(ISupplierDto supplierDto) {
-        this.supplierID = supplierDto.getSupplierID();
-        this.supplierName = supplierDto.getSupplierName();
+    public Supplier(int supplierID, String supplierName) {
+        this.supplierID = supplierID;
+        this.supplierName = supplierName;
     }
 
     @Override

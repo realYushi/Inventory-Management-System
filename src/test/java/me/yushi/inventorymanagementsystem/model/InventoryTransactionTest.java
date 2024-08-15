@@ -5,11 +5,9 @@
 package me.yushi.inventorymanagementsystem.model;
 
 import java.util.Date;
-import me.yushi.inventorymanagementsystem.Dto.InventoryTransactionDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.*;
 
 /**
  *
@@ -22,17 +20,10 @@ import static org.mockito.Mockito.*;
 public class InventoryTransactionTest {
 
     private InventoryTransaction instance;
-    private InventoryTransactionDto mockDto;
 
     @Before
     public void setUp() {
-        mockDto = mock(InventoryTransactionDto.class);
-        when(mockDto.getTransactionID()).thenReturn(1);
-        when(mockDto.getProductID()).thenReturn(100);
-        when(mockDto.getQuantity()).thenReturn(5);
-        when(mockDto.getDate()).thenReturn(new Date());
-        when(mockDto.getTransactionType()).thenReturn(InventoryTransactionDto.TransactionType.PURCHASE);
-        instance = new InventoryTransaction(mockDto);
+        instance= instance = new InventoryTransaction(1, 100, 5, new Date(), IInventoryTransaction.TransactionType.PURCHASE);
     }
 
     @Test

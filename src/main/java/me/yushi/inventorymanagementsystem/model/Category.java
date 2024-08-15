@@ -4,8 +4,6 @@
  */
 package me.yushi.inventorymanagementsystem.model;
 
-import me.yushi.inventorymanagementsystem.Dto.ICategoryDto;
-
 /**
  *
  * @author yushi
@@ -15,9 +13,9 @@ public class Category implements ICategory {
     private int categoryID;
     private String categoryName;
 
-    public Category(ICategoryDto categoryDto) {
-        this.categoryID = categoryDto.getCategoryID();
-        this.categoryName = categoryDto.getCategoryName();
+    public Category(int categoryID,String categoryName) {
+        this.categoryID = categoryID;
+        this.categoryName = categoryName;
     }
 
     @Override

@@ -4,12 +4,9 @@
  */
 package me.yushi.inventorymanagementsystem.model;
 
-import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  *
@@ -17,15 +14,11 @@ import static org.mockito.Mockito.when;
  */
 public class SupplierTest {
     private Supplier instance; 
-    private SupplierDto mockDto;
     
     @Before
     public void setUp() {
-        mockDto=mock(SupplierDto.class);
-        when(mockDto.getSupplierID()).thenReturn(1);
-        when(mockDto.getSupplierName()).thenReturn("test");
+        instance=new Supplier(1, "test");
 
-        instance=new Supplier(mockDto);
     }
 
     /**

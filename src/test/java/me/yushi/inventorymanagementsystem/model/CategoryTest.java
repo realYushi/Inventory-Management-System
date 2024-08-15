@@ -4,22 +4,16 @@
  */
 package me.yushi.inventorymanagementsystem.model;
 
-import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.*;
 
 public class CategoryTest {
     private Category instance;
-    private CategoryDto mockDto;
 
     @Before
     public void setUp() {
-        mockDto = mock(CategoryDto.class);
-        when(mockDto.getCategoryID()).thenReturn(1);
-        when(mockDto.getCategoryName()).thenReturn("test");
-        instance = new Category(mockDto);
+        instance=new Category(1, "test");
     }
 
     @Test

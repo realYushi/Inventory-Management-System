@@ -5,12 +5,9 @@
 package me.yushi.inventorymanagementsystem.model;
 
 import java.util.Date;
-import me.yushi.inventorymanagementsystem.Dto.IProductDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  *
@@ -18,20 +15,10 @@ import static org.mockito.Mockito.when;
  */
 public class ProductTest {
     private Product instance;
-    private IProductDto mockDto;
 
     @Before
     public void setUp() {
-        mockDto = mock(IProductDto.class);
-        when(mockDto.getProductID()).thenReturn(1);
-        when(mockDto.getName()).thenReturn("Test Product");
-        when(mockDto.getCategoryID()).thenReturn(2);
-        when(mockDto.getQuantity()).thenReturn(10);
-        when(mockDto.getUnit()).thenReturn("pcs");
-        when(mockDto.getPrice()).thenReturn(19.99);
-        when(mockDto.getExpirationDate()).thenReturn(new Date(1640995200000L)); // 2022-01-01
-
-        instance = new Product(mockDto);
+        instance= new Product(1, "Test Product", 2, 10, "pcs", 19.99, new Date(1640995200000L));
     }
 
     @Test

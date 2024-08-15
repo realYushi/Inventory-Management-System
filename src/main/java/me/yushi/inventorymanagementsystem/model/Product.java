@@ -5,7 +5,6 @@
 package me.yushi.inventorymanagementsystem.model;
 
 import java.util.Date;
-import me.yushi.inventorymanagementsystem.Dto.IProductDto;
 
 /**
  *
@@ -21,14 +20,14 @@ public class Product implements IProduct {
     private double price;
     private Date expirationDate;
 
-    public Product(IProductDto productDto) {
-        this.productID = productDto.getProductID();
-        this.name = productDto.getName();
-        this.categoryID = productDto.getCategoryID();
-        this.quantity = productDto.getQuantity();
-        this.unit = productDto.getUnit();
-        this.price = productDto.getPrice();
-        this.expirationDate = productDto.getExpirationDate();
+    public Product(int productID,String name, int categoryID,int quantity, String unit, double price, Date expirationDate) {
+        this.productID = productID;
+        this.name = name;
+        this.categoryID = categoryID;
+        this.quantity = quantity;
+        this.unit = unit;
+        this.price = price;
+        this.expirationDate = expirationDate;
     }
 
     @Override
