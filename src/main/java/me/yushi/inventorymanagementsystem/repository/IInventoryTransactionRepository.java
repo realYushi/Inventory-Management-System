@@ -4,7 +4,7 @@
  */
 package me.yushi.inventorymanagementsystem.repository;
 
-import java.util.List;
+import java.util.Map;
 import me.yushi.inventorymanagementsystem.model.IInventoryTransaction;
 
 /**
@@ -17,6 +17,6 @@ public interface IInventoryTransactionRepository {
     IInventoryTransaction updateInventoryTransaction(IInventoryTransaction updatedIInventoryTransaction);
     boolean deleteInventoryTransaction(int inventoryTransationID); 
 
-    List<IInventoryTransaction> getAllInventoryTransations();
-    boolean setUp();
+    Map<Integer,IInventoryTransaction> getAllInventoryTransations();
+    void save();
 }

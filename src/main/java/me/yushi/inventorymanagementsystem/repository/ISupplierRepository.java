@@ -4,7 +4,7 @@
  */
 package me.yushi.inventorymanagementsystem.repository;
 
-import java.util.List;
+import java.util.Map;
 import me.yushi.inventorymanagementsystem.model.ISupplier;
 
 /**
@@ -16,8 +16,7 @@ public interface ISupplierRepository {
     ISupplier readSupplier(int supplierID);
     ISupplier updateSupplier(ISupplier updatedSupplier);
     boolean deleteSupplier(int supplierID);
-
-    List<ISupplier>getAllSuppliers();
-    boolean setUp();
+    Map<Integer,ISupplier>getAllSuppliers();
+    void save();
     
 }
