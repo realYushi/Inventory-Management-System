@@ -4,44 +4,105 @@
  */
 package me.yushi.inventorymanagementsystem.repository;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import me.yushi.inventorymanagementsystem.model.IProduct;
+import me.yushi.inventorymanagementsystem.model.Product;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.mockito.Mock;
+import static org.mockito.Mockito.*;
+import org.mockito.MockitoAnnotations;
 
-/**
- *
- * @author yushi
- */
 public class ProductRepositoryTest {
-    
-    public ProductRepositoryTest() {
-    }
-    
+
+    @Rule
+    public TemporaryFolder tempFolder = new TemporaryFolder();
+
+    private String filePath;
+
+    @Mock
+    private IFileHandler<IProduct> mockFileHandler;
+
+    private ProductRepository productRepository;
+    private Product testProduct;
+
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
+        MockitoAnnotations.openMocks(this);
+        testProduct = new Product(1, "Test Product", 1, 10, "pcs", 9.99, new Date());
+        File tempFile = tempFolder.newFile("test.json");
+        filePath = tempFile.getAbsolutePath();
+         // Create the mock FileHandler
+    mockFileHandler = mock(IFileHandler.class);
+    
+    // Create initial data
+    Map<Integer, IProduct> initialData = new HashMap<>();
+    initialData.put(testProduct.getProductID(), testProduct);
+    
+    // Set up the mock behavior
+    when(mockFileHandler.readFromFile()).thenReturn(new ArrayList<>(initialData.values()));
+    
+    // Create ProductRepository with the mock FileHandler
+    productRepository = new ProductRepository(mockFileHandler);
     }
+
+    ;
 
     @Test
     public void testCreateProduct() {
+        Product newProduct = new Product(2, "New Product", 1, 5, "kg", 19.99, new Date());
+        IProduct createdProduct = productRepository.createProduct(newProduct);
+
+        assertThat(createdProduct).isNotNull();
+        assertThat(createdProduct.getProductID()).isEqualTo(2);
+        assertThat(productRepository.readProduct(2)).isEqualTo(newProduct);
     }
 
     @Test
     public void testReadProduct() {
+        IProduct readProduct = productRepository.readProduct(1);
+
+        assertThat(readProduct).isNotNull();
+        assertThat(readProduct.getProductID()).isEqualTo(testProduct.getProductID());
+        assertThat(readProduct.getName()).isEqualTo(testProduct.getName());
     }
 
     @Test
     public void testUpdateProduct() {
+        testProduct.setName("Updated Product");
+        IProduct updatedProduct = productRepository.updateProduct(testProduct);
+
+        assertThat(updatedProduct).isNotNull();
+        assertThat(updatedProduct.getName()).isEqualTo("Updated Product");
+        assertThat(productRepository.readProduct(1).getName()).isEqualTo("Updated Product");
     }
 
     @Test
     public void testDeleteProduct() {
+        boolean deleted = productRepository.deleteProduct(1);
+
+        assertThat(deleted).isTrue();
+        assertThat(productRepository.readProduct(1)).isNull();
     }
 
     @Test
     public void testGetAllProducts() {
+        Map<Integer, IProduct> allProducts = productRepository.getAllProducts();
+
+        assertThat(allProducts).isNotNull();
+        assertThat(allProducts).hasSize(1);
+        assertThat(allProducts.get(1)).isEqualTo(testProduct);
     }
 
     @Test
-    public void testSave() {
+    public void testSave() throws IOException {
+        productRepository.save();
+
+        verify(mockFileHandler, times(1)).writeToFile(anyMap());
     }
-    
 }
