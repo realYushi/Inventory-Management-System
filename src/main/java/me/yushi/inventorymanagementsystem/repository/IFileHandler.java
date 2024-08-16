@@ -5,6 +5,7 @@
 package me.yushi.inventorymanagementsystem.repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -12,6 +13,6 @@ import java.util.List;
  */
 interface IFileHandler <T> {
     List<T> readFromFile();
-    void writeToFile(List<T> objectList);
+    void writeToFile(Map<Integer,T> objectList);
 
 }

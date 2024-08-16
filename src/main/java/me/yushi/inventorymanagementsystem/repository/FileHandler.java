@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -56,9 +57,9 @@ public class FileHandler<T> implements IFileHandler<T> {
     }
 
     @Override
-    public void writeToFile(List<T> objectList) {
+    public void writeToFile(Map<Integer,T> objectList) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.fileLocation))){
-            writer.write(gson.toJson(objectList));
+            writer.write(gson.toJson(objectList.values()));
         } catch (IOException ex) {
             Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
         }

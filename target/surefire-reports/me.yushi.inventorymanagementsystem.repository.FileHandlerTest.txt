@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: me.yushi.inventorymanagementsystem.repository.FileHandlerTest
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.553 s -- in me.yushi.inventorymanagementsystem.repository.FileHandlerTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.578 s -- in me.yushi.inventorymanagementsystem.repository.FileHandlerTest

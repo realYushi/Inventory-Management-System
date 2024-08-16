@@ -17,4 +17,5 @@ public interface IProductRepository {
     IProduct updateProduct(IProduct updatedProduct);
     boolean deleteProduct(int productID);
     Map<Integer,IProduct> getAllProducts();
+    void save();
 }

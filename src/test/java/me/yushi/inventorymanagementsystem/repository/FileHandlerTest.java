@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import org.junit.Before;
@@ -42,9 +44,14 @@ public class FileHandlerTest {
         TestObject obj1 = new TestObject("Test1", 1);
         TestObject obj2 = new TestObject("Test2", 2);
         List<TestObject> expectedList = Arrays.asList(obj1, obj2);
+        Map<Integer, TestObject> expectedMap = expectedList.stream()
+        .collect(Collectors.toMap(
+            testObject -> testObject.value, // Use 'value' as the key
+            testObject -> testObject // Use the TestObject itself as the value
+        ));
 
         // Write test data to file
-        fileHandler.writeToFile(expectedList);
+        fileHandler.writeToFile(expectedMap);
 
         // Read from file
         List<TestObject> result = fileHandler.readFromFile();
@@ -64,9 +71,14 @@ public class FileHandlerTest {
         TestObject obj1 = new TestObject("Test1", 1);
         TestObject obj2 = new TestObject("Test2", 2);
         List<TestObject> testList = Arrays.asList(obj1, obj2);
+        Map<Integer, TestObject> expectedMap = testList.stream()
+        .collect(Collectors.toMap(
+            testObject -> testObject.value, // Use 'value' as the key
+            testObject -> testObject // Use the TestObject itself as the value
+        ));
 
         // Write to file
-        fileHandler.writeToFile(testList);
+        fileHandler.writeToFile(expectedMap);
 
         // Read from file to verify
         List<TestObject> result = fileHandler.readFromFile();
@@ -88,6 +100,9 @@ public class FileHandlerTest {
         public TestObject(String name, int value) {
             this.name = name;
             this.value = value;
+        }
+        public int getValue(){
+            return this.value;
         }
 
     }

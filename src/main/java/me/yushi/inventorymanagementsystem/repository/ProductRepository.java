@@ -53,4 +53,9 @@ public class ProductRepository implements IProductRepository {
         return productMap;
     }
 
+    @Override
+    public void save() {
+        productFileHandler.writeToFile(productMap);
+    }
+
 }
