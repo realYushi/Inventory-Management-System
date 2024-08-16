@@ -1,4 +1,42 @@
 .aider*
-/nbproject/
+# Ignore Maven output directories
 /target/
-.m2/
+
+# Ignore Eclipse specific files
+/.settings/
+/.project
+/.classpath
+
+# Ignore IntelliJ IDEA specific files
+/.idea/
+/*.iml
+
+# Ignore VSCode specific files
+/.vscode/
+
+# Ignore MacOS specific files
+.DS_Store
+
+# Ignore Windows specific files
+Thumbs.db
+
+# Ignore NetBeans specific files
+/nbproject/private/
+/nbproject/nbproject.xml
+
+# Ignore logs
+*.log
+
+# Ignore build directories
+/build/
+
+# Ignore compiled Java classes
+*.class
+
+# Ignore packaged JAR files
+*.jar
+*.war
+*.ear
+
+# Ignore Java generated files
+hs_err_pid*

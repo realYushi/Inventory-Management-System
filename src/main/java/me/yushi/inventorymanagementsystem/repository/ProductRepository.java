@@ -13,16 +13,18 @@ import me.yushi.inventorymanagementsystem.model.IProduct;
  *
  * @author yushi
  */
-public class ProductRepository implements IProductRepository{
-    private Map<Integer,IProduct> productMap;
+public class ProductRepository implements IProductRepository {
+
+    private Map<Integer, IProduct> productMap;
     private IFileHandler<IProduct> productFileHandler;
 
-    public ProductRepository(String filePath) throws IOException{
-        productFileHandler=new FileHandler<>(IProduct.class,filePath);
-        this.productMap=productFileHandler.readFromFile()
+    public ProductRepository(String filePath) throws IOException {
+        productFileHandler = new FileHandler<>(IProduct.class, filePath);
+        this.productMap = productFileHandler.readFromFile()
                 .stream()
-                .collect(Collectors.toMap(product->product.getProductID(),product->product));
+                .collect(Collectors.toMap(product -> product.getProductID(), product -> product));
     }
+
     @Override
     public IProduct createProduct(IProduct newProduct) {
         productMap.put(newProduct.getProductID(), newProduct);
@@ -47,11 +49,8 @@ public class ProductRepository implements IProductRepository{
     }
 
     @Override
-    public Map<Integer,IProduct> getAllProducts() {
+    public Map<Integer, IProduct> getAllProducts() {
         return productMap;
     }
 
-
-    
-    
 }
