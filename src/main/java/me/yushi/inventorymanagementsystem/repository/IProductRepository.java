@@ -18,4 +18,5 @@ public interface IProductRepository {
     boolean deleteProduct(int productID);
     void save();
     List<IProduct> getAllProducts();
+    List<IProduct> searchProducts(String keyword);
 }
