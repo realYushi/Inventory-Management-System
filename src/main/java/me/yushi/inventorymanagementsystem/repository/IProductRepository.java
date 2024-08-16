@@ -16,7 +16,6 @@ public interface IProductRepository {
     IProduct readProduct(int productID);
     IProduct updateProduct(IProduct updatedProduct);
     boolean deleteProduct(int productID);
-
+    void save();
     List<IProduct> getAllProducts();
-    boolean setUp();
 }
