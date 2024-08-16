@@ -13,4 +13,5 @@ import java.util.List;
 interface IFileHandler <T> {
     List<T> readFromFile();
     void writeToFile(List<T> objectList);
+
 }

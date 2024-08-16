@@ -4,7 +4,7 @@
  */
 package me.yushi.inventorymanagementsystem.repository;
 
-import java.util.List;
+import java.util.Map;
 import me.yushi.inventorymanagementsystem.model.IProduct;
 
 /**
@@ -16,7 +16,5 @@ public interface IProductRepository {
     IProduct readProduct(int productID);
     IProduct updateProduct(IProduct updatedProduct);
     boolean deleteProduct(int productID);
-    void save();
-    List<IProduct> getAllProducts();
-    List<IProduct> searchProducts(String keyword);
+    Map<Integer,IProduct> getAllProducts();
 }
