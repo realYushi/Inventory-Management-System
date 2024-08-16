@@ -37,21 +37,20 @@ public class ProductRepositoryTest {
         testProduct = new Product(1, "Test Product", 1, 10, "pcs", 9.99, new Date());
         File tempFile = tempFolder.newFile("test.json");
         filePath = tempFile.getAbsolutePath();
-         // Create the mock FileHandler
-    mockFileHandler = mock(IFileHandler.class);
-    
-    // Create initial data
-    Map<Integer, IProduct> initialData = new HashMap<>();
-    initialData.put(testProduct.getProductID(), testProduct);
-    
-    // Set up the mock behavior
-    when(mockFileHandler.readFromFile()).thenReturn(new ArrayList<>(initialData.values()));
-    
-    // Create ProductRepository with the mock FileHandler
-    productRepository = new ProductRepository(mockFileHandler);
+        
+        // Create the mock FileHandler
+        mockFileHandler = mock(IFileHandler.class);
+        
+        // Create initial data
+        Map<Integer, IProduct> initialData = new HashMap<>();
+        initialData.put(testProduct.getProductID(), testProduct);
+        
+        // Set up the mock behavior
+        when(mockFileHandler.readFromFile()).thenReturn(new ArrayList<>(initialData.values()));
+        
+        // Create ProductRepository with the mock FileHandler
+        productRepository = new ProductRepository(mockFileHandler);
     }
-
-    ;
 
     @Test
     public void testCreateProduct() {
@@ -60,7 +59,9 @@ public class ProductRepositoryTest {
 
         assertThat(createdProduct).isNotNull();
         assertThat(createdProduct.getProductID()).isEqualTo(2);
-        assertThat(productRepository.readProduct(2)).isEqualTo(newProduct);
+        assertThat(createdProduct).isEqualTo(newProduct);
+        
+        verify(mockFileHandler, times(1)).writeToFile(anyMap());
     }
 
     @Test
@@ -68,18 +69,19 @@ public class ProductRepositoryTest {
         IProduct readProduct = productRepository.readProduct(1);
 
         assertThat(readProduct).isNotNull();
-        assertThat(readProduct.getProductID()).isEqualTo(testProduct.getProductID());
-        assertThat(readProduct.getName()).isEqualTo(testProduct.getName());
+        assertThat(readProduct).isEqualTo(testProduct);
     }
 
     @Test
     public void testUpdateProduct() {
-        testProduct.setName("Updated Product");
-        IProduct updatedProduct = productRepository.updateProduct(testProduct);
+        Product updatedProduct = new Product(1, "Updated Product", 1, 10, "pcs", 9.99, new Date());
+        IProduct result = productRepository.updateProduct(updatedProduct);
 
-        assertThat(updatedProduct).isNotNull();
-        assertThat(updatedProduct.getName()).isEqualTo("Updated Product");
-        assertThat(productRepository.readProduct(1).getName()).isEqualTo("Updated Product");
+        assertThat(result).isNotNull();
+        assertThat(result).isEqualTo(updatedProduct);
+        assertThat(productRepository.readProduct(1)).isEqualTo(updatedProduct);
+        
+        verify(mockFileHandler, times(1)).writeToFile(anyMap());
     }
 
     @Test
@@ -88,6 +90,8 @@ public class ProductRepositoryTest {
 
         assertThat(deleted).isTrue();
         assertThat(productRepository.readProduct(1)).isNull();
+        
+        verify(mockFileHandler, times(1)).writeToFile(anyMap());
     }
 
     @Test
@@ -97,6 +101,8 @@ public class ProductRepositoryTest {
         assertThat(allProducts).isNotNull();
         assertThat(allProducts).hasSize(1);
         assertThat(allProducts.get(1)).isEqualTo(testProduct);
+        
+        verify(mockFileHandler, times(1)).readFromFile();
     }
 
     @Test
