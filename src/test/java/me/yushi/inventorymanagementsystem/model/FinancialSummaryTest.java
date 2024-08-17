@@ -18,7 +18,7 @@ public class FinancialSummaryTest {
     
     @Before
     public void setUp() {
-        instance= new FinancialSummary(10.0, 6, 4);
+        instance= new FinancialSummary(10.0, 6 );
     }
 
     @Test

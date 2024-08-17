@@ -23,7 +23,7 @@ public class InventoryTransactionTest {
 
     @Before
     public void setUp() {
-        instance= instance = new InventoryTransaction(1, 100, 5, new Date(), IInventoryTransaction.TransactionType.PURCHASE);
+        instance= instance = new InventoryTransaction(1, 100, 5, new Date(), IInventoryTransaction.TransactionType.PURCHASE,1.0);
     }
 
     @Test
