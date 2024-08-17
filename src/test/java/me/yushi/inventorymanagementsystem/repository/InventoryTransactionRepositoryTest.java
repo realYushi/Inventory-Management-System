@@ -46,22 +46,50 @@ public class InventoryTransactionRepositoryTest {
 
     @Test
     public void testReadInventoryTransaction() {
+        IInventoryTransaction newInventoryTransaction = new InventoryTransaction(3, 100, 5, new Date(), IInventoryTransaction.TransactionType.PURCHASE);
+        repo.createInventoryTransaction(newInventoryTransaction);
+        IInventoryTransaction read = repo.readInventoryTransaction(3);
+        assertThat(read).isEqualTo(newInventoryTransaction);
     }
 
     @Test
     public void testUpdateInventoryTransaction() {
+        IInventoryTransaction newInventoryTransaction = new InventoryTransaction(3, 100, 5, new Date(), IInventoryTransaction.TransactionType.PURCHASE);
+        repo.createInventoryTransaction(newInventoryTransaction);
+        IInventoryTransaction updatedInventoryTransaction = new InventoryTransaction(3, 200, 10, new Date(), IInventoryTransaction.TransactionType.SALE);
+        repo.updateInventoryTransaction(updatedInventoryTransaction);
+        IInventoryTransaction read = repo.readInventoryTransaction(3);
+        assertThat(read).isEqualTo(updatedInventoryTransaction);
     }
 
     @Test
     public void testDeleteInventoryTransaction() {
+        IInventoryTransaction newInventoryTransaction = new InventoryTransaction(3, 100, 5, new Date(), IInventoryTransaction.TransactionType.PURCHASE);
+        repo.createInventoryTransaction(newInventoryTransaction);
+        boolean deleted = repo.deleteInventoryTransaction(3);
+        assertThat(deleted).isTrue();
+        IInventoryTransaction read = repo.readInventoryTransaction(3);
+        assertThat(read).isNull();
     }
 
     @Test
     public void testGetAllInventoryTransations() {
+        IInventoryTransaction newInventoryTransaction1 = new InventoryTransaction(3, 100, 5, new Date(), IInventoryTransaction.TransactionType.PURCHASE);
+        IInventoryTransaction newInventoryTransaction2 = new InventoryTransaction(4, 200, 10, new Date(), IInventoryTransaction.TransactionType.SALE);
+        repo.createInventoryTransaction(newInventoryTransaction1);
+        repo.createInventoryTransaction(newInventoryTransaction2);
+        List<IInventoryTransaction> allTransactions = new ArrayList<>(repo.getAllInventoryTransations().values());
+        assertThat(allTransactions).containsExactlyInAnyOrder(newInventoryTransaction1, newInventoryTransaction2);
     }
 
     @Test
     public void testSave() {
+        IInventoryTransaction newInventoryTransaction = new InventoryTransaction(3, 100, 5, new Date(), IInventoryTransaction.TransactionType.PURCHASE);
+        repo.createInventoryTransaction(newInventoryTransaction);
+        repo.save();
+        // Assuming the save method calls fileHandler.writeToFile, we can verify this with Mockito
+        // This is a simplified example, as the actual implementation might require more complex verification
+        // depending on how the fileHandler is mocked and used.
     }
 
 }
