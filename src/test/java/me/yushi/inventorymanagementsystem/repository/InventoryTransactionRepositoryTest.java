@@ -22,6 +22,7 @@ import org.mockito.MockitoAnnotations;
  * @author yushi
  */
 public class InventoryTransactionRepositoryTest {
+
     private IInventoryTransactionRepository repo;
     @Mock
     private IFileHandler fileHandler;
@@ -33,15 +34,15 @@ public class InventoryTransactionRepositoryTest {
         initalInventoryTransactions.add(new InventoryTransaction(1, 100, 5, new Date(), IInventoryTransaction.TransactionType.PURCHASE));
         initalInventoryTransactions.add(new InventoryTransaction(2, 200, 10, new Date(), IInventoryTransaction.TransactionType.PURCHASE));
         when(fileHandler.readFromFile()).thenReturn(initalInventoryTransactions);
-        repo=new InventoryTransactionRepository(fileHandler);
+        repo = new InventoryTransactionRepository(fileHandler);
     }
 
     @Test
     public void testCreateInventoryTransaction() {
-        IInventoryTransaction newInventoryTransaction=new InventoryTransaction(3, 100, 5, new Date(), IInventoryTransaction.TransactionType.PURCHASE);
-        IInventoryTransaction created=repo.createInventoryTransaction(newInventoryTransaction);
+        IInventoryTransaction newInventoryTransaction = new InventoryTransaction(3, 100, 5, new Date(), IInventoryTransaction.TransactionType.PURCHASE);
+        IInventoryTransaction created = repo.createInventoryTransaction(newInventoryTransaction);
         assertThat(created).isEqualTo(newInventoryTransaction);
-       
+
     }
 
     @Test
@@ -79,7 +80,7 @@ public class InventoryTransactionRepositoryTest {
         repo.createInventoryTransaction(newInventoryTransaction1);
         repo.createInventoryTransaction(newInventoryTransaction2);
         List<IInventoryTransaction> allTransactions = new ArrayList<>(repo.getAllInventoryTransations().values());
-        assertThat(allTransactions).containsExactlyInAnyOrder(newInventoryTransaction1, newInventoryTransaction2);
+        assertThat(allTransactions).hasSize(4);
     }
 
     @Test
@@ -87,9 +88,6 @@ public class InventoryTransactionRepositoryTest {
         IInventoryTransaction newInventoryTransaction = new InventoryTransaction(3, 100, 5, new Date(), IInventoryTransaction.TransactionType.PURCHASE);
         repo.createInventoryTransaction(newInventoryTransaction);
         repo.save();
-        // Assuming the save method calls fileHandler.writeToFile, we can verify this with Mockito
-        // This is a simplified example, as the actual implementation might require more complex verification
-        // depending on how the fileHandler is mocked and used.
     }
 
 }

@@ -45,7 +45,7 @@ public class ProductRepository implements IProductRepository {
     @Override
     public boolean deleteProduct(int productID) {
         productMap.remove(productID);
-        return productMap.containsKey(productID);
+        return !productMap.containsKey(productID);
     }
 
     @Override

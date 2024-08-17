@@ -4,8 +4,6 @@
  */
 package me.yushi.inventorymanagementsystem.repository;
 
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  *

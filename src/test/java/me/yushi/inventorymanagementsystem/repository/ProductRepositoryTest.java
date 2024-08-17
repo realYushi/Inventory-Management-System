@@ -4,8 +4,18 @@
  */
 package me.yushi.inventorymanagementsystem.repository;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import me.yushi.inventorymanagementsystem.model.IProduct;
+import me.yushi.inventorymanagementsystem.model.Product;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
 
 /**
  *
