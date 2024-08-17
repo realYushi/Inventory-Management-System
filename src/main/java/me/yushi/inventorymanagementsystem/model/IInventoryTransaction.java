@@ -30,6 +30,8 @@ public interface IInventoryTransaction {
     TransactionType getTransactionType();
 
     void setTransactionType(TransactionType type);
+    double getPrice();
+    void setPrice(double price);
 
     enum TransactionType {
         PURCHASE,

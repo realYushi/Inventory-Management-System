@@ -17,13 +17,15 @@ public class InventoryTransaction implements IInventoryTransaction {
     private int quantity;
     private Date date;
     private TransactionType transactionType;
+    private double price;
 
-    public InventoryTransaction(int transactionID, int productID, int quantity, Date date, TransactionType transactionType) {
+    public InventoryTransaction(int transactionID, int productID, int quantity, Date date, TransactionType transactionType, double price) {
         this.transactionID = transactionID;
         this.productID = productID;
         this.quantity = quantity;
         this.date = date;
         this.transactionType =transactionType; 
+        this.price=price;
     }
 
     @Override
@@ -83,6 +85,16 @@ public class InventoryTransaction implements IInventoryTransaction {
     public void setTransactionType(TransactionType transactionType) {
         this.transactionType = transactionType;
         // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public double getPrice() {
+        return this.price;
+    }
+
+    @Override
+    public void setPrice(double price) {
+        this.price=price;
     }
 
 }

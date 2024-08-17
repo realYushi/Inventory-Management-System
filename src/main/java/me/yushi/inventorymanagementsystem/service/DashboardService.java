@@ -4,12 +4,19 @@
  */
 package me.yushi.inventorymanagementsystem.service;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import me.yushi.inventorymanagementsystem.Dto.FinancialSummaryDto;
 import me.yushi.inventorymanagementsystem.Dto.IFinancialSummaryDto;
 import me.yushi.inventorymanagementsystem.Dto.IInventorySummaryDto;
+import me.yushi.inventorymanagementsystem.model.FinancialSummary;
 import me.yushi.inventorymanagementsystem.model.IFinancialSummary;
 import me.yushi.inventorymanagementsystem.model.IInventoryTransaction;
 import me.yushi.inventorymanagementsystem.repository.IInventoryTransactionRepository;
+import me.yushi.inventorymanagementsystem.service.IDashboardService;
 
 /**
  *
@@ -18,6 +25,9 @@ import me.yushi.inventorymanagementsystem.repository.IInventoryTransactionReposi
 public class DashboardService implements IDashboardService {
     IInventoryTransactionRepository inventoryTransactionRepository;
     private final int DATE_RANGE=30;
+    private final double PROFIT_RATE=1.2;
+    
+    
 
 
     public DashboardService(IInventoryTransactionRepository inventoryTransactionRepository) {
@@ -26,18 +36,50 @@ public class DashboardService implements IDashboardService {
 
     @Override
     public IFinancialSummaryDto getFinancialSummary() {
-        IFinancialSummary financialSummary;
-        IFinancialSummaryDto financialSummaryDto;
         Map<Integer,IInventoryTransaction> allData=inventoryTransactionRepository.getAllInventoryTransations();
         
-        
-        double totalSales;
-        double totalCost;
-        double netProfit;
+        Date currentDate=new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.DAY_OF_MONTH, -DATE_RANGE);
+        Date date30DaysAgo=calendar.getTime();
+
+        List<IInventoryTransaction>recentData=allData.values().stream()
+             .filter(transation->transation.getDate().after(date30DaysAgo))
+             .collect(Collectors.toList());
+        double totalSales=0;
+        double totalCost=0;
+        for (IInventoryTransaction t: recentData) {
+            switch (t.getTransactionType()) {
+                case SALE:
+                    totalSales=totalSales+(t.getPrice()*PROFIT_RATE);
+                    break;
+                case PURCHASE:
+                    totalCost=totalCost+t.getPrice();
+                    break;
+                case SPOILAGE:
+                    totalCost=totalCost+t.getPrice();
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+
+            
+        }
+        IFinancialSummary financialSummary=new FinancialSummary(totalSales, totalCost);
+        IFinancialSummaryDto financialSummaryDto=new FinancialSummaryDto.Builder()
+                .grossMarginPercentage(financialSummary.getGrossMarginPercentage())
+                .netProfit(financialSummary.getNetProfit())
+                .totalCost(financialSummary.getTotalCost())
+                .totalSales(financialSummary.getTotalSales())
+                .build();
+        return financialSummaryDto;
+                                                                    
+     
+            
+
     }
         
-    double totalCost;
-    double netProfit;
 
     @Override
     public IInventorySummaryDto getIentorySummary() {

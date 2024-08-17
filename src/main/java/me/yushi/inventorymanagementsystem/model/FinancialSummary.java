@@ -15,10 +15,10 @@ public class FinancialSummary implements IFinancialSummary {
     private double netProfit;
     private double grossMarginPercentage;
 
-    public FinancialSummary(double totalSales, double totalCost, double netProfit) {
+    public FinancialSummary(double totalSales, double totalCost) {
         this.totalSales = totalSales;
         this.totalCost = totalCost;
-        this.netProfit = netProfit;
+        this.netProfit = this.totalSales-this.totalCost;
         this.grossMarginPercentage = calculateGrossMarginPercentage();
     }
 
