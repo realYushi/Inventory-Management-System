@@ -12,49 +12,32 @@ import java.util.List;
  */
 public class InventorySummary implements IInventorySummary{
 
-    private List<IProduct> recentProducts;
-    private List<ISupplier> recentSuppliers;
-    private List<ICategory> recentCategories;
-    private List<IInventoryTransaction> recentInventoryTransactions;
+    private List<IProduct> lowStockProducts;
+    private List<IProduct> expirySoonProducts;
+    private List<IProduct> expiriedProducts;
+    private List<IInventoryTransaction> recentInventoryTransactions; 
 
-    public InventorySummary(List<IProduct> recentProducts, List<ISupplier> recentSuppliers, 
-                            List<ICategory> recentCategories, 
-                            List<IInventoryTransaction> recentInventoryTransactions) {
-        this.recentProducts = recentProducts;
-        this.recentSuppliers = recentSuppliers;
-        this.recentCategories = recentCategories;
-        this.recentInventoryTransactions = recentInventoryTransactions;
+    public InventorySummary(List<IProduct> lowStock,List<IProduct> expritySoon,List<IProduct> expried,List<IInventoryTransaction> transatioins) {
+        this.lowStockProducts=lowStock;
+        this.expiriedProducts=expried;
+        this.expirySoonProducts=expritySoon;
+        this.recentInventoryTransactions=transatioins;
+    }
+    
+
+    @Override
+    public List<IProduct> getLowStrockProducts() {
+        return this.lowStockProducts;
     }
 
     @Override
-    public List<IProduct> getRecentProducts() {
-        return this.recentProducts;
+    public List<IProduct> getExpirySoonProducts() {
+        return this.expirySoonProducts;
     }
 
     @Override
-    public void setRecentProducts(List<IProduct> recentProducts) {
-        this.recentProducts=recentProducts;
-    }
-
-    @Override
-    public List<ICategory> getRecentCategories() {
-        return this.recentCategories;
-    }
-
-    @Override
-    public void setRecentCategories(List<ICategory> recentCategories) {
-        this.recentCategories=recentCategories;
-    }
-
-    @Override
-    public List<ISupplier> getRecentSuppliers() {
-        return this.recentSuppliers;
-    }
-
-    @Override
-    public void setRecentSuppliers(List<ISupplier> recentSuppliers) {
-        this.recentSuppliers=recentSuppliers;
-
+    public List<IProduct> getExpriedProducts() {
+        return this.expiriedProducts;
     }
 
     @Override
@@ -62,10 +45,7 @@ public class InventorySummary implements IInventorySummary{
         return this.recentInventoryTransactions;
     }
 
-    @Override
-    public void setRecentInventoryTransactions(List<IInventoryTransaction> recentInventoryTransactions) {
-        this.recentInventoryTransactions=recentInventoryTransactions;
-    }
+
 
 
 }

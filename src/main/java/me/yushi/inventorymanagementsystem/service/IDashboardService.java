@@ -4,14 +4,14 @@
  */
 package me.yushi.inventorymanagementsystem.service;
 
-import me.yushi.inventorymanagementsystem.Dto.IFinancialSummaryDto;
-import me.yushi.inventorymanagementsystem.Dto.IInventorySummaryDto;
+import me.yushi.inventorymanagementsystem.model.IFinancialSummary;
+import me.yushi.inventorymanagementsystem.model.IInventorySummary;
 
 /**
  *
  * @author yushi
  */
 public interface IDashboardService {
-    IFinancialSummaryDto getFinancialSummary();
-    IInventorySummaryDto getIentorySummary();
+    IFinancialSummary getFinancialSummary();
+    IInventorySummary getIentorySummary();
 }
