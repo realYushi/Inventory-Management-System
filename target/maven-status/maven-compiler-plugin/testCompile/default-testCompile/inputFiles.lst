@@ -1,4 +1,7 @@
+/Users/yushi/Dev/inventoryManagementSystem/src/test/java/me/yushi/inventorymanagementsystem/repository/CategoryRepositoryTest.java
+/Users/yushi/Dev/inventoryManagementSystem/src/test/java/me/yushi/inventorymanagementsystem/repository/SupplierRepositoryTest.java
 /Users/yushi/Dev/inventoryManagementSystem/src/test/java/me/yushi/inventorymanagementsystem/model/FinancialSummaryTest.java
+/Users/yushi/Dev/inventoryManagementSystem/src/test/java/me/yushi/inventorymanagementsystem/repository/InventoryTransactionRepositoryTest.java
 /Users/yushi/Dev/inventoryManagementSystem/src/test/java/me/yushi/inventorymanagementsystem/model/CategoryTest.java
 /Users/yushi/Dev/inventoryManagementSystem/src/test/java/me/yushi/inventorymanagementsystem/model/InventoryTransactionTest.java
 /Users/yushi/Dev/inventoryManagementSystem/src/test/java/me/yushi/inventorymanagementsystem/model/ProductTest.java

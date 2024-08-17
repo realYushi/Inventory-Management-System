@@ -5,6 +5,7 @@
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/Dto/ISupplierDto.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/Dto/InventorySummaryDto.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/repository/IInventoryTransactionRepository.java
+/Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/repository/CategoryRepository.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/repository/IProductRepository.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/repository/ProductRepository.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/model/IInventorySummary.java
@@ -13,6 +14,7 @@
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/model/IFinancialSummary.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/model/Product.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/service/ICategoryService.java
+/Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/repository/SupplierRepository.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/Dto/SupplierDto.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/contoller/IInventoryTransactionController.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/Dto/InventoryTransactionDto.java
@@ -25,6 +27,7 @@
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/Dto/ICategoryDto.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/InventoryManagementSystem/Main.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/repository/ICategoryRepository.java
+/Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/repository/InventoryTransactionRepository.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/service/IProductService.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/repository/ISupplierRepository.java
 /Users/yushi/Dev/inventoryManagementSystem/src/main/java/me/yushi/inventorymanagementsystem/model/Category.java

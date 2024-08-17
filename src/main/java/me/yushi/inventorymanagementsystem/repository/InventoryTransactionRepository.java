@@ -18,8 +18,8 @@ public class InventoryTransactionRepository implements IInventoryTransactionRepo
     private Map<Integer, IInventoryTransaction> inventoryTransactionMap;
     private IFileHandler<IInventoryTransaction> inventoryTransactionFileHandler;
 
-    public InventoryTransactionRepository(String filePath) throws IOException {
-        inventoryTransactionFileHandler = new FileHandler<>(IInventoryTransaction.class, filePath);
+    public InventoryTransactionRepository(IFileHandler<IInventoryTransaction> fileHandler) throws IOException {
+        inventoryTransactionFileHandler=fileHandler;
         this.inventoryTransactionMap = inventoryTransactionFileHandler.readFromFile()
                 .stream()
                 .collect(Collectors.toMap(i -> i.getTransactionID(), i -> i));

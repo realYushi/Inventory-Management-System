@@ -16,6 +16,7 @@ me/yushi/inventorymanagementsystem/Dto/IInventoryTransactionDto$TransactionType.
 me/yushi/inventorymanagementsystem/model/IInventoryTransaction$TransactionType.class
 me/yushi/inventorymanagementsystem/service/IProductService.class
 me/yushi/inventorymanagementsystem/Dto/CategoryDto.class
+me/yushi/inventorymanagementsystem/repository/SupplierRepository.class
 me/yushi/inventorymanagementsystem/Dto/IInventorySummaryDto.class
 me/yushi/inventorymanagementsystem/model/InventoryTransaction.class
 me/yushi/inventorymanagementsystem/Dto/FinancialSummaryDto$Builder.class
@@ -36,6 +37,8 @@ me/yushi/inventorymanagementsystem/model/InventorySummary.class
 me/yushi/inventorymanagementsystem/repository/ICategoryRepository.class
 me/yushi/inventorymanagementsystem/contoller/IInventoryTransactionController.class
 me/yushi/inventorymanagementsystem/service/ICategoryService.class
+me/yushi/inventorymanagementsystem/repository/InventoryTransactionRepository.class
+me/yushi/inventorymanagementsystem/repository/CategoryRepository.class
 me/yushi/inventorymanagementsystem/model/Product.class
 me/yushi/inventorymanagementsystem/Dto/ICategoryDto.class
 me/yushi/inventorymanagementsystem/Dto/ProductDto$Builder.class

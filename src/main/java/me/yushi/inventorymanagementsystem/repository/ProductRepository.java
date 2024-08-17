@@ -18,8 +18,8 @@ public class ProductRepository implements IProductRepository {
     private Map<Integer, IProduct> productMap;
     private IFileHandler<IProduct> productFileHandler;
 
-    public ProductRepository(String filePath) throws IOException {
-        productFileHandler = new FileHandler<>(IProduct.class, filePath);
+    public ProductRepository(IFileHandler<IProduct> fileHandler) throws IOException {
+        productFileHandler=fileHandler;
         this.productMap = productFileHandler.readFromFile()
                 .stream()
                 .collect(Collectors.toMap(product -> product.getProductID(), product -> product));

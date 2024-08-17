@@ -13,12 +13,13 @@ import me.yushi.inventorymanagementsystem.model.ICategory;
  *
  * @author yushi
  */
-public class CategoryRepository implements ICategoryRepository{
+public class CategoryRepository implements ICategoryRepository {
+
     private Map<Integer, ICategory> categoryMap;
     private IFileHandler<ICategory> categoryFileHandler;
 
-    public CategoryRepository(String filePath) throws IOException {
-        categoryFileHandler = new FileHandler<>(ICategory.class, filePath);
+    public CategoryRepository(IFileHandler<ICategory> fileHandler) throws IOException {
+        categoryFileHandler = fileHandler;
         this.categoryMap = categoryFileHandler.readFromFile()
                 .stream()
                 .collect(Collectors.toMap(c -> c.getCategoryID(), c -> c));
@@ -39,7 +40,7 @@ public class CategoryRepository implements ICategoryRepository{
     public ICategory updateCategory(ICategory newCategory) {
         categoryMap.put(newCategory.getCategoryID(), newCategory);
         return categoryMap.get(newCategory.getCategoryID());
-        
+
     }
 
     @Override
@@ -57,5 +58,5 @@ public class CategoryRepository implements ICategoryRepository{
     public void save() {
         categoryFileHandler.writeToFile(categoryMap);
     }
-    
+
 }

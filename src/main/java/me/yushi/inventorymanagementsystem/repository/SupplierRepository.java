@@ -18,8 +18,8 @@ public class SupplierRepository implements ISupplierRepository {
     private Map<Integer, ISupplier> supplierMap;
     private IFileHandler<ISupplier> supplierFileHandler;
 
-    public SupplierRepository(String filePath) throws IOException {
-        supplierFileHandler = new FileHandler<>(ISupplier.class, filePath);
+    public SupplierRepository(IFileHandler<ISupplier> fileHandler) throws IOException {
+        supplierFileHandler = fileHandler;
         this.supplierMap = supplierFileHandler.readFromFile()
                 .stream()
                 .collect(Collectors.toMap(s -> s.getSupplierID(), s -> s));

@@ -13,18 +13,18 @@ import org.junit.Test;
  * @author yushi
  */
 public class SupplierTest {
-    private Supplier instance; 
-    
+    private Supplier instance;
+
     @Before
     public void setUp() {
-        instance=new Supplier(1, "test");
+        instance = new Supplier(1, "test");
 
     }
 
     /**
      * Test of getSupplierID method, of class Supplier.
      */
-     @Test
+    @Test
     public void testGetSupplierID() {
         assertThat(instance.getSupplierID()).isEqualTo(1);
     }
@@ -47,6 +47,5 @@ public class SupplierTest {
         instance.setSupplierName(newSupplierName);
         assertThat(instance.getSupplierName()).isEqualTo(newSupplierName);
     }
-    
-    
+
 }
