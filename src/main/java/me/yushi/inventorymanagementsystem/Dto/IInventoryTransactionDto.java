@@ -20,6 +20,7 @@ public interface IInventoryTransactionDto {
     Date getDate();
 
     TransactionType getTransactionType();
+    double getPrice();
 
     enum TransactionType {
         PURCHASE,

@@ -17,6 +17,7 @@ public class InventoryTransactionDto implements IInventoryTransactionDto {
     private final int quantity;
     private final Date date;
     private final TransactionType transactionType;
+    private final double price;
 
     private InventoryTransactionDto(Builder builder) {
         this.transactionID = builder.transactionID;
@@ -24,6 +25,7 @@ public class InventoryTransactionDto implements IInventoryTransactionDto {
         this.quantity = builder.quantity;
         this.date = builder.date;
         this.transactionType = builder.transactionType;
+        this.price = builder.price;
     }
 
     public static class Builder {
@@ -33,6 +35,7 @@ public class InventoryTransactionDto implements IInventoryTransactionDto {
         private int quantity;
         private Date date;
         private TransactionType transactionType;
+        private double price;
 
         public Builder transactionType(TransactionType transactionType) {
             this.transactionType = transactionType;
@@ -56,6 +59,10 @@ public class InventoryTransactionDto implements IInventoryTransactionDto {
 
         public Builder date(Date date) {
             this.date = date;
+            return this;
+        }
+        public Builder price(double price){
+            this.price=price;
             return this;
         }
 
@@ -88,6 +95,11 @@ public class InventoryTransactionDto implements IInventoryTransactionDto {
     @Override
     public TransactionType getTransactionType() {
         return this.transactionType;
+    }
+
+    @Override
+    public double getPrice() {
+        return this.price;
     }
 
 }
