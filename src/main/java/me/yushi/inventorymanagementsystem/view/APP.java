@@ -7,67 +7,120 @@ package me.yushi.inventorymanagementsystem.view;
 import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.Button;
 import com.googlecode.lanterna.gui2.Direction;
+import com.googlecode.lanterna.gui2.GridLayout;
+import com.googlecode.lanterna.gui2.Label;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
 import com.googlecode.lanterna.gui2.Panel;
+import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
+import java.io.IOException;
+import me.yushi.inventorymanagementsystem.model.Category;
+import me.yushi.inventorymanagementsystem.model.IInventoryTransaction;
+import me.yushi.inventorymanagementsystem.model.Product;
+import me.yushi.inventorymanagementsystem.model.Supplier;
+import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
+import me.yushi.inventorymanagementsystem.repository.FileHandler;
+import me.yushi.inventorymanagementsystem.repository.ICategoryRepository;
+import me.yushi.inventorymanagementsystem.repository.IInventoryTransactionRepository;
+import me.yushi.inventorymanagementsystem.repository.IProductRepository;
+import me.yushi.inventorymanagementsystem.repository.ISupplierRepository;
+import me.yushi.inventorymanagementsystem.repository.ProductRepository;
+import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
 
 /**
  *
  * @author yushi
  */
 public class APP {
-    private String categoryPath;
-    private String inventoryTransationPath;
-    private String productPath;
-    private String supplierPath;
-    
+    private ICategoryRepository categoryRepository;
+    private IProductRepository productRepository;
+    private IInventoryTransactionRepository transactionRepository;
+    private ISupplierRepository supplierRepository;
+    public APP(String categoryFile, String transationFile, String productFile, String supplierFile) throws IOException {
+        categoryRepository=new CategoryRepository(new FileHandler(Category.class,categoryFile));
+        productRepository=new ProductRepository(new FileHandler(Product.class,productFile));
+        transactionRepository=new IInventoryTransactionRepository(new FileHandler(IInventoryTransaction.class,transationFile));
+        supplierRepository=new SupplierRepository(new FileHandler(Supplier.class,supplierFile));
 
-    public APP(String category,String inventory,String product,String supplier) {
-        this.categoryPath=category;
-        this.inventoryTransationPath=inventory;
-        this.productPath=product;
-        this.supplierPath=supplier;
     }
-    public void start(){
-       try {
-                // Create terminal and screen
-                Terminal terminal = new DefaultTerminalFactory().createTerminal();
-                Screen screen = new TerminalScreen(terminal);
-                screen.startScreen();
 
-                // Create window
-                BasicWindow window = new BasicWindow("My First Lanterna App");
+    public void start() {
+        Terminal terminal = null;
+        Screen screen = null;
+        try {
+            terminal = new DefaultTerminalFactory().createTerminal();
+            screen = new TerminalScreen(terminal);
+            screen.startScreen();
 
-                // Create a panel to hold components
-                Panel panel = new Panel();
-                panel.setLayoutManager(new LinearLayout(Direction.VERTICAL));
+            WindowBasedTextGUI textGUI = new MultiWindowTextGUI(screen);
+            BasicWindow window = new BasicWindow("Inventory Management System");
 
-                // Add a button to the panel
-                Button button = new Button("Click Me!");
-                button.addListener(new Button.Listener() {
-                    @Override
-                    public void onTriggered(Button button) {
-                        System.out.println("Button clicked!");
-                    }
-                });
-                panel.addComponent(button);
+            Panel mainPanel = new Panel(new GridLayout(1));
+            // Create body panel
+            Panel bodyPanel = new Panel(new LinearLayout(Direction.VERTICAL));
 
-                // Set the panel as the window's component
-                window.setComponent(panel);
+            // Create top navigation panel
+            Panel topNavPanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
+            topNavPanel.addComponent(new Button("Dashboard", () -> showDashboard(bodyPanel)));
+            topNavPanel.addComponent(new Button("Product", () -> showProduct(bodyPanel)));
+            topNavPanel.addComponent(new Button("Supplier", () -> showSupplier(bodyPanel)));
+            topNavPanel.addComponent(new Button("Transaction", () -> showTransaction(bodyPanel)));
+            topNavPanel.addComponent(new Button("Category", () -> showCategory(bodyPanel)));
 
-                // Create the GUI and add the window
-                MultiWindowTextGUI gui = new MultiWindowTextGUI(screen);
-                gui.addWindowAndWait(window);
+            // Create bottom panel for help
+            Panel bottomPanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
+            bottomPanel.addComponent(new Label("Help: Press F1 for more info"));
 
-                // Stop the screen when done
-                screen.stopScreen();
-            } catch (Exception e) {
-                e.printStackTrace();
+            // Add sub-panels to main panel
+            mainPanel.addComponent(topNavPanel);
+            mainPanel.addComponent(bodyPanel);
+            mainPanel.addComponent(bottomPanel);
+
+            // Set main panel as the content of the window
+            window.setComponent(mainPanel);
+
+            // Add window to the GUI and run
+            textGUI.addWindowAndWait(window);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (screen != null) {
+                try {
+                    screen.stopScreen();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        } 
+        }
     }
-    
+
+    private static void showDashboard(Panel bodyPanel) {
+        bodyPanel.removeAllComponents();
+        bodyPanel.addComponent(new Label("Dashboard Content"));
+    }
+
+    private static void showProduct(Panel bodyPanel) {
+        bodyPanel.removeAllComponents();
+        bodyPanel.addComponent(new Label("Product Content"));
+    }
+
+    private static void showSupplier(Panel bodyPanel) {
+        bodyPanel.removeAllComponents();
+        bodyPanel.addComponent(new Label("Supplier Content"));
+    }
+
+    private static void showTransaction(Panel bodyPanel) {
+        bodyPanel.removeAllComponents();
+        bodyPanel.addComponent(new Label("Transaction Content"));
+    }
+
+    private static void showCategory(Panel bodyPanel) {
+        bodyPanel.removeAllComponents();
+        bodyPanel.addComponent(new Label("Category Content"));
+    }
+}

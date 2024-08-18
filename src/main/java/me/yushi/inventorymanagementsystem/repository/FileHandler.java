@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import me.yushi.inventorymanagementsystem.model.Category;
 
 
 /**
@@ -35,6 +36,10 @@ public class FileHandler<T> implements IFileHandler<T> {
         this.targetClass = targetClass;
         this.fileLocation=fileLocation;
         checkFile();
+    }
+
+    public FileHandler(Class<Category> aClass, String categoryFile) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     private void checkFile() throws IOException {
