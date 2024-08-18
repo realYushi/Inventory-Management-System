@@ -12,7 +12,7 @@ import me.yushi.inventorymanagementsystem.Dto.IInventoryTransactionDto;
  * @author yushi
  */
 public interface IInventoryTransactionService {
-    IInventoryTransactionDto createInventoryTransaction(IInventoryTransactionDto newIInventoryTransactionDto);
+    IInventoryTransactionDto createInventoryTransaction(IInventoryTransactionDto newInventoryTransactionDto);
     IInventoryTransactionDto updateInventoryTransaction(IInventoryTransactionDto updatedInventoryTransactionDto);
     IInventoryTransactionDto getInventoryTransactionByID(int inventoryTransationID);
     boolean deleteInventoryTransaction(int inventoryTransationID);
