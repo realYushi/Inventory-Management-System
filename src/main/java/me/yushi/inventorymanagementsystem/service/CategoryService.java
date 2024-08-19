@@ -7,16 +7,14 @@ package me.yushi.inventorymanagementsystem.service;
 import java.util.List;
 import java.util.stream.Collectors;
 import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
-import me.yushi.inventorymanagementsystem.Dto.ICategoryDto;
 import me.yushi.inventorymanagementsystem.model.Category;
-import me.yushi.inventorymanagementsystem.model.ICategory;
 import me.yushi.inventorymanagementsystem.repository.ICategoryRepository;
 
 /**
  *
  * @author yushi
  */
-public class CategoryService implements ICategoryService,IMapper<ICategoryDto, ICategory>{
+public class CategoryService implements ICategoryService,IMapper<CategoryDto, Category>{
     private ICategoryRepository repository;
 
     public CategoryService(ICategoryRepository categoryRepository) {
@@ -25,23 +23,27 @@ public class CategoryService implements ICategoryService,IMapper<ICategoryDto, I
 
     
     @Override
-    public ICategoryDto createCategory(ICategoryDto newCategoryDto) {
-        ICategory category=toModel(newCategoryDto);
-        return toDto(repository.createCategory(category));
+    public CategoryDto createCategory(CategoryDto newCategoryDto) {
+        Category category=toModel(newCategoryDto);
+        CategoryDto categoryDto=toDto(repository.createCategory(category));
+        this.save();
+        return categoryDto;
         
     }
 
     @Override
-    public ICategoryDto getCategoryByID(int categoryID) {
-        ICategory category=repository.readCategory(categoryID);
+    public CategoryDto getCategoryByID(int categoryID) {
+        Category category=repository.readCategory(categoryID);
         return toDto(category);
     }
 
     @Override
-    public ICategoryDto updateCategory(ICategoryDto updatedCategoryDto) {
-        ICategory newCategory=toModel(updatedCategoryDto);
-        ICategory category=repository.updateCategory(newCategory);
-        return toDto(category);
+    public CategoryDto updateCategory(CategoryDto updatedCategoryDto) {
+        Category newCategory=toModel(updatedCategoryDto);
+        Category category=repository.updateCategory(newCategory);
+        CategoryDto categoryDto=toDto(category);
+        this.save();
+        return categoryDto;
     }
 
     @Override
@@ -50,8 +52,8 @@ public class CategoryService implements ICategoryService,IMapper<ICategoryDto, I
     }
 
     @Override
-    public List<ICategoryDto> getAllCategorys() {
-        List<ICategory> categorys=repository.getAllCategorys()
+    public List<CategoryDto> getAllCategorys() {
+        List<Category> categorys=repository.getAllCategorys()
                 .values().stream().collect(Collectors.toList());
         return categorys.stream().map(category->this.toDto(category)).collect(Collectors.toList());
         
@@ -59,7 +61,7 @@ public class CategoryService implements ICategoryService,IMapper<ICategoryDto, I
     }
 
     @Override
-    public ICategoryDto toDto(ICategory model) {
+    public CategoryDto toDto(Category model) {
         return new CategoryDto.Builder()
                 .categoryID(model.getCategoryID())
                 .categoryName(model.getCategoryName())
@@ -67,9 +69,16 @@ public class CategoryService implements ICategoryService,IMapper<ICategoryDto, I
     }
 
     @Override
-    public ICategory toModel(ICategoryDto dto) {
+    public Category toModel(CategoryDto dto) {
         return new Category(dto.getCategoryID(), dto.getCategoryName());
     }
+
+    @Override
+    public void save() {
+        repository.save();
+    }
+
+
     
     
 }

@@ -5,18 +5,18 @@
 package me.yushi.inventorymanagementsystem.repository;
 
 import java.util.Map;
-import me.yushi.inventorymanagementsystem.model.ICategory;
+import me.yushi.inventorymanagementsystem.model.Category;
 
 /**
  *
  * @author yushi
  */
 public interface ICategoryRepository {
-    ICategory createCategory(ICategory newCategory);
-    ICategory readCategory(int categoryID);
-    ICategory updateCategory(ICategory newCategory);
+    Category createCategory(Category newCategory);
+    Category readCategory(int categoryID);
+    Category updateCategory(Category newCategory);
     boolean deleteCategory(int categoryID);
 
-    Map<Integer,ICategory> getAllCategorys();
+    Map<Integer,Category> getAllCategorys();
     void save();
 }

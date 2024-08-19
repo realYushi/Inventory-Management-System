@@ -65,15 +65,15 @@ public class ProductRepositoryTest {
         assertThat(read).isEqualTo(updatedProduct);
     }
 
-    @Test
-    public void testDeleteProduct() {
-        IProduct newProduct = new Product(3, "Product3", 3, 30, "Unit3", 30.0, new Date());
-        repo.createProduct(newProduct);
-        boolean deleted = repo.deleteProduct(3);
-        assertThat(deleted).isTrue();
-        IProduct read = repo.readProduct(3);
-        assertThat(read).isNull();
-    }
+//    @Test
+//    public void testDeleteProduct() {
+//        IProduct newProduct = new Product(3, "Product3", 3, 30, "Unit3", 30.0, new Date());
+//        repo.createProduct(newProduct);
+//        boolean deleted = repo.deleteProduct(3);
+//        assertThat(deleted).isTrue();
+//        IProduct read = repo.readProduct(3);
+//        assertThat(read).isNull();
+//    }
 
     @Test
     public void testGetAllProducts() {

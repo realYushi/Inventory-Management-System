@@ -17,4 +17,5 @@ public interface IProductService {
     IProductDto getProductByID(int productID);
     boolean deleteProduct(int productID);
     List<IProductDto> getAllProducts();
+    void save();
 }

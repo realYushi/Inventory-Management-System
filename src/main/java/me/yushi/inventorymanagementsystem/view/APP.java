@@ -18,7 +18,7 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import java.io.IOException;
-import me.yushi.inventorymanagementsystem.model.ICategory;
+import me.yushi.inventorymanagementsystem.model.Category;
 import me.yushi.inventorymanagementsystem.model.IInventoryTransaction;
 import me.yushi.inventorymanagementsystem.model.IProduct;
 import me.yushi.inventorymanagementsystem.model.ISupplier;
@@ -45,7 +45,7 @@ public class APP {
     private ISupplierRepository supplierRepository;
 
     public APP(String categoryFile, String transationFile, String productFile, String supplierFile) throws IOException {
-        IFileHandler<ICategory> categoryFileHandler = new FileHandler<>(ICategory.class, categoryFile);
+        IFileHandler<Category> categoryFileHandler = new FileHandler<>(Category.class, categoryFile);
         categoryRepository = new CategoryRepository(categoryFileHandler);
 
         IFileHandler<IProduct> productFileHandler = new FileHandler<>(IProduct.class, productFile);
@@ -80,7 +80,7 @@ public class APP {
             topNavPanel.addComponent(new Button("Product", () -> showProduct(bodyPanel)));
             topNavPanel.addComponent(new Button("Supplier", () -> showSupplier(bodyPanel)));
             topNavPanel.addComponent(new Button("Transaction", () -> showTransaction(bodyPanel)));
-            topNavPanel.addComponent(new Button("Category", () -> showCategory(bodyPanel)));
+            topNavPanel.addComponent(new Button("Category", () -> showCategory(bodyPanel,categoryRepository,textGUI)));
 
             // Create bottom panel for help
             Panel bottomPanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
@@ -130,8 +130,8 @@ public class APP {
         bodyPanel.addComponent(new Label("Transaction Content"));
     }
 
-    private static void showCategory(Panel bodyPanel) {
+    private static void showCategory(Panel bodyPanel,ICategoryRepository categoryRepository,WindowBasedTextGUI textGUI) {
         bodyPanel.removeAllComponents();
-        bodyPanel.addComponent(new Label("Category Content"));
+        bodyPanel.addComponent(new CategoryView(categoryRepository,textGUI));
     }
 }

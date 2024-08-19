@@ -28,13 +28,17 @@ public class InventoryTransactionService implements IInventoryTransactionService
     @Override
     public IInventoryTransactionDto createInventoryTransaction(IInventoryTransactionDto newInventoryTransactionDto) {
         IInventoryTransaction inventoryTransaton = toModel(newInventoryTransactionDto);
-        return toDto(repository.createInventoryTransaction(inventoryTransaton));
+        IInventoryTransactionDto inventoryTransactionDto=toDto(repository.createInventoryTransaction(inventoryTransaton));
+        this.save();
+        return inventoryTransactionDto;
     }
 
     @Override
     public IInventoryTransactionDto updateInventoryTransaction(IInventoryTransactionDto updatedInventoryTransactionDto) {
         IInventoryTransaction inventoryTransaction = toModel(updatedInventoryTransactionDto);
-        return toDto(repository.updateInventoryTransaction(inventoryTransaction));
+        IInventoryTransactionDto inventoryTransactionDto=toDto(repository.updateInventoryTransaction(inventoryTransaction));
+        this.save();
+        return inventoryTransactionDto;
     }
 
     @Override
@@ -101,6 +105,11 @@ public class InventoryTransactionService implements IInventoryTransactionService
             default:
                 throw new IllegalArgumentException("Unknown enum type: " + dtoType);
         }
+    }
+
+    @Override
+    public void save() {
+        repository.save();
     }
 
 }

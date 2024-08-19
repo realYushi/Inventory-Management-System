@@ -16,28 +16,34 @@ import me.yushi.inventorymanagementsystem.repository.IProductRepository;
  *
  * @author yushi
  */
-public class ProductService implements IProductService,IMapper<IProductDto, IProduct>{
+public class ProductService implements IProductService, IMapper<IProductDto, IProduct> {
+
     IProductRepository repository;
 
     public ProductService(IProductRepository repository) {
-        this.repository=repository;
+        this.repository = repository;
     }
-    
 
     @Override
     public IProductDto createProduct(IProductDto newProductDto) {
-        IProduct product=toModel(newProductDto);
-        return toDto(repository.createProduct(product));
+        IProduct product = toModel(newProductDto);
+
+        IProductDto productDto = toDto(repository.createProduct(product));
+        this.save();
+        return productDto;
     }
 
     @Override
     public IProductDto updateProduct(IProductDto updatedProductDto) {
-        IProduct product =toModel(updatedProductDto);
-        return toDto(repository.updateProduct(product));
+        IProduct product = toModel(updatedProductDto);
+        IProductDto productDto=toDto(repository.updateProduct(product));
+        this.save();
+        return productDto;
     }
 
     @Override
     public IProductDto getProductByID(int productID) {
+
         return toDto(repository.readProduct(productID));
     }
 
@@ -50,7 +56,7 @@ public class ProductService implements IProductService,IMapper<IProductDto, IPro
     public List<IProductDto> getAllProducts() {
         List<IProduct> products = repository.getAllProducts().values().stream()
                 .collect(Collectors.toList());
-        return products.stream().map(product->this.toDto(product))
+        return products.stream().map(product -> this.toDto(product))
                 .collect(Collectors.toList());
     }
 
@@ -69,7 +75,7 @@ public class ProductService implements IProductService,IMapper<IProductDto, IPro
 
     @Override
     public IProduct toModel(IProductDto dto) {
-        return new Product(dto.getProductID(), 
+        return new Product(dto.getProductID(),
                 dto.getName(),
                 dto.getCategoryID(),
                 dto.getQuantity(),
@@ -77,5 +83,10 @@ public class ProductService implements IProductService,IMapper<IProductDto, IPro
                 dto.getPrice(),
                 dto.getExpirationDate());
     }
-    
+
+    @Override
+    public void save() {
+        repository.save();
+    }
+
 }

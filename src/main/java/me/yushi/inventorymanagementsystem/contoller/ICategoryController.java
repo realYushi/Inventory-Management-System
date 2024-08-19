@@ -5,17 +5,17 @@
 package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
-import me.yushi.inventorymanagementsystem.Dto.ICategoryDto;
+import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
 
 /**
  *
  * @author yushi
  */
 public interface ICategoryController{
-    ICategoryDto createCategory(ICategoryDto newCategoryDto);
-    ICategoryDto getCategoryByID( int categoryID);
-    ICategoryDto updateCategory(ICategoryDto updatedCategoryDto);
+    CategoryDto createCategory(CategoryDto newCategoryDto);
+    CategoryDto getCategoryByID( int categoryID);
+    CategoryDto updateCategory(CategoryDto updatedCategoryDto);
     boolean deleteCategory(int categoryID);
 
-    List<ICategoryDto> getAllCategorys();
+    List<CategoryDto> getAllCategorys();
 }

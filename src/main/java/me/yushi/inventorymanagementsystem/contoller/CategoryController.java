@@ -5,7 +5,7 @@
 package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
-import me.yushi.inventorymanagementsystem.Dto.ICategoryDto;
+import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
 import me.yushi.inventorymanagementsystem.repository.ICategoryRepository;
 import me.yushi.inventorymanagementsystem.service.CategoryService;
 import me.yushi.inventorymanagementsystem.service.ICategoryService;
@@ -23,19 +23,19 @@ public class CategoryController implements ICategoryController{
     
 
     @Override
-    public ICategoryDto createCategory(ICategoryDto newCategoryDto) {
+    public CategoryDto createCategory(CategoryDto newCategoryDto) {
         return categoryService.createCategory(newCategoryDto);
 
     }
 
     @Override
-    public ICategoryDto getCategoryByID(int categoryID) {
+    public CategoryDto getCategoryByID(int categoryID) {
         return categoryService.getCategoryByID(categoryID);
 
     }
 
     @Override
-    public ICategoryDto updateCategory(ICategoryDto updatedCategoryDto) {
+    public CategoryDto updateCategory(CategoryDto updatedCategoryDto) {
         return categoryService.updateCategory(updatedCategoryDto);
     }
 
@@ -45,7 +45,7 @@ public class CategoryController implements ICategoryController{
     }
 
     @Override
-    public List<ICategoryDto> getAllCategorys() {
+    public List<CategoryDto> getAllCategorys() {
         return categoryService.getAllCategorys();
     }
     

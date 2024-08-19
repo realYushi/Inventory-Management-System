@@ -7,7 +7,7 @@ import me.yushi.inventorymanagementsystem.view.APP;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String productFile = "product.json";
         String categoryFile = "category.json";
         String transationFile = "transation.json";

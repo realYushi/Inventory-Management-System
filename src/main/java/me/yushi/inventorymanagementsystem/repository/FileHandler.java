@@ -5,10 +5,12 @@
 package me.yushi.inventorymanagementsystem.repository;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 /**
  *
@@ -31,9 +32,9 @@ public class FileHandler<T> implements IFileHandler<T> {
     private final Class<T> targetClass;
     private final String fileLocation;
 
-    public FileHandler(Class<T> targetClass,String fileLocation) throws IOException {
+    public FileHandler(Class<T> targetClass, String fileLocation) throws IOException {
         this.targetClass = targetClass;
-        this.fileLocation=fileLocation;
+        this.fileLocation = fileLocation;
         checkFile();
     }
 
@@ -46,24 +47,38 @@ public class FileHandler<T> implements IFileHandler<T> {
 
     @Override
     public List<T> readFromFile() {
+        System.out.println("Reading from file: " + this.fileLocation);
         try (BufferedReader reader = new BufferedReader(new FileReader(this.fileLocation))) {
             Type listType = TypeToken.getParameterized(List.class, targetClass).getType();
             List<T> loadedList = gson.fromJson(reader, listType);
-            return loadedList != null ? loadedList : new ArrayList<>();
+            if (loadedList == null) {
+                loadedList = new ArrayList<>();
+            }
+            return loadedList;
+        } catch (FileNotFoundException ex) {
+            System.err.println("File not found: " + this.fileLocation);
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            System.err.println("I/O error reading file: " + ex.getMessage());
+            ex.printStackTrace();
+        } catch (JsonSyntaxException ex) {
+            System.err.println("JSON parsing error: " + ex.getMessage());
+            ex.printStackTrace();
         } catch (Exception ex) {
-            return new ArrayList<>();
+            System.err.println("Unexpected error: " + ex.getMessage());
+            ex.printStackTrace();
         }
-
+        return new ArrayList<>();
     }
 
     @Override
-    public void writeToFile(Map<Integer,T> objectList) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.fileLocation))){
+    public void writeToFile(Map<Integer, T> objectList) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.fileLocation))) {
             writer.write(gson.toJson(objectList.values()));
         } catch (IOException ex) {
             Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
 }

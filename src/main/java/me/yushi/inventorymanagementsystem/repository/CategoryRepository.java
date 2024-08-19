@@ -7,7 +7,7 @@ package me.yushi.inventorymanagementsystem.repository;
 import java.io.IOException;
 import java.util.Map;
 import java.util.stream.Collectors;
-import me.yushi.inventorymanagementsystem.model.ICategory;
+import me.yushi.inventorymanagementsystem.model.Category;
 
 /**
  *
@@ -15,10 +15,10 @@ import me.yushi.inventorymanagementsystem.model.ICategory;
  */
 public class CategoryRepository implements ICategoryRepository {
 
-    private Map<Integer, ICategory> categoryMap;
-    private IFileHandler<ICategory> categoryFileHandler;
+    private Map<Integer, Category> categoryMap;
+    private IFileHandler<Category> categoryFileHandler;
 
-    public CategoryRepository(IFileHandler<ICategory> fileHandler) throws IOException {
+    public CategoryRepository(IFileHandler<Category> fileHandler) throws IOException {
         categoryFileHandler = fileHandler;
         this.categoryMap = categoryFileHandler.readFromFile()
                 .stream()
@@ -26,18 +26,18 @@ public class CategoryRepository implements ICategoryRepository {
     }
 
     @Override
-    public ICategory createCategory(ICategory newCategory) {
+    public Category createCategory(Category newCategory) {
         categoryMap.put(newCategory.getCategoryID(), newCategory);
         return categoryMap.get(newCategory.getCategoryID());
     }
 
     @Override
-    public ICategory readCategory(int categoryID) {
+    public Category readCategory(int categoryID) {
         return categoryMap.get(categoryID);
     }
 
     @Override
-    public ICategory updateCategory(ICategory newCategory) {
+    public Category updateCategory(Category newCategory) {
         categoryMap.put(newCategory.getCategoryID(), newCategory);
         return categoryMap.get(newCategory.getCategoryID());
 
@@ -50,7 +50,7 @@ public class CategoryRepository implements ICategoryRepository {
     }
 
     @Override
-    public Map<Integer, ICategory> getAllCategorys() {
+    public Map<Integer, Category> getAllCategorys() {
         return categoryMap;
     }
 

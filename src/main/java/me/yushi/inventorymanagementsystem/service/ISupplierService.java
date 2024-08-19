@@ -17,6 +17,7 @@ public interface ISupplierService {
     ISupplierDto getSupplierByID(int supplierDtoID);
     boolean deleteSupplier(int supplierDtoID);
     List<ISupplierDto> getAllSuppliers();
+    void save();
     
     
     

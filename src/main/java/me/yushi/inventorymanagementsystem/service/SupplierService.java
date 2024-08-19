@@ -27,13 +27,17 @@ public class SupplierService implements ISupplierService, IMapper<ISupplierDto, 
     @Override
     public ISupplierDto createSupplier(ISupplierDto newSupplierDto) {
         ISupplier supplier = toModel(newSupplierDto);
-        return toDto(repository.createSupplier(supplier));
+        ISupplierDto supplierDto=toDto(repository.createSupplier(supplier));
+        this.save();
+        return supplierDto;
     }
 
     @Override
     public ISupplierDto updateSupplier(ISupplierDto updatedSupplierDto) {
         ISupplier supplier = toModel(updatedSupplierDto);
-        return toDto(repository.updateSupplier(supplier));
+        ISupplierDto supplierDto=toDto(repository.updateSupplier(supplier));
+        this.save();
+        return supplierDto;
 
     }
 
@@ -66,6 +70,11 @@ public class SupplierService implements ISupplierService, IMapper<ISupplierDto, 
     @Override
     public ISupplier toModel(ISupplierDto dto) {
         return new Supplier(dto.getSupplierID(), dto.getSupplierName());
+    }
+
+    @Override
+    public void save() {
+        repository.save();
     }
 
 }
