@@ -28,7 +28,6 @@ public class CategoryView extends Panel {
     private ICategoryController controller;
     private Table<String> categoryTable;
     private WindowBasedTextGUI textGUI;
-    private int selectedRow = -1;
 
     public CategoryView(ICategoryRepository repository, WindowBasedTextGUI textGUI) {
         this.controller = new CategoryController(repository);
@@ -36,11 +35,10 @@ public class CategoryView extends Panel {
         setupUI();
         loadCategories();
 
-
     }
 
     private void setupUI() {
-        categoryTable=new Table<>("Name","ID");
+        categoryTable = new Table<>("ID", "Name");
         this.addComponent(new Label("Category Management"));
 
         // Create a table to display categories
@@ -53,10 +51,11 @@ public class CategoryView extends Panel {
         // Button to add a new category
         Button addCategoryButton = new Button("Add Category", () -> addCategory());
         this.addComponent(addCategoryButton);
-        // Button to update an existing category
         Button updateCategoryButton = new Button("Update Category", () -> updateCategory());
         this.addComponent(updateCategoryButton);
+
     }
+
 
     private void loadCategories() {
         categoryTable.getTableModel().clear();
@@ -90,7 +89,7 @@ public class CategoryView extends Panel {
     private void updateCategory() {
         // Prompt the user to select a category from the table
         int selectedRow = categoryTable.getSelectedRow();
-        if (selectedRow < 0) {
+        if (selectedRow == 0) {
             MessageDialog.showMessageDialog(textGUI, "Error", "No category selected.", MessageDialogButton.OK);
             return;
         }
