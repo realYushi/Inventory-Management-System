@@ -14,8 +14,8 @@ import me.yushi.inventorymanagementsystem.Dto.ProductDto;
 public interface IProductService {
     ProductDto createProduct(ProductDto newProductDto);
     ProductDto updateProduct(ProductDto updatedProductDto);
-    ProductDto getProductByID(int productID);
-    boolean deleteProduct(int productID);
+    ProductDto getProductByID(String productID);
+    boolean deleteProduct(String productID);
     List<ProductDto> getAllProducts();
     void save();
 }

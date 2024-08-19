@@ -5,6 +5,7 @@
 package me.yushi.inventorymanagementsystem.model;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  *
@@ -12,16 +13,18 @@ import java.util.Date;
  */
 public class Product implements IProduct {
 
-    private int productID;
+    private String productID;
     private String name;
-    private int categoryID;
+    private String categoryID;
     private int quantity;
     private String unit;
     private double price;
     private Date expirationDate;
 
-    public Product(int productID,String name, int categoryID,int quantity, String unit, double price, Date expirationDate) {
-        this.productID = productID;
+    public Product(String productID,String name, String categoryID,int quantity, String unit, double price, Date expirationDate) {
+        this.productID=productID;
+        this.productID =(this.productID==""?UUID.randomUUID().toString():productID);
+
         this.name = name;
         this.categoryID = categoryID;
         this.quantity = quantity;
@@ -31,13 +34,8 @@ public class Product implements IProduct {
     }
 
     @Override
-    public int getProductID() {
+    public String getProductID() {
         return this.productID;
-    }
-
-    @Override
-    public void setProductID(int producitonID) {
-        this.productID=producitonID;
     }
 
     @Override
@@ -51,14 +49,10 @@ public class Product implements IProduct {
     }
 
     @Override
-    public int getCategoryID() {
+    public String getCategoryID() {
         return this.categoryID;
     }
 
-    @Override
-    public void setCategoryID(int categoryID) {
-        this.categoryID=categoryID;
-    }
 
     @Override
     public int getQuantity() {

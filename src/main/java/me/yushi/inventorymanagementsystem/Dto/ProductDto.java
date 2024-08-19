@@ -12,9 +12,9 @@ import java.util.Date;
  */
 public class ProductDto implements IProductDto {
 
-    private final int productID;
+    private final String productID;
     private final String name;
-    private final int categoryID;
+    private final String categoryID;
     private final int quantity;
     private final String unit;
     private final double price;
@@ -32,15 +32,15 @@ public class ProductDto implements IProductDto {
 
     public static class Builder {
 
-        private int productID;
+        private String productID;
         private String name;
-        private int categoryID;
+        private String categoryID;
         private int quantity;
         private String unit;
         private double price;
         private Date expirationDate;
 
-        public Builder productID(int productID) {
+        public Builder productID(String productID) {
             this.productID = productID;
             return this;
         }
@@ -50,7 +50,7 @@ public class ProductDto implements IProductDto {
             return this;
         }
 
-        public Builder categoryID(int categoryID) {
+        public Builder categoryID(String categoryID) {
             this.categoryID = categoryID;
             return this;
         }
@@ -82,7 +82,7 @@ public class ProductDto implements IProductDto {
     }
 
     @Override
-    public int getProductID() {
+    public String getProductID() {
         return this.productID;
     }
 
@@ -97,7 +97,7 @@ public class ProductDto implements IProductDto {
     }
 
     @Override
-    public int getCategoryID() {
+    public String getCategoryID() {
         return this.categoryID;
     }
 

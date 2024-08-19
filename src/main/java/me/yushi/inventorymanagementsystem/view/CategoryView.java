@@ -28,17 +28,18 @@ public class CategoryView extends Panel {
     private ICategoryController controller;
     private Table<String> categoryTable;
     private WindowBasedTextGUI textGUI;
+    private int selectedRow = -1;
 
     public CategoryView(ICategoryRepository repository, WindowBasedTextGUI textGUI) {
         this.controller = new CategoryController(repository);
         this.textGUI = textGUI;
         setupUI();
         loadCategories();
-
+        addTableSelectionListener();
     }
 
     private void setupUI() {
-        categoryTable = new Table<>("ID", "Name");
+        categoryTable = new Table<>(" ", "ID", "Name"); // Add "Selected" column
         this.addComponent(new Label("Category Management"));
 
         // Create a table to display categories
@@ -51,28 +52,27 @@ public class CategoryView extends Panel {
         // Button to add a new category
         Button addCategoryButton = new Button("Add Category", () -> addCategory());
         this.addComponent(addCategoryButton);
+        //Button to update a category
         Button updateCategoryButton = new Button("Update Category", () -> updateCategory());
         this.addComponent(updateCategoryButton);
-
+        //Button to delete a category
+        Button deleteCategoryButton= new Button("Delete Category",()->deleteCategory());
+        this.addComponent(deleteCategoryButton);
     }
-
 
     private void loadCategories() {
         categoryTable.getTableModel().clear();
         List<CategoryDto> categories = controller.getAllCategorys();
         for (ICategoryDto category : categories) {
-            categoryTable.getTableModel().addRow(
-                    String.valueOf(category.getCategoryID()),
-                    category.getCategoryName()
-            );
+            categoryTable.getTableModel().addRow("", String.valueOf(category.getCategoryID()),
+                    category.getCategoryName());
         }
     }
 
     private void addCategory() {
         String categoryName = TextInputDialog.showDialog(textGUI, "Add Category", "Category Name:", "");
-        String categoryID = TextInputDialog.showDialog(textGUI, "Add Category", "Category ID:", "");
         if (categoryName != null && !categoryName.trim().isEmpty()) {
-            CategoryDto category = new CategoryDto.Builder().categoryName(categoryName).categoryID(Integer.parseInt(categoryID)).build();
+            CategoryDto category = new CategoryDto.Builder().categoryName(categoryName).build();
             ICategoryDto newCategory = controller.createCategory(category);
 
             if (newCategory != null) {
@@ -88,24 +88,25 @@ public class CategoryView extends Panel {
 
     private void updateCategory() {
         // Prompt the user to select a category from the table
-        int selectedRow = categoryTable.getSelectedRow();
-        if (selectedRow == 0) {
+        selectedRow = categoryTable.getSelectedRow();
+        if (selectedRow == -1) { // Check if no row is selected
             MessageDialog.showMessageDialog(textGUI, "Error", "No category selected.", MessageDialogButton.OK);
+            selectedRow = -1;
             return;
         }
 
         // Get the selected category ID and name
-        String categoryID = categoryTable.getTableModel().getRow(selectedRow).get(0);
-        String categoryName = categoryTable.getTableModel().getRow(selectedRow).get(1);
+        String categoryID = categoryTable.getTableModel().getRow(selectedRow).get(1);
+        String categoryName = categoryTable.getTableModel().getRow(selectedRow).get(2);
 
         // Prompt the user to input new values for the category
-        String newCategoryName = TextInputDialog.showDialog(textGUI, "Update Category", "New Category Name:", categoryName);
-        String newCategoryID = TextInputDialog.showDialog(textGUI, "Update Category", "New Category ID:", categoryID);
+        String newCategoryName = TextInputDialog.showDialog(textGUI, "Update Category", "New Category Name:",
+                categoryName);
 
-        if (newCategoryName != null && !newCategoryName.trim().isEmpty() && newCategoryID != null && !newCategoryID.trim().isEmpty()) {
+        if (newCategoryName != null && !newCategoryName.trim().isEmpty()) {
             // Create a new CategoryDto with the updated values
             CategoryDto updatedCategory = new CategoryDto.Builder()
-                    .categoryID(Integer.parseInt(newCategoryID))
+                    .categoryID(categoryID)
                     .categoryName(newCategoryName)
                     .build();
 
@@ -114,12 +115,53 @@ public class CategoryView extends Panel {
 
             if (result != null) {
                 loadCategories();
-                MessageDialog.showMessageDialog(textGUI, "Success", "Category updated successfully!", MessageDialogButton.OK);
+                MessageDialog.showMessageDialog(textGUI, "Success", "Category updated successfully!",
+                        MessageDialogButton.OK);
             } else {
-                MessageDialog.showMessageDialog(textGUI, "Error", "Failed to update category.", MessageDialogButton.OK);
+                MessageDialog.showMessageDialog(textGUI, "Error", "Failed to update category.",
+                        MessageDialogButton.OK);
             }
         } else {
             MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input.", MessageDialogButton.OK);
         }
+        selectedRow = -1;
+
+    }
+
+    private void deleteCategory() {
+        // Prompt the user to select a category from the table
+        selectedRow = categoryTable.getSelectedRow();
+        if (selectedRow == -1) { // Check if no row is selected
+            MessageDialog.showMessageDialog(textGUI, "Error", "No category selected.", MessageDialogButton.OK);
+            selectedRow = -1;
+            return;
+        }
+        String categoryID = categoryTable.getTableModel().getRow(selectedRow).get(1);
+        Boolean result = controller.deleteCategory(categoryID);
+
+        if (result != null) {
+            loadCategories();
+            MessageDialog.showMessageDialog(textGUI, "Success", "Category delete successfully!",
+                    MessageDialogButton.OK);
+        } else {
+            MessageDialog.showMessageDialog(textGUI, "Error", "Failed to delete category.",
+                    MessageDialogButton.OK);
+        }
+        selectedRow = -1;
+
+    }
+
+    private void addTableSelectionListener() {
+        categoryTable.setSelectAction(() -> {
+            int selectedRow = categoryTable.getSelectedRow();
+            if (selectedRow != -1) {
+                // Clear previous selection
+                for (int row = 0; row < categoryTable.getTableModel().getRowCount(); row++) {
+                    categoryTable.getTableModel().setCell(0, row, "");
+                }
+                // Mark the selected row with a star
+                categoryTable.getTableModel().setCell(0, selectedRow, "*");
+            }
+        });
     }
 }

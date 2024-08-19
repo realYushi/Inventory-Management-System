@@ -13,9 +13,9 @@ import me.yushi.inventorymanagementsystem.model.Product;
  */
 public interface IProductRepository {
     Product createProduct(Product newProduct);
-    Product readProduct(int productID);
+    Product readProduct(String productID);
     Product updateProduct(Product updatedProduct);
-    boolean deleteProduct(int productID);
-    Map<Integer,Product> getAllProducts();
+    boolean deleteProduct(String productID);
+    Map<String,Product> getAllProducts();
     void save();
 }

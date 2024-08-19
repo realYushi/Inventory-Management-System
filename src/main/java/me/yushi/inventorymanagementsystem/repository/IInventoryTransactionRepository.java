@@ -13,10 +13,10 @@ import me.yushi.inventorymanagementsystem.model.InventoryTransaction;
  */
 public interface IInventoryTransactionRepository {
     InventoryTransaction createInventoryTransaction(InventoryTransaction newIInventoryTransaction);
-    InventoryTransaction readInventoryTransaction(int inventoryTransationID);
+    InventoryTransaction readInventoryTransaction(String inventoryTransationID);
     InventoryTransaction updateInventoryTransaction(InventoryTransaction updatedIInventoryTransaction);
-    boolean deleteInventoryTransaction(int inventoryTransationID); 
+    boolean deleteInventoryTransaction(String inventoryTransationID); 
 
-    Map<Integer,InventoryTransaction> getAllInventoryTransations();
+    Map<String,InventoryTransaction> getAllInventoryTransations();
     void save();
 }

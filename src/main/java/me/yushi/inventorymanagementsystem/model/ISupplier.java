@@ -9,8 +9,7 @@ package me.yushi.inventorymanagementsystem.model;
  * @author yushi
  */
 public interface ISupplier {
-    int getSupplierID();
-    void setSupplierID(int supplierID);
+    String getSupplierID();
     String getSupplierName();
     void setSupplierName(String supplierName);
     

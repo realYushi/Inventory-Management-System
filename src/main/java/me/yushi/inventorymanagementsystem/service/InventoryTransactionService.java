@@ -40,13 +40,15 @@ public class InventoryTransactionService implements IInventoryTransactionService
     }
 
     @Override
-    public InventoryTransactionDto getInventoryTransactionByID(int inventoryTransationID) {
+    public InventoryTransactionDto getInventoryTransactionByID(String inventoryTransationID) {
         return toDto(repository.readInventoryTransaction(inventoryTransationID));
     }
 
     @Override
-    public boolean deleteInventoryTransaction(int inventoryTransationID) {
-        return repository.deleteInventoryTransaction(inventoryTransationID);
+    public boolean deleteInventoryTransaction(String inventoryTransationID) {
+        boolean result =repository.deleteInventoryTransaction(inventoryTransationID);
+        this.save();
+        return result;
     }
 
     @Override

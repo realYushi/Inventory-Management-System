@@ -14,8 +14,8 @@ import me.yushi.inventorymanagementsystem.Dto.InventoryTransactionDto;
 public interface IInventoryTransactionController{
     InventoryTransactionDto createInventoryTransaction(InventoryTransactionDto newIInventoryTransactionDto);
     InventoryTransactionDto updateInventoryTransaction(InventoryTransactionDto updatedInventoryTransactionDto);
-    InventoryTransactionDto getInventoryTransactionByID(int inventoryTransationID);
-    boolean deleteInventoryTransaction(int inventoryTransationID);
+    InventoryTransactionDto getInventoryTransactionByID(String inventoryTransationID);
+    boolean deleteInventoryTransaction(String inventoryTransationID);
     List<InventoryTransactionDto> getAllInventoryTransations();
     
     

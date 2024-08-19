@@ -13,10 +13,10 @@ import me.yushi.inventorymanagementsystem.model.Supplier;
  */
 public interface ISupplierRepository {
     Supplier createSupplier(Supplier newSupplier);
-    Supplier readSupplier(int supplierID);
+    Supplier readSupplier(String supplierID);
     Supplier updateSupplier(Supplier updatedSupplier);
-    boolean deleteSupplier(int supplierID);
-    Map<Integer,Supplier>getAllSuppliers();
+    boolean deleteSupplier(String supplierID);
+    Map<String,Supplier>getAllSuppliers();
     void save();
     
 }

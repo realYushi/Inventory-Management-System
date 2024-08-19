@@ -10,7 +10,7 @@ package me.yushi.inventorymanagementsystem.Dto;
  */
 public class SupplierDto implements ISupplierDto {
 
-    private final int supplierID;
+    private final String supplierID;
     private final String supplierName;
 
     private SupplierDto(Builder builder) {
@@ -21,10 +21,10 @@ public class SupplierDto implements ISupplierDto {
 
     public static class Builder {
 
-        private int supplierID;
+        private String supplierID;
         private String supplierName;
 
-        public Builder supplierID(int supplierID) {
+        public Builder supplierID(String supplierID) {
             this.supplierID = supplierID;
             return this;
         }
@@ -41,7 +41,7 @@ public class SupplierDto implements ISupplierDto {
     }
 
     @Override
-    public int getSupplierID() {
+    public String getSupplierID() {
         return this.supplierID;
     }
 

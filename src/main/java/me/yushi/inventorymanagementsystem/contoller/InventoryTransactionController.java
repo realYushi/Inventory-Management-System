@@ -32,12 +32,12 @@ public class InventoryTransactionController implements IInventoryTransactionCont
     }
 
     @Override
-    public InventoryTransactionDto getInventoryTransactionByID(int inventoryTransationID) {
+    public InventoryTransactionDto getInventoryTransactionByID(String inventoryTransationID) {
         return inventoryTransactionService.getInventoryTransactionByID(inventoryTransationID);
     }
 
     @Override
-    public boolean deleteInventoryTransaction(int inventoryTransationID) {
+    public boolean deleteInventoryTransaction(String inventoryTransationID) {
         return inventoryTransactionService.deleteInventoryTransaction(inventoryTransationID);
     }
 

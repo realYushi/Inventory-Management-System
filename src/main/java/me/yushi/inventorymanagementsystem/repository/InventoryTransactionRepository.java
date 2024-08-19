@@ -15,7 +15,7 @@ import me.yushi.inventorymanagementsystem.model.InventoryTransaction;
  */
 public class InventoryTransactionRepository implements IInventoryTransactionRepository {
 
-    private Map<Integer, InventoryTransaction> inventoryTransactionMap;
+    private Map<String, InventoryTransaction> inventoryTransactionMap;
     private IFileHandler<InventoryTransaction> inventoryTransactionFileHandler;
 
     public InventoryTransactionRepository(IFileHandler<InventoryTransaction> fileHandler) throws IOException {
@@ -26,14 +26,14 @@ public class InventoryTransactionRepository implements IInventoryTransactionRepo
     }
 
     @Override
-    public InventoryTransaction createInventoryTransaction(InventoryTransaction newIInventoryTransaction) {
-        inventoryTransactionMap.put(newIInventoryTransaction.getTransactionID(), newIInventoryTransaction);
-        return inventoryTransactionMap.get(newIInventoryTransaction.getTransactionID());
+    public InventoryTransaction createInventoryTransaction(InventoryTransaction newInventoryTransaction) {
+        inventoryTransactionMap.put(newInventoryTransaction.getProductID(), newInventoryTransaction);
+        return inventoryTransactionMap.get(newInventoryTransaction.getTransactionID());
 
     }
 
     @Override
-    public InventoryTransaction readInventoryTransaction(int inventoryTransationID) {
+    public InventoryTransaction readInventoryTransaction(String inventoryTransationID) {
         return inventoryTransactionMap.get(inventoryTransationID);
     }
 
@@ -44,13 +44,13 @@ public class InventoryTransactionRepository implements IInventoryTransactionRepo
     }
 
     @Override
-    public boolean deleteInventoryTransaction(int inventoryTransationID) {
+    public boolean deleteInventoryTransaction(String inventoryTransationID) {
         inventoryTransactionMap.remove(inventoryTransationID);
         return !inventoryTransactionMap.containsKey(inventoryTransationID);
     }
 
     @Override
-    public Map<Integer, InventoryTransaction> getAllInventoryTransations() {
+    public Map<String,InventoryTransaction> getAllInventoryTransations() {
         return inventoryTransactionMap;
     }
 

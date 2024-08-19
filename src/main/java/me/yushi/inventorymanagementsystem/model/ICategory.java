@@ -9,8 +9,7 @@ package me.yushi.inventorymanagementsystem.model;
  * @author yushi
  */
 public interface ICategory {
-    int getCategoryID();
-    void setCategoryID(int categoryID);
+    String getCategoryID();
 
     String getCategoryName();
     void setCategoryName(String categoryName);

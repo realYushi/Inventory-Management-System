@@ -13,5 +13,5 @@ import java.util.Map;
  */
 public interface IFileHandler <T> {
     List<T> readFromFile();
-    void writeToFile(Map<Integer,T> objectList);
+    void writeToFile(Map<String,T> objectList);
 }

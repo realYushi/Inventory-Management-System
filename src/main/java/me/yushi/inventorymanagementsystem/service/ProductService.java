@@ -41,14 +41,16 @@ public class ProductService implements IProductService, IMapper<ProductDto, Prod
     }
 
     @Override
-    public ProductDto getProductByID(int productID) {
+    public ProductDto getProductByID(String productID) {
 
         return toDto(repository.readProduct(productID));
     }
 
     @Override
-    public boolean deleteProduct(int productID) {
-        return repository.deleteProduct(productID);
+    public boolean deleteProduct(String productID) {
+        boolean result =repository.deleteProduct(productID);
+        this.save();
+        return result;
     }
 
     @Override
@@ -74,7 +76,8 @@ public class ProductService implements IProductService, IMapper<ProductDto, Prod
 
     @Override
     public Product toModel(ProductDto dto) {
-        return new Product(dto.getProductID(),
+        return new Product(
+                dto.getProductID(),
                 dto.getName(),
                 dto.getCategoryID(),
                 dto.getQuantity(),

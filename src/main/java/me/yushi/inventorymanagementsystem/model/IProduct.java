@@ -11,8 +11,7 @@ import java.util.Date;
  * @author yushi
  */
 public interface IProduct {
-    int getProductID();
-    void setProductID(int producitonID);
+    String getProductID();
     
     String getUnit();
     void setUnit(String unit);
@@ -20,8 +19,7 @@ public interface IProduct {
     String getName();
     void setName(String name);
 
-    int getCategoryID();
-    void setCategoryID(int categoryID);
+    String getCategoryID();
 
     int getQuantity();
     void setQuantity(int quantity);

@@ -40,13 +40,15 @@ public class SupplierService implements ISupplierService, IMapper<SupplierDto, S
     }
 
     @Override
-    public SupplierDto getSupplierByID(int supplierDtoID) {
+    public SupplierDto getSupplierByID(String supplierDtoID) {
         return toDto(repository.readSupplier(supplierDtoID));
     }
 
     @Override
-    public boolean deleteSupplier(int supplierDtoID) {
-        return repository.deleteSupplier(supplierDtoID);
+    public boolean deleteSupplier(String supplierDtoID) {
+        boolean result =repository.deleteSupplier(supplierDtoID);
+        this.save();
+        return result;
     }
 
     @Override
@@ -67,7 +69,7 @@ public class SupplierService implements ISupplierService, IMapper<SupplierDto, S
 
     @Override
     public Supplier toModel(SupplierDto dto) {
-        return new Supplier(dto.getSupplierID(), dto.getSupplierName());
+        return new Supplier(dto.getSupplierID(),dto.getSupplierName());
     }
 
     @Override

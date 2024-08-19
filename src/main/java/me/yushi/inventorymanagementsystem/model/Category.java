@@ -4,29 +4,28 @@
  */
 package me.yushi.inventorymanagementsystem.model;
 
+import java.util.UUID;
+
 /**
  *
  * @author yushi
  */
 public class Category implements ICategory {
 
-    private int categoryID;
+    private String categoryID;
     private String categoryName;
 
-    public Category(int categoryID,String categoryName) {
-        this.categoryID = categoryID;
+    public Category(String categoryName,String categoryID) {
         this.categoryName = categoryName;
+        this.categoryID=categoryID;
+        categoryID= (categoryID==""?UUID.randomUUID().toString():categoryID);
     }
 
     @Override
-    public int getCategoryID() {
+    public String getCategoryID() {
         return this.categoryID;
     }
 
-    @Override
-    public void setCategoryID(int categoryID) {
-        this.categoryID=categoryID;
-    }
 
     @Override
     public String getCategoryName() {

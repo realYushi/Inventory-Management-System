@@ -32,12 +32,12 @@ public class ProductController implements IProductController{
     }
 
     @Override
-    public ProductDto getProductByID(int productID) {
+    public ProductDto getProductByID(String productID) {
         return productService.getProductByID(productID);
     }
 
     @Override
-    public boolean deleteProduct(int productID) {
+    public boolean deleteProduct(String productID) {
         return productService.deleteProduct(productID);
     }
 

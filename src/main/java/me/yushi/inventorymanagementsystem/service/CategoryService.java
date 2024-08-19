@@ -32,7 +32,7 @@ public class CategoryService implements ICategoryService,IMapper<CategoryDto, Ca
     }
 
     @Override
-    public CategoryDto getCategoryByID(int categoryID) {
+    public CategoryDto getCategoryByID(String categoryID) {
         Category category=repository.readCategory(categoryID);
         return toDto(category);
     }
@@ -47,8 +47,10 @@ public class CategoryService implements ICategoryService,IMapper<CategoryDto, Ca
     }
 
     @Override
-    public boolean deleteCategory(int categoryID) {
-        return repository.deleteCategory(categoryID);
+    public boolean deleteCategory(String categoryID) {
+        boolean result =repository.deleteCategory(categoryID);
+        this.save();
+        return result; 
     }
 
     @Override
@@ -70,7 +72,7 @@ public class CategoryService implements ICategoryService,IMapper<CategoryDto, Ca
 
     @Override
     public Category toModel(CategoryDto dto) {
-        return new Category(dto.getCategoryID(), dto.getCategoryName());
+        return new Category( dto.getCategoryName(),dto.getCategoryID());
     }
 
     @Override

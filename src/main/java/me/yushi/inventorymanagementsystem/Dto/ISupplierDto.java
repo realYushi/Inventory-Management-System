@@ -9,7 +9,7 @@ package me.yushi.inventorymanagementsystem.Dto;
  * @author yushi
  */
 public interface ISupplierDto {
-    int getSupplierID();
+    String getSupplierID();
     String getSupplierName();
     
 }

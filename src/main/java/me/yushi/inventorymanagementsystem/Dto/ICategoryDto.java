@@ -9,7 +9,7 @@ package me.yushi.inventorymanagementsystem.Dto;
  * @author yushi
  */
 public interface ICategoryDto {
-    int getCategoryID();
+    String getCategoryID();
 
     String getCategoryName();
     

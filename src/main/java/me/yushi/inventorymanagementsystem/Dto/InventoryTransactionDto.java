@@ -12,8 +12,8 @@ import java.util.Date;
  */
 public class InventoryTransactionDto implements IInventoryTransactionDto {
 
-    private final int transactionID;
-    private final int productID;
+    private final String transactionID;
+    private final String productID;
     private final int quantity;
     private final Date date;
     private final TransactionType transactionType;
@@ -30,8 +30,8 @@ public class InventoryTransactionDto implements IInventoryTransactionDto {
 
     public static class Builder {
 
-        private int transactionID;
-        private int productID;
+        private String transactionID;
+        private String productID;
         private int quantity;
         private Date date;
         private TransactionType transactionType;
@@ -42,12 +42,12 @@ public class InventoryTransactionDto implements IInventoryTransactionDto {
             return this;
         }
 
-        public Builder transactionID(int transactionID) {
+        public Builder transactionID(String transactionID) {
             this.transactionID = transactionID;
             return this;
         }
 
-        public Builder productID(int productID) {
+        public Builder productID(String productID) {
             this.productID = productID;
             return this;
         }
@@ -73,12 +73,12 @@ public class InventoryTransactionDto implements IInventoryTransactionDto {
     }
 
     @Override
-    public int getTransactionID() {
+    public String getTransactionID() {
         return this.transactionID;
     }
 
     @Override
-    public int getProductID() {
+    public String getProductID() {
         return this.productID;
     }
 

@@ -13,10 +13,10 @@ import me.yushi.inventorymanagementsystem.model.Category;
  */
 public interface ICategoryRepository {
     Category createCategory(Category newCategory);
-    Category readCategory(int categoryID);
+    Category readCategory(String categoryID);
     Category updateCategory(Category newCategory);
-    boolean deleteCategory(int categoryID);
+    boolean deleteCategory(String categoryID);
 
-    Map<Integer,Category> getAllCategorys();
+    Map<String,Category> getAllCategorys();
     void save();
 }

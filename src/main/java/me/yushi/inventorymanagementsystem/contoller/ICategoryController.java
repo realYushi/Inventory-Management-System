@@ -13,9 +13,9 @@ import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
  */
 public interface ICategoryController{
     CategoryDto createCategory(CategoryDto newCategoryDto);
-    CategoryDto getCategoryByID( int categoryID);
+    CategoryDto getCategoryByID( String categoryID);
     CategoryDto updateCategory(CategoryDto updatedCategoryDto);
-    boolean deleteCategory(int categoryID);
+    boolean deleteCategory(String categoryID);
 
     List<CategoryDto> getAllCategorys();
 }

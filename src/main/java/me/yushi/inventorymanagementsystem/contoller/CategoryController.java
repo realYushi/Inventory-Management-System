@@ -29,7 +29,7 @@ public class CategoryController implements ICategoryController{
     }
 
     @Override
-    public CategoryDto getCategoryByID(int categoryID) {
+    public CategoryDto getCategoryByID(String categoryID) {
         return categoryService.getCategoryByID(categoryID);
 
     }
@@ -40,7 +40,7 @@ public class CategoryController implements ICategoryController{
     }
 
     @Override
-    public boolean deleteCategory(int categoryID) {
+    public boolean deleteCategory(String categoryID) {
         return categoryService.deleteCategory(categoryID);
     }
 

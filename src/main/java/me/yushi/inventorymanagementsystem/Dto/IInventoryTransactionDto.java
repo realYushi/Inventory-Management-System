@@ -11,9 +11,9 @@ import java.util.Date;
  * @author yushi
  */
 public interface IInventoryTransactionDto {
-    int getTransactionID();
+    String getTransactionID();
 
-    int getProductID();
+    String getProductID();
 
     int getQuantity();
 

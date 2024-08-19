@@ -72,7 +72,7 @@ public class FileHandler<T> implements IFileHandler<T> {
     }
 
     @Override
-    public void writeToFile(Map<Integer, T> objectList) {
+    public void writeToFile(Map<String, T> objectList) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.fileLocation))) {
             writer.write(gson.toJson(objectList.values()));
         } catch (IOException ex) {

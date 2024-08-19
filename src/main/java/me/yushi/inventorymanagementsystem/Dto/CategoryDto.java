@@ -10,7 +10,7 @@ package me.yushi.inventorymanagementsystem.Dto;
  */
 public class CategoryDto implements ICategoryDto {
 
-    private final int categoryID;
+    private final String categoryID;
     private final String categoryName;
 
     private CategoryDto(Builder builder) {
@@ -20,10 +20,10 @@ public class CategoryDto implements ICategoryDto {
 
     public static class Builder {
 
-        private int categoryID;
+        private String categoryID;
         private String categoryName;
 
-        public Builder categoryID(int categoryID) {
+        public Builder categoryID(String categoryID) {
             this.categoryID = categoryID;
             return this;
         }
@@ -39,7 +39,7 @@ public class CategoryDto implements ICategoryDto {
     }
 
     @Override
-    public int getCategoryID() {
+    public String getCategoryID() {
         return this.categoryID;
     }
 

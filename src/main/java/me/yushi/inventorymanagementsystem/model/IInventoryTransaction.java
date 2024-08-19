@@ -11,13 +11,9 @@ import java.util.Date;
  * @author yushi
  */
 public interface IInventoryTransaction {
-    int getTransactionID();
+    String getTransactionID();
 
-    void setTransactionID(int transctionID);
-
-    int getProductID();
-
-    void setProductID(int productID);
+    String getProductID();
 
     int getQuantity();
 

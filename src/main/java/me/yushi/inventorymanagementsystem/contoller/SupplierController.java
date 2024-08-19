@@ -33,12 +33,12 @@ public class SupplierController implements ISupplierController{
     }
 
     @Override
-    public SupplierDto getSupplierByID(int supplierID) {
+    public SupplierDto getSupplierByID(String supplierID) {
         return supplierService.getSupplierByID(supplierID);
     }
 
     @Override
-    public boolean deleteSupplier(int supplierID) {
+    public boolean deleteSupplier(String supplierID) {
         return supplierService.deleteSupplier(supplierID);
 
     }

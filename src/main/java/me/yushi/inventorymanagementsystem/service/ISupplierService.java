@@ -14,8 +14,8 @@ import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
 public interface ISupplierService {
     SupplierDto createSupplier(SupplierDto newSupplierDto);
     SupplierDto updateSupplier(SupplierDto updatedSupplierDto);
-    SupplierDto getSupplierByID(int supplierDtoID);
-    boolean deleteSupplier(int supplierDtoID);
+    SupplierDto getSupplierByID(String supplierDtoID);
+    boolean deleteSupplier(String supplierDtoID);
     List<SupplierDto> getAllSuppliers();
     void save();
     

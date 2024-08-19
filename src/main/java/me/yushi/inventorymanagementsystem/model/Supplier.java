@@ -4,29 +4,28 @@
  */
 package me.yushi.inventorymanagementsystem.model;
 
+import java.util.UUID;
+
 /**
  *
  * @author yushi
  */
 public class Supplier implements ISupplier {
 
-    private int supplierID;
+    private String supplierID;
     private String supplierName;
 
-    public Supplier(int supplierID, String supplierName) {
-        this.supplierID = supplierID;
+    public Supplier(String supplierID,String supplierName) {
+        this.supplierID=supplierID;
+        this.supplierID = (this.supplierID==""?UUID.randomUUID().toString():supplierID);
         this.supplierName = supplierName;
     }
 
     @Override
-    public int getSupplierID() {
+    public String getSupplierID() {
         return this.supplierID;
     }
 
-    @Override
-    public void setSupplierID(int supplierID) {
-        this.supplierID = supplierID;
-    }
 
     @Override
     public String getSupplierName() {

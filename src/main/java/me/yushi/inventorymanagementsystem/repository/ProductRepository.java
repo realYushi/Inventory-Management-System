@@ -15,7 +15,7 @@ import me.yushi.inventorymanagementsystem.model.Product;
  */
 public class ProductRepository implements IProductRepository {
 
-    private Map<Integer, Product> productMap;
+    private Map<String, Product> productMap;
     private FileHandler<Product> productFileHandler;
 
     public ProductRepository(FileHandler<Product> fileHandler) throws IOException {
@@ -32,7 +32,7 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public Product readProduct(int productID) {
+    public Product readProduct(String productID) {
         return productMap.get(productID);
     }
 
@@ -43,13 +43,13 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public boolean deleteProduct(int productID) {
+    public boolean deleteProduct(String productID) {
         productMap.remove(productID);
         return productMap.containsKey(productID);
     }
 
     @Override
-    public Map<Integer, Product> getAllProducts() {
+    public Map<String, Product> getAllProducts() {
         return productMap;
     }
 

@@ -5,6 +5,7 @@
 package me.yushi.inventorymanagementsystem.model;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  *
@@ -12,15 +13,16 @@ import java.util.Date;
  */
 public class InventoryTransaction implements IInventoryTransaction {
 
-    private int transactionID;
-    private int productID;
+    private String transactionID;
+    private String productID;
     private int quantity;
     private Date date;
     private TransactionType transactionType;
     private double price;
 
-    public InventoryTransaction(int transactionID, int productID, int quantity, Date date, TransactionType transactionType, double price) {
-        this.transactionID = transactionID;
+    public InventoryTransaction(String transactionID, String productID, int quantity, Date date, TransactionType transactionType, double price) {
+        this.transactionID=transactionID;
+        this.transactionID = (transactionID==""?UUID.randomUUID().toString():transactionID);
         this.productID = productID;
         this.quantity = quantity;
         this.date = date;
@@ -29,27 +31,17 @@ public class InventoryTransaction implements IInventoryTransaction {
     }
 
     @Override
-    public int getTransactionID() {
+    public String getTransactionID() {
         return this.transactionID;
         // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    @Override
-    public void setTransactionID(int transctionID) {
-        this.transactionID = transctionID;
-        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 
     @Override
-    public int getProductID() {
+    public String getProductID() {
         return this.productID;
     }
 
-    @Override
-    public void setProductID(int productID) {
-        this.productID = productID;
-        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 
     @Override
     public int getQuantity() {

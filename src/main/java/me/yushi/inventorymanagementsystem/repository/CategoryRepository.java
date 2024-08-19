@@ -15,7 +15,7 @@ import me.yushi.inventorymanagementsystem.model.Category;
  */
 public class CategoryRepository implements ICategoryRepository {
 
-    private Map<Integer, Category> categoryMap;
+    private Map<String, Category> categoryMap;
     private FileHandler<Category> categoryFileHandler;
 
     public CategoryRepository(FileHandler<Category> fileHandler) throws IOException {
@@ -32,7 +32,7 @@ public class CategoryRepository implements ICategoryRepository {
     }
 
     @Override
-    public Category readCategory(int categoryID) {
+    public Category readCategory(String categoryID) {
         return categoryMap.get(categoryID);
     }
 
@@ -44,13 +44,13 @@ public class CategoryRepository implements ICategoryRepository {
     }
 
     @Override
-    public boolean deleteCategory(int categoryID) {
+    public boolean deleteCategory(String categoryID) {
         categoryMap.remove(categoryID);
         return !categoryMap.containsKey(categoryID);
     }
 
     @Override
-    public Map<Integer, Category> getAllCategorys() {
+    public Map<String, Category> getAllCategorys() {
         return categoryMap;
     }
 

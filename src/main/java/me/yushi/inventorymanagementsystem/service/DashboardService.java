@@ -104,7 +104,7 @@ public class DashboardService implements IDashboardService {
 
     private List<InventoryTransaction> getRecentTransactionData() {
         Date endDate = getEndDate(TRANSATION_DATE_RANGE);
-        Map<Integer, InventoryTransaction> allData = inventoryTransactionRepository.getAllInventoryTransations();
+        Map<String, InventoryTransaction> allData = inventoryTransactionRepository.getAllInventoryTransations();
         recentTransationData = allData.values().stream()
                 .filter(transation -> transation.getDate().after(endDate))
                 .collect(Collectors.toList());

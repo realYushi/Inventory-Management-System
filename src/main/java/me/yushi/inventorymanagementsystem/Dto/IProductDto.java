@@ -11,10 +11,10 @@ import java.util.Date;
  * @author yushi
  */
 public interface IProductDto {
-    int getProductID();
+    String getProductID();
     String getUnit();
     String getName();
-    int getCategoryID();
+    String getCategoryID();
     int getQuantity();
     double getPrice();
     Date getExpirationDate();

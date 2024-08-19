@@ -15,7 +15,7 @@ import me.yushi.inventorymanagementsystem.model.Supplier;
  */
 public class SupplierRepository implements ISupplierRepository {
 
-    private Map<Integer, Supplier> supplierMap;
+    private Map<String, Supplier> supplierMap;
     private FileHandler<Supplier> supplierFileHandler;
 
     public SupplierRepository(FileHandler<Supplier> fileHandler) throws IOException {
@@ -32,7 +32,7 @@ public class SupplierRepository implements ISupplierRepository {
     }
 
     @Override
-    public Supplier readSupplier(int supplierID) {
+    public Supplier readSupplier(String supplierID) {
         return supplierMap.get(supplierID);
     }
 
@@ -43,13 +43,13 @@ public class SupplierRepository implements ISupplierRepository {
     }
 
     @Override
-    public boolean deleteSupplier(int supplierID) {
+    public boolean deleteSupplier(String supplierID) {
         supplierMap.remove(supplierID);
         return !supplierMap.containsKey(supplierID);
     }
 
     @Override
-    public Map<Integer, Supplier> getAllSuppliers() {
+    public Map<String, Supplier> getAllSuppliers() {
         return supplierMap;
     }
 
