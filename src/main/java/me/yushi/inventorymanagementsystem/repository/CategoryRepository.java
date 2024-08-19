@@ -16,9 +16,9 @@ import me.yushi.inventorymanagementsystem.model.Category;
 public class CategoryRepository implements ICategoryRepository {
 
     private Map<Integer, Category> categoryMap;
-    private IFileHandler<Category> categoryFileHandler;
+    private FileHandler<Category> categoryFileHandler;
 
-    public CategoryRepository(IFileHandler<Category> fileHandler) throws IOException {
+    public CategoryRepository(FileHandler<Category> fileHandler) throws IOException {
         categoryFileHandler = fileHandler;
         this.categoryMap = categoryFileHandler.readFromFile()
                 .stream()

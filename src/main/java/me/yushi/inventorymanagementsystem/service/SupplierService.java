@@ -6,43 +6,41 @@ package me.yushi.inventorymanagementsystem.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import me.yushi.inventorymanagementsystem.Dto.ISupplierDto;
 import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
-import me.yushi.inventorymanagementsystem.model.ISupplier;
 import me.yushi.inventorymanagementsystem.model.Supplier;
-import me.yushi.inventorymanagementsystem.repository.ISupplierRepository;
+import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
 
 /**
  *
  * @author yushi
  */
-public class SupplierService implements ISupplierService, IMapper<ISupplierDto, ISupplier> {
+public class SupplierService implements ISupplierService, IMapper<SupplierDto, Supplier> {
 
-    private ISupplierRepository repository;
+    private SupplierRepository repository;
 
-    public SupplierService(ISupplierRepository repository) {
+    public SupplierService(SupplierRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public ISupplierDto createSupplier(ISupplierDto newSupplierDto) {
-        ISupplier supplier = toModel(newSupplierDto);
-        ISupplierDto supplierDto=toDto(repository.createSupplier(supplier));
+    public SupplierDto createSupplier(SupplierDto newSupplierDto) {
+        Supplier supplier = toModel(newSupplierDto);
+        SupplierDto supplierDto=toDto(repository.createSupplier(supplier));
         this.save();
         return supplierDto;
     }
 
     @Override
-    public ISupplierDto updateSupplier(ISupplierDto updatedSupplierDto) {
-        ISupplier supplier = toModel(updatedSupplierDto);
-        ISupplierDto supplierDto=toDto(repository.updateSupplier(supplier));
+    public SupplierDto updateSupplier(SupplierDto updatedSupplierDto) {
+        Supplier supplier = toModel(updatedSupplierDto);
+        SupplierDto supplierDto=toDto(repository.updateSupplier(supplier));
         this.save();
         return supplierDto;
 
     }
 
     @Override
-    public ISupplierDto getSupplierByID(int supplierDtoID) {
+    public SupplierDto getSupplierByID(int supplierDtoID) {
         return toDto(repository.readSupplier(supplierDtoID));
     }
 
@@ -52,15 +50,15 @@ public class SupplierService implements ISupplierService, IMapper<ISupplierDto, 
     }
 
     @Override
-    public List<ISupplierDto> getAllSuppliers() {
-        List<ISupplier> suppliers = repository.getAllSuppliers().values().stream()
+    public List<SupplierDto> getAllSuppliers() {
+        List<Supplier> suppliers = repository.getAllSuppliers().values().stream()
                 .collect(Collectors.toList());
         return suppliers.stream().map(supplier -> this.toDto(supplier))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ISupplierDto toDto(ISupplier model) {
+    public SupplierDto toDto(Supplier model) {
         return new SupplierDto.Builder()
                 .supplierID(model.getSupplierID())
                 .supplierName(model.getSupplierName())
@@ -68,7 +66,7 @@ public class SupplierService implements ISupplierService, IMapper<ISupplierDto, 
     }
 
     @Override
-    public ISupplier toModel(ISupplierDto dto) {
+    public Supplier toModel(SupplierDto dto) {
         return new Supplier(dto.getSupplierID(), dto.getSupplierName());
     }
 

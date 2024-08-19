@@ -5,18 +5,18 @@
 package me.yushi.inventorymanagementsystem.repository;
 
 import java.util.Map;
-import me.yushi.inventorymanagementsystem.model.ISupplier;
+import me.yushi.inventorymanagementsystem.model.Supplier;
 
 /**
  *
  * @author yushi
  */
 public interface ISupplierRepository {
-    ISupplier createSupplier(ISupplier newSupplier);
-    ISupplier readSupplier(int supplierID);
-    ISupplier updateSupplier(ISupplier updatedSupplier);
+    Supplier createSupplier(Supplier newSupplier);
+    Supplier readSupplier(int supplierID);
+    Supplier updateSupplier(Supplier updatedSupplier);
     boolean deleteSupplier(int supplierID);
-    Map<Integer,ISupplier>getAllSuppliers();
+    Map<Integer,Supplier>getAllSuppliers();
     void save();
     
 }

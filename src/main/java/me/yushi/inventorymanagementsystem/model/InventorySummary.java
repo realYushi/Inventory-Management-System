@@ -12,12 +12,12 @@ import java.util.List;
  */
 public class InventorySummary implements IInventorySummary{
 
-    private List<IProduct> lowStockProducts;
-    private List<IProduct> expirySoonProducts;
-    private List<IProduct> expiriedProducts;
-    private List<IInventoryTransaction> recentInventoryTransactions; 
+    private List<Product> lowStockProducts;
+    private List<Product> expirySoonProducts;
+    private List<Product> expiriedProducts;
+    private List<InventoryTransaction> recentInventoryTransactions; 
 
-    public InventorySummary(List<IProduct> lowStock,List<IProduct> expritySoon,List<IProduct> expried,List<IInventoryTransaction> transatioins) {
+    public InventorySummary(List<Product> lowStock,List<Product> expritySoon,List<Product> expried,List<InventoryTransaction> transatioins) {
         this.lowStockProducts=lowStock;
         this.expiriedProducts=expried;
         this.expirySoonProducts=expritySoon;
@@ -26,22 +26,22 @@ public class InventorySummary implements IInventorySummary{
     
 
     @Override
-    public List<IProduct> getLowStrockProducts() {
+    public List<Product> getLowStrockProducts() {
         return this.lowStockProducts;
     }
 
     @Override
-    public List<IProduct> getExpirySoonProducts() {
+    public List<Product> getExpirySoonProducts() {
         return this.expirySoonProducts;
     }
 
     @Override
-    public List<IProduct> getExpriedProducts() {
+    public List<Product> getExpriedProducts() {
         return this.expiriedProducts;
     }
 
     @Override
-    public List<IInventoryTransaction> getRecentInventoryTransactions() {
+    public List<InventoryTransaction> getRecentInventoryTransactions() {
         return this.recentInventoryTransactions;
     }
 

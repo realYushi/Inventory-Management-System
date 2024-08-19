@@ -5,9 +5,8 @@
 package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
-import me.yushi.inventorymanagementsystem.Dto.IInventoryTransactionDto;
-import me.yushi.inventorymanagementsystem.repository.IInventoryTransactionRepository;
-import me.yushi.inventorymanagementsystem.service.IInventoryTransactionService;
+import me.yushi.inventorymanagementsystem.Dto.InventoryTransactionDto;
+import me.yushi.inventorymanagementsystem.repository.InventoryTransactionRepository;
 import me.yushi.inventorymanagementsystem.service.InventoryTransactionService;
 
 /**
@@ -15,25 +14,25 @@ import me.yushi.inventorymanagementsystem.service.InventoryTransactionService;
  * @author yushi
  */
 public class InventoryTransactionController implements IInventoryTransactionController{
-    IInventoryTransactionService inventoryTransactionService;
+    InventoryTransactionService inventoryTransactionService;
 
-    public InventoryTransactionController(IInventoryTransactionRepository repository) {
+    public InventoryTransactionController(InventoryTransactionRepository repository) {
         this.inventoryTransactionService=new InventoryTransactionService(repository);
     }
     
 
     @Override
-    public IInventoryTransactionDto createInventoryTransaction(IInventoryTransactionDto newIInventoryTransactionDto) {
+    public InventoryTransactionDto createInventoryTransaction(InventoryTransactionDto newIInventoryTransactionDto) {
         return inventoryTransactionService.createInventoryTransaction(newIInventoryTransactionDto);
     }
 
     @Override
-    public IInventoryTransactionDto updateInventoryTransaction(IInventoryTransactionDto updatedInventoryTransactionDto) {
+    public InventoryTransactionDto updateInventoryTransaction(InventoryTransactionDto updatedInventoryTransactionDto) {
         return inventoryTransactionService.updateInventoryTransaction(updatedInventoryTransactionDto);
     }
 
     @Override
-    public IInventoryTransactionDto getInventoryTransactionByID(int inventoryTransationID) {
+    public InventoryTransactionDto getInventoryTransactionByID(int inventoryTransationID) {
         return inventoryTransactionService.getInventoryTransactionByID(inventoryTransationID);
     }
 
@@ -43,7 +42,7 @@ public class InventoryTransactionController implements IInventoryTransactionCont
     }
 
     @Override
-    public List<IInventoryTransactionDto> getAllInventoryTransations() {
+    public List<InventoryTransactionDto> getAllInventoryTransations() {
         return inventoryTransactionService.getAllInventoryTransations();
     }
     

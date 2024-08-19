@@ -5,18 +5,18 @@
 package me.yushi.inventorymanagementsystem.service;
 
 import java.util.List;
-import me.yushi.inventorymanagementsystem.Dto.IInventoryTransactionDto;
+import me.yushi.inventorymanagementsystem.Dto.InventoryTransactionDto;
 
 /**
  *
  * @author yushi
  */
 public interface IInventoryTransactionService {
-    IInventoryTransactionDto createInventoryTransaction(IInventoryTransactionDto newInventoryTransactionDto);
-    IInventoryTransactionDto updateInventoryTransaction(IInventoryTransactionDto updatedInventoryTransactionDto);
-    IInventoryTransactionDto getInventoryTransactionByID(int inventoryTransationID);
+    InventoryTransactionDto createInventoryTransaction(InventoryTransactionDto newInventoryTransactionDto);
+    InventoryTransactionDto updateInventoryTransaction(InventoryTransactionDto updatedInventoryTransactionDto);
+    InventoryTransactionDto getInventoryTransactionByID(int inventoryTransationID);
     boolean deleteInventoryTransaction(int inventoryTransationID);
-    List<IInventoryTransactionDto> getAllInventoryTransations();
+    List<InventoryTransactionDto> getAllInventoryTransations();
     void save();
     
     

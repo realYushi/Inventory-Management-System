@@ -5,9 +5,8 @@
 package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
-import me.yushi.inventorymanagementsystem.Dto.IProductDto;
-import me.yushi.inventorymanagementsystem.repository.IProductRepository;
-import me.yushi.inventorymanagementsystem.service.IProductService;
+import me.yushi.inventorymanagementsystem.Dto.ProductDto;
+import me.yushi.inventorymanagementsystem.repository.ProductRepository;
 import me.yushi.inventorymanagementsystem.service.ProductService;
 
 /**
@@ -15,25 +14,25 @@ import me.yushi.inventorymanagementsystem.service.ProductService;
  * @author yushi
  */
 public class ProductController implements IProductController{
-    private IProductService productService;
+    private ProductService productService;
 
-    public ProductController(IProductRepository repository) {
+    public ProductController(ProductRepository repository) {
         this.productService=new ProductService(repository);
     }
     
 
     @Override
-    public IProductDto createProduct(IProductDto newProductDto) {
+    public ProductDto createProduct(ProductDto newProductDto) {
         return productService.createProduct(newProductDto);
     }
 
     @Override
-    public IProductDto updateProduct(IProductDto updatedProductDto) {
+    public ProductDto updateProduct(ProductDto updatedProductDto) {
         return productService.updateProduct(updatedProductDto);
     }
 
     @Override
-    public IProductDto getProductByID(int productID) {
+    public ProductDto getProductByID(int productID) {
         return productService.getProductByID(productID);
     }
 
@@ -43,7 +42,7 @@ public class ProductController implements IProductController{
     }
 
     @Override
-    public List<IProductDto> getAllProducts() {
+    public List<ProductDto> getAllProducts() {
         return productService.getAllProducts();
     }
     

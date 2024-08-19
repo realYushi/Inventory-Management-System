@@ -5,17 +5,17 @@
 package me.yushi.inventorymanagementsystem.repository;
 
 import java.util.Map;
-import me.yushi.inventorymanagementsystem.model.IProduct;
+import me.yushi.inventorymanagementsystem.model.Product;
 
 /**
  *
  * @author yushi
  */
 public interface IProductRepository {
-    IProduct createProduct(IProduct newProduct);
-    IProduct readProduct(int productID);
-    IProduct updateProduct(IProduct updatedProduct);
+    Product createProduct(Product newProduct);
+    Product readProduct(int productID);
+    Product updateProduct(Product updatedProduct);
     boolean deleteProduct(int productID);
-    Map<Integer,IProduct> getAllProducts();
+    Map<Integer,Product> getAllProducts();
     void save();
 }

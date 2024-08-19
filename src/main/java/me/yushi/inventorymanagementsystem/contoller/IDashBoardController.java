@@ -4,14 +4,14 @@
  */
 package me.yushi.inventorymanagementsystem.contoller;
 
-import me.yushi.inventorymanagementsystem.model.IFinancialSummary;
-import me.yushi.inventorymanagementsystem.model.IInventorySummary;
+import me.yushi.inventorymanagementsystem.model.FinancialSummary;
+import me.yushi.inventorymanagementsystem.model.InventorySummary;
 
 /**
  *
  * @author yushi
  */
 public interface IDashBoardController {
-    IInventorySummary getInventorySummary();
-    IFinancialSummary getFinancialSummary();
+    InventorySummary getInventorySummary();
+    FinancialSummary getFinancialSummary();
 }

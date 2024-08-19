@@ -7,7 +7,7 @@ package me.yushi.inventorymanagementsystem.repository;
 import java.io.IOException;
 import java.util.Map;
 import java.util.stream.Collectors;
-import me.yushi.inventorymanagementsystem.model.ISupplier;
+import me.yushi.inventorymanagementsystem.model.Supplier;
 
 /**
  *
@@ -15,10 +15,10 @@ import me.yushi.inventorymanagementsystem.model.ISupplier;
  */
 public class SupplierRepository implements ISupplierRepository {
 
-    private Map<Integer, ISupplier> supplierMap;
-    private IFileHandler<ISupplier> supplierFileHandler;
+    private Map<Integer, Supplier> supplierMap;
+    private FileHandler<Supplier> supplierFileHandler;
 
-    public SupplierRepository(IFileHandler<ISupplier> fileHandler) throws IOException {
+    public SupplierRepository(FileHandler<Supplier> fileHandler) throws IOException {
         supplierFileHandler = fileHandler;
         this.supplierMap = supplierFileHandler.readFromFile()
                 .stream()
@@ -26,18 +26,18 @@ public class SupplierRepository implements ISupplierRepository {
     }
 
     @Override
-    public ISupplier createSupplier(ISupplier newSupplier) {
+    public Supplier createSupplier(Supplier newSupplier) {
         supplierMap.put(newSupplier.getSupplierID(), newSupplier);
         return supplierMap.get(newSupplier.getSupplierID());
     }
 
     @Override
-    public ISupplier readSupplier(int supplierID) {
+    public Supplier readSupplier(int supplierID) {
         return supplierMap.get(supplierID);
     }
 
     @Override
-    public ISupplier updateSupplier(ISupplier updatedSupplier) {
+    public Supplier updateSupplier(Supplier updatedSupplier) {
         supplierMap.put(updatedSupplier.getSupplierID(), updatedSupplier);
         return supplierMap.get(updatedSupplier.getSupplierID());
     }
@@ -49,7 +49,7 @@ public class SupplierRepository implements ISupplierRepository {
     }
 
     @Override
-    public Map<Integer, ISupplier> getAllSuppliers() {
+    public Map<Integer, Supplier> getAllSuppliers() {
         return supplierMap;
     }
 

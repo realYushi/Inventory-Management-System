@@ -19,16 +19,12 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import java.io.IOException;
 import me.yushi.inventorymanagementsystem.model.Category;
-import me.yushi.inventorymanagementsystem.model.IInventoryTransaction;
-import me.yushi.inventorymanagementsystem.model.IProduct;
-import me.yushi.inventorymanagementsystem.model.ISupplier;
+import me.yushi.inventorymanagementsystem.model.InventoryTransaction;
+import me.yushi.inventorymanagementsystem.model.Product;
+import me.yushi.inventorymanagementsystem.model.Supplier;
 import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
 import me.yushi.inventorymanagementsystem.repository.FileHandler;
 import me.yushi.inventorymanagementsystem.repository.ICategoryRepository;
-import me.yushi.inventorymanagementsystem.repository.IFileHandler;
-import me.yushi.inventorymanagementsystem.repository.IInventoryTransactionRepository;
-import me.yushi.inventorymanagementsystem.repository.IProductRepository;
-import me.yushi.inventorymanagementsystem.repository.ISupplierRepository;
 import me.yushi.inventorymanagementsystem.repository.InventoryTransactionRepository;
 import me.yushi.inventorymanagementsystem.repository.ProductRepository;
 import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
@@ -39,22 +35,22 @@ import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
  */
 public class APP {
 
-    private ICategoryRepository categoryRepository;
-    private IProductRepository productRepository;
-    private IInventoryTransactionRepository transactionRepository;
-    private ISupplierRepository supplierRepository;
+    private final CategoryRepository categoryRepository;
+    private ProductRepository productRepository;
+    private InventoryTransactionRepository transactionRepository;
+    private SupplierRepository supplierRepository;
 
     public APP(String categoryFile, String transationFile, String productFile, String supplierFile) throws IOException {
-        IFileHandler<Category> categoryFileHandler = new FileHandler<>(Category.class, categoryFile);
+        FileHandler<Category> categoryFileHandler = new FileHandler<>(Category.class, categoryFile);
         categoryRepository = new CategoryRepository(categoryFileHandler);
 
-        IFileHandler<IProduct> productFileHandler = new FileHandler<>(IProduct.class, productFile);
+        FileHandler<Product> productFileHandler = new FileHandler<>(Product.class, productFile);
         productRepository = new ProductRepository(productFileHandler);
 
-        IFileHandler<IInventoryTransaction> transationFileHandler = new FileHandler<>(IInventoryTransaction.class, transationFile);
+        FileHandler<InventoryTransaction> transationFileHandler = new FileHandler<>(InventoryTransaction.class, transationFile);
         transactionRepository = new InventoryTransactionRepository(transationFileHandler);
 
-        IFileHandler<ISupplier> supplierFileHandler = new FileHandler<>(ISupplier.class, supplierFile);
+        FileHandler<Supplier> supplierFileHandler = new FileHandler<>(Supplier.class, supplierFile);
         supplierRepository = new SupplierRepository(supplierFileHandler);
 
     }

@@ -6,43 +6,42 @@ package me.yushi.inventorymanagementsystem.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import me.yushi.inventorymanagementsystem.Dto.IProductDto;
 import me.yushi.inventorymanagementsystem.Dto.ProductDto;
-import me.yushi.inventorymanagementsystem.model.IProduct;
 import me.yushi.inventorymanagementsystem.model.Product;
 import me.yushi.inventorymanagementsystem.repository.IProductRepository;
+import me.yushi.inventorymanagementsystem.repository.ProductRepository;
 
 /**
  *
  * @author yushi
  */
-public class ProductService implements IProductService, IMapper<IProductDto, IProduct> {
+public class ProductService implements IProductService, IMapper<ProductDto, Product> {
 
     IProductRepository repository;
 
-    public ProductService(IProductRepository repository) {
+    public ProductService(ProductRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public IProductDto createProduct(IProductDto newProductDto) {
-        IProduct product = toModel(newProductDto);
+    public ProductDto createProduct(ProductDto newProductDto) {
+        Product product = toModel(newProductDto);
 
-        IProductDto productDto = toDto(repository.createProduct(product));
+        ProductDto productDto = toDto(repository.createProduct(product));
         this.save();
         return productDto;
     }
 
     @Override
-    public IProductDto updateProduct(IProductDto updatedProductDto) {
-        IProduct product = toModel(updatedProductDto);
-        IProductDto productDto=toDto(repository.updateProduct(product));
+    public ProductDto updateProduct(ProductDto updatedProductDto) {
+        Product product = toModel(updatedProductDto);
+        ProductDto productDto=toDto(repository.updateProduct(product));
         this.save();
         return productDto;
     }
 
     @Override
-    public IProductDto getProductByID(int productID) {
+    public ProductDto getProductByID(int productID) {
 
         return toDto(repository.readProduct(productID));
     }
@@ -53,15 +52,15 @@ public class ProductService implements IProductService, IMapper<IProductDto, IPr
     }
 
     @Override
-    public List<IProductDto> getAllProducts() {
-        List<IProduct> products = repository.getAllProducts().values().stream()
+    public List<ProductDto> getAllProducts() {
+        List<Product> products = repository.getAllProducts().values().stream()
                 .collect(Collectors.toList());
         return products.stream().map(product -> this.toDto(product))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public IProductDto toDto(IProduct model) {
+    public ProductDto toDto(Product model) {
         return new ProductDto.Builder()
                 .categoryID(model.getCategoryID())
                 .expirationDate(model.getExpirationDate())
@@ -74,7 +73,7 @@ public class ProductService implements IProductService, IMapper<IProductDto, IPr
     }
 
     @Override
-    public IProduct toModel(IProductDto dto) {
+    public Product toModel(ProductDto dto) {
         return new Product(dto.getProductID(),
                 dto.getName(),
                 dto.getCategoryID(),

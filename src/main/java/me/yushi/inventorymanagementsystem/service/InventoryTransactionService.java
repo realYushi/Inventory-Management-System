@@ -6,43 +6,41 @@ package me.yushi.inventorymanagementsystem.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import me.yushi.inventorymanagementsystem.Dto.IInventoryTransactionDto;
 import me.yushi.inventorymanagementsystem.Dto.InventoryTransactionDto;
-import me.yushi.inventorymanagementsystem.model.IInventoryTransaction;
 import static me.yushi.inventorymanagementsystem.model.IInventoryTransaction.TransactionType.PURCHASE;
 import me.yushi.inventorymanagementsystem.model.InventoryTransaction;
-import me.yushi.inventorymanagementsystem.repository.IInventoryTransactionRepository;
+import me.yushi.inventorymanagementsystem.repository.InventoryTransactionRepository;
 
 /**
  *
  * @author yushi
  */
-public class InventoryTransactionService implements IInventoryTransactionService, IMapper<IInventoryTransactionDto, IInventoryTransaction> {
+public class InventoryTransactionService implements IInventoryTransactionService, IMapper<InventoryTransactionDto, InventoryTransaction> {
 
-    private IInventoryTransactionRepository repository;
+    private InventoryTransactionRepository repository;
 
-    public InventoryTransactionService(IInventoryTransactionRepository repository) {
+    public InventoryTransactionService(InventoryTransactionRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public IInventoryTransactionDto createInventoryTransaction(IInventoryTransactionDto newInventoryTransactionDto) {
-        IInventoryTransaction inventoryTransaton = toModel(newInventoryTransactionDto);
-        IInventoryTransactionDto inventoryTransactionDto=toDto(repository.createInventoryTransaction(inventoryTransaton));
+    public InventoryTransactionDto createInventoryTransaction(InventoryTransactionDto newInventoryTransactionDto) {
+        InventoryTransaction inventoryTransaton = toModel(newInventoryTransactionDto);
+        InventoryTransactionDto inventoryTransactionDto=toDto(repository.createInventoryTransaction(inventoryTransaton));
         this.save();
         return inventoryTransactionDto;
     }
 
     @Override
-    public IInventoryTransactionDto updateInventoryTransaction(IInventoryTransactionDto updatedInventoryTransactionDto) {
-        IInventoryTransaction inventoryTransaction = toModel(updatedInventoryTransactionDto);
-        IInventoryTransactionDto inventoryTransactionDto=toDto(repository.updateInventoryTransaction(inventoryTransaction));
+    public InventoryTransactionDto updateInventoryTransaction(InventoryTransactionDto updatedInventoryTransactionDto) {
+        InventoryTransaction inventoryTransaction = toModel(updatedInventoryTransactionDto);
+        InventoryTransactionDto inventoryTransactionDto=toDto(repository.updateInventoryTransaction(inventoryTransaction));
         this.save();
         return inventoryTransactionDto;
     }
 
     @Override
-    public IInventoryTransactionDto getInventoryTransactionByID(int inventoryTransationID) {
+    public InventoryTransactionDto getInventoryTransactionByID(int inventoryTransationID) {
         return toDto(repository.readInventoryTransaction(inventoryTransationID));
     }
 
@@ -52,15 +50,15 @@ public class InventoryTransactionService implements IInventoryTransactionService
     }
 
     @Override
-    public List<IInventoryTransactionDto> getAllInventoryTransations() {
-        List<IInventoryTransaction> transactions = repository.getAllInventoryTransations()
+    public List<InventoryTransactionDto> getAllInventoryTransations() {
+        List<InventoryTransaction> transactions = repository.getAllInventoryTransations()
                 .values().stream().collect(Collectors.toList());
         return transactions.stream().map(transaction -> this.toDto(transaction)).collect(Collectors.toList());
 
     }
 
     @Override
-    public IInventoryTransactionDto toDto(IInventoryTransaction model) {
+    public InventoryTransactionDto toDto(InventoryTransaction model) {
         return new InventoryTransactionDto.Builder()
                 .productID(model.getProductID())
                 .date(model.getDate())
@@ -70,21 +68,21 @@ public class InventoryTransactionService implements IInventoryTransactionService
                 .build();
     }
 
-    private IInventoryTransactionDto.TransactionType mapModelToDtoType(IInventoryTransaction.TransactionType modelType) {
+    private InventoryTransactionDto.TransactionType mapModelToDtoType(InventoryTransaction.TransactionType modelType) {
         switch (modelType) {
             case PURCHASE:
-                return IInventoryTransactionDto.TransactionType.PURCHASE;
+                return InventoryTransactionDto.TransactionType.PURCHASE;
             case SALE:
-                return IInventoryTransactionDto.TransactionType.SALE;
+                return InventoryTransactionDto.TransactionType.SALE;
             case SPOILAGE:
-                return IInventoryTransactionDto.TransactionType.SPOILAGE;
+                return InventoryTransactionDto.TransactionType.SPOILAGE;
             default:
                 throw new IllegalArgumentException("Unknown enum type: " + modelType);
         }
     }
 
     @Override
-    public IInventoryTransaction toModel(IInventoryTransactionDto dto) {
+    public InventoryTransaction toModel(InventoryTransactionDto dto) {
         return new InventoryTransaction(dto.getTransactionID(),
                  dto.getProductID(),
                  dto.getQuantity(),
@@ -94,14 +92,14 @@ public class InventoryTransactionService implements IInventoryTransactionService
 
     }
 
-    private IInventoryTransaction.TransactionType mapDtoToModelType(IInventoryTransactionDto.TransactionType dtoType) {
+    private InventoryTransaction.TransactionType mapDtoToModelType(InventoryTransactionDto.TransactionType dtoType) {
         switch (dtoType) {
             case PURCHASE:
-                return IInventoryTransaction.TransactionType.PURCHASE;
+                return InventoryTransaction.TransactionType.PURCHASE;
             case SALE:
-                return IInventoryTransaction.TransactionType.SALE;
+                return InventoryTransaction.TransactionType.SALE;
             case SPOILAGE:
-                return IInventoryTransaction.TransactionType.SPOILAGE;
+                return InventoryTransaction.TransactionType.SPOILAGE;
             default:
                 throw new IllegalArgumentException("Unknown enum type: " + dtoType);
         }

@@ -12,9 +12,9 @@ import java.util.List;
  */
 public interface IInventorySummary {
 
-    List<IProduct> getLowStrockProducts();
-    List<IProduct> getExpirySoonProducts();
-    List<IProduct> getExpriedProducts();
-    List<IInventoryTransaction> getRecentInventoryTransactions();
+    List<Product> getLowStrockProducts();
+    List<Product> getExpirySoonProducts();
+    List<Product> getExpriedProducts();
+    List<InventoryTransaction> getRecentInventoryTransactions();
 
 }

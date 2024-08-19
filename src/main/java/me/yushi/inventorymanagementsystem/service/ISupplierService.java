@@ -5,18 +5,18 @@
 package me.yushi.inventorymanagementsystem.service;
 
 import java.util.List;
-import me.yushi.inventorymanagementsystem.Dto.ISupplierDto;
+import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
 
 /**
  *
  * @author yushi
  */
 public interface ISupplierService {
-    ISupplierDto createSupplier(ISupplierDto newSupplierDto);
-    ISupplierDto updateSupplier(ISupplierDto updatedSupplierDto);
-    ISupplierDto getSupplierByID(int supplierDtoID);
+    SupplierDto createSupplier(SupplierDto newSupplierDto);
+    SupplierDto updateSupplier(SupplierDto updatedSupplierDto);
+    SupplierDto getSupplierByID(int supplierDtoID);
     boolean deleteSupplier(int supplierDtoID);
-    List<ISupplierDto> getAllSuppliers();
+    List<SupplierDto> getAllSuppliers();
     void save();
     
     

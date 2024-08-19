@@ -5,8 +5,8 @@
 package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
-import me.yushi.inventorymanagementsystem.Dto.ISupplierDto;
-import me.yushi.inventorymanagementsystem.repository.ISupplierRepository;
+import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
+import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
 import me.yushi.inventorymanagementsystem.service.ISupplierService;
 import me.yushi.inventorymanagementsystem.service.SupplierService;
 
@@ -17,23 +17,23 @@ import me.yushi.inventorymanagementsystem.service.SupplierService;
 public class SupplierController implements ISupplierController{
     private ISupplierService supplierService;
 
-    public SupplierController(ISupplierRepository repository) {
+    public SupplierController(SupplierRepository repository) {
         this.supplierService=new SupplierService(repository);
     }
     
 
     @Override
-    public ISupplierDto createSupplier(ISupplierDto newSupplierDto) {
+    public SupplierDto createSupplier(SupplierDto newSupplierDto) {
         return supplierService.createSupplier(newSupplierDto);
     }
 
     @Override
-    public ISupplierDto updateSupplier(ISupplierDto updateSupplierDto) {
+    public SupplierDto updateSupplier(SupplierDto updateSupplierDto) {
         return supplierService.updateSupplier(updateSupplierDto);
     }
 
     @Override
-    public ISupplierDto getSupplierByID(int supplierID) {
+    public SupplierDto getSupplierByID(int supplierID) {
         return supplierService.getSupplierByID(supplierID);
     }
 
@@ -44,7 +44,7 @@ public class SupplierController implements ISupplierController{
     }
 
     @Override
-    public List<ISupplierDto> getAllSuppliers() {
+    public List<SupplierDto> getAllSuppliers() {
         return supplierService.getAllSuppliers();
     }
     

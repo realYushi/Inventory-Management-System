@@ -11,13 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import me.yushi.inventorymanagementsystem.model.FinancialSummary;
-import me.yushi.inventorymanagementsystem.model.IFinancialSummary;
-import me.yushi.inventorymanagementsystem.model.IInventorySummary;
 import me.yushi.inventorymanagementsystem.model.IInventoryTransaction;
-import me.yushi.inventorymanagementsystem.model.IProduct;
 import me.yushi.inventorymanagementsystem.model.InventorySummary;
-import me.yushi.inventorymanagementsystem.repository.IInventoryTransactionRepository;
-import me.yushi.inventorymanagementsystem.repository.IProductRepository;
+import me.yushi.inventorymanagementsystem.model.InventoryTransaction;
+import me.yushi.inventorymanagementsystem.model.Product;
+import me.yushi.inventorymanagementsystem.repository.InventoryTransactionRepository;
+import me.yushi.inventorymanagementsystem.repository.ProductRepository;
 
 /**
  *
@@ -25,22 +24,22 @@ import me.yushi.inventorymanagementsystem.repository.IProductRepository;
  */
 public class DashboardService implements IDashboardService {
 
-    IInventoryTransactionRepository inventoryTransactionRepository;
-    IProductRepository productRepository;
+    InventoryTransactionRepository inventoryTransactionRepository;
+    ProductRepository productRepository;
     private final int TRANSATION_DATE_RANGE = 30;
     private final int EXPRIY_SOON_DATE_RANGE = 7;
     private final double PROFIT_RATE = 1.2;
     private final int LOW_STOCK_TRIGGER = 10;
-    private List<IInventoryTransaction> recentTransationData;
+    private List<InventoryTransaction> recentTransationData;
 
-    public DashboardService(IInventoryTransactionRepository inventoryTransactionRepository, IProductRepository productRepository) {
+    public DashboardService(InventoryTransactionRepository inventoryTransactionRepository, ProductRepository productRepository) {
         this.inventoryTransactionRepository = inventoryTransactionRepository;
         this.productRepository = productRepository;
         recentTransationData = getRecentTransactionData();
     }
 
     @Override
-    public IFinancialSummary getFinancialSummary() {
+    public FinancialSummary getFinancialSummary() {
 
         double totalSales = 0;
         double totalCost = 0;
@@ -65,16 +64,16 @@ public class DashboardService implements IDashboardService {
     }
 
     @Override
-    public IInventorySummary getIentorySummary() {
-        List<IProduct> allData = productRepository.getAllProducts().values().stream().collect(Collectors.toList());
-        List<IProduct> lowStock = new ArrayList<>();
-        List<IProduct> expirySoon = new ArrayList<>();
-        List<IProduct> expired = new ArrayList<>();
+    public InventorySummary getIentorySummary() {
+        List<Product> allData = productRepository.getAllProducts().values().stream().collect(Collectors.toList());
+        List<Product> lowStock = new ArrayList<>();
+        List<Product> expirySoon = new ArrayList<>();
+        List<Product> expired = new ArrayList<>();
 
         Date currentDate = new Date();
         Date expirySoonDate = getEndDate(EXPRIY_SOON_DATE_RANGE);
 
-        for (IProduct product : allData) {
+        for (Product product : allData) {
             // Check for low stock 
             if (product.getQuantity() < LOW_STOCK_TRIGGER) {
                 lowStock.add(product);
@@ -103,9 +102,9 @@ public class DashboardService implements IDashboardService {
 
     }
 
-    private List<IInventoryTransaction> getRecentTransactionData() {
+    private List<InventoryTransaction> getRecentTransactionData() {
         Date endDate = getEndDate(TRANSATION_DATE_RANGE);
-        Map<Integer, IInventoryTransaction> allData = inventoryTransactionRepository.getAllInventoryTransations();
+        Map<Integer, InventoryTransaction> allData = inventoryTransactionRepository.getAllInventoryTransations();
         recentTransationData = allData.values().stream()
                 .filter(transation -> transation.getDate().after(endDate))
                 .collect(Collectors.toList());

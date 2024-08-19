@@ -7,7 +7,7 @@ package me.yushi.inventorymanagementsystem.repository;
 import java.io.IOException;
 import java.util.Map;
 import java.util.stream.Collectors;
-import me.yushi.inventorymanagementsystem.model.IProduct;
+import me.yushi.inventorymanagementsystem.model.Product;
 
 /**
  *
@@ -15,10 +15,10 @@ import me.yushi.inventorymanagementsystem.model.IProduct;
  */
 public class ProductRepository implements IProductRepository {
 
-    private Map<Integer, IProduct> productMap;
-    private IFileHandler<IProduct> productFileHandler;
+    private Map<Integer, Product> productMap;
+    private FileHandler<Product> productFileHandler;
 
-    public ProductRepository(IFileHandler<IProduct> fileHandler) throws IOException {
+    public ProductRepository(FileHandler<Product> fileHandler) throws IOException {
         productFileHandler=fileHandler;
         this.productMap = productFileHandler.readFromFile()
                 .stream()
@@ -26,18 +26,18 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public IProduct createProduct(IProduct newProduct) {
+    public Product createProduct(Product newProduct) {
         productMap.put(newProduct.getProductID(), newProduct);
         return newProduct;
     }
 
     @Override
-    public IProduct readProduct(int productID) {
+    public Product readProduct(int productID) {
         return productMap.get(productID);
     }
 
     @Override
-    public IProduct updateProduct(IProduct updatedProduct) {
+    public Product updateProduct(Product updatedProduct) {
         productMap.put(updatedProduct.getProductID(), updatedProduct);
         return productMap.get(updatedProduct.getProductID());
     }
@@ -49,7 +49,7 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public Map<Integer, IProduct> getAllProducts() {
+    public Map<Integer, Product> getAllProducts() {
         return productMap;
     }
 

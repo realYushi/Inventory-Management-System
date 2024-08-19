@@ -4,10 +4,10 @@
  */
 package me.yushi.inventorymanagementsystem.contoller;
 
-import me.yushi.inventorymanagementsystem.model.IFinancialSummary;
-import me.yushi.inventorymanagementsystem.model.IInventorySummary;
-import me.yushi.inventorymanagementsystem.repository.IInventoryTransactionRepository;
-import me.yushi.inventorymanagementsystem.repository.IProductRepository;
+import me.yushi.inventorymanagementsystem.model.FinancialSummary;
+import me.yushi.inventorymanagementsystem.model.InventorySummary;
+import me.yushi.inventorymanagementsystem.repository.InventoryTransactionRepository;
+import me.yushi.inventorymanagementsystem.repository.ProductRepository;
 import me.yushi.inventorymanagementsystem.service.DashboardService;
 import me.yushi.inventorymanagementsystem.service.IDashboardService;
 
@@ -18,18 +18,18 @@ import me.yushi.inventorymanagementsystem.service.IDashboardService;
 public class DashBoardController implements IDashBoardController{
     IDashboardService dashboardService;
 
-    public DashBoardController(IInventoryTransactionRepository transactionRepository,IProductRepository productRepository) {
+    public DashBoardController(InventoryTransactionRepository transactionRepository,ProductRepository productRepository) {
         dashboardService=new DashboardService(transactionRepository,productRepository);
     }
     
 
     @Override
-    public IInventorySummary getInventorySummary() {
+    public InventorySummary getInventorySummary() {
         return dashboardService.getIentorySummary();
     }
 
     @Override
-    public IFinancialSummary getFinancialSummary() {
+    public FinancialSummary getFinancialSummary() {
         return dashboardService.getFinancialSummary();
     }
     
