@@ -23,7 +23,7 @@ public class Product implements IProduct {
 
     public Product(String productID,String name, String categoryID,int quantity, String unit, double price, Date expirationDate) {
         this.productID=productID;
-        this.productID =(this.productID==""?UUID.randomUUID().toString():productID);
+        this.productID =(this.productID==null?UUID.randomUUID().toString():productID);
 
         this.name = name;
         this.categoryID = categoryID;

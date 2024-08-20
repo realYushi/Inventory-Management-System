@@ -6,19 +6,23 @@ package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
 import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
-import me.yushi.inventorymanagementsystem.repository.ICategoryRepository;
+import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
+import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
+import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
 import me.yushi.inventorymanagementsystem.service.CategoryService;
-import me.yushi.inventorymanagementsystem.service.ICategoryService;
+import me.yushi.inventorymanagementsystem.service.SupplierService;
 
 /**
  *
  * @author yushi
  */
 public class CategoryController implements ICategoryController{
-    private ICategoryService categoryService;
+    private CategoryService categoryService;
+    private SupplierService supplierService;
 
-    public CategoryController(ICategoryRepository repository) {
-        this.categoryService=new CategoryService(repository);
+    public CategoryController(CategoryRepository categoryRepository,SupplierRepository supplierRepository)  {
+        this.categoryService=new CategoryService(categoryRepository);
+        this.supplierService=new SupplierService(supplierRepository);
     }
     
 
@@ -47,6 +51,12 @@ public class CategoryController implements ICategoryController{
     @Override
     public List<CategoryDto> getAllCategorys() {
         return categoryService.getAllCategorys();
+    }
+
+    @Override
+    public SupplierDto getSupplier(String supplierID) {
+        return supplierService.getSupplierByID(supplierID);
+
     }
     
 }

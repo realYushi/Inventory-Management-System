@@ -14,11 +14,13 @@ public class Category implements ICategory {
 
     private String categoryID;
     private String categoryName;
+    private String supplierID;
 
-    public Category(String categoryName,String categoryID) {
+    public Category(String categoryName,String categoryID,String supplierID) {
         this.categoryName = categoryName;
         this.categoryID=categoryID;
-        categoryID= (categoryID==""?UUID.randomUUID().toString():categoryID);
+        this.supplierID=supplierID;
+        this.categoryID= (categoryID==null?UUID.randomUUID().toString():categoryID);
     }
 
     @Override
@@ -35,6 +37,16 @@ public class Category implements ICategory {
     @Override
     public void setCategoryName(String categoryName) {
         this.categoryName=categoryName;
+    }
+
+    @Override
+    public String getSupplierID() {
+        return this.supplierID;
+    }
+
+    @Override
+    public void setSupplierID(String suppierID) {
+        this.supplierID=suppierID;
     }
 
 }

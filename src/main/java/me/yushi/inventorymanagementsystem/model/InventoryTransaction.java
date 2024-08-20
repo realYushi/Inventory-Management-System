@@ -22,7 +22,7 @@ public class InventoryTransaction implements IInventoryTransaction {
 
     public InventoryTransaction(String transactionID, String productID, int quantity, Date date, TransactionType transactionType, double price) {
         this.transactionID=transactionID;
-        this.transactionID = (transactionID==""?UUID.randomUUID().toString():transactionID);
+        this.transactionID = (transactionID==null?UUID.randomUUID().toString():transactionID);
         this.productID = productID;
         this.quantity = quantity;
         this.date = date;

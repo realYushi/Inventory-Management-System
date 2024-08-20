@@ -13,5 +13,6 @@ public interface ICategory {
 
     String getCategoryName();
     void setCategoryName(String categoryName);
-    
+    String getSupplierID();
+    void setSupplierID(String suppierID);
 }

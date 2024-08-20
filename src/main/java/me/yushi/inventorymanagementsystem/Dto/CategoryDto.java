@@ -12,16 +12,21 @@ public class CategoryDto implements ICategoryDto {
 
     private final String categoryID;
     private final String categoryName;
+    private final String supplierID;
 
     private CategoryDto(Builder builder) {
         this.categoryID = builder.categoryID;
         this.categoryName = builder.categoryName;
+        this.supplierID=builder.supplierID;
     }
+
+    
 
     public static class Builder {
 
         private String categoryID;
         private String categoryName;
+        private String supplierID;
 
         public Builder categoryID(String categoryID) {
             this.categoryID = categoryID;
@@ -32,6 +37,11 @@ public class CategoryDto implements ICategoryDto {
             this.categoryName = categoryName;
             return this;
         }
+        public Builder supplierID(String supplierID){
+            this.supplierID=supplierID;
+            return this;
+        }
+
 
         public CategoryDto build() {
             return new CategoryDto(this);
@@ -46,6 +56,10 @@ public class CategoryDto implements ICategoryDto {
     @Override
     public String getCategoryName() {
         return this.categoryName;
+    }
+    @Override
+    public String getSupplierID() {
+        return this.supplierID;
     }
 
 }

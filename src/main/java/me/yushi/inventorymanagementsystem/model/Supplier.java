@@ -17,7 +17,7 @@ public class Supplier implements ISupplier {
 
     public Supplier(String supplierID,String supplierName) {
         this.supplierID=supplierID;
-        this.supplierID = (this.supplierID==""?UUID.randomUUID().toString():supplierID);
+        this.supplierID = (this.supplierID==null?UUID.randomUUID().toString():supplierID);
         this.supplierName = supplierName;
     }
 

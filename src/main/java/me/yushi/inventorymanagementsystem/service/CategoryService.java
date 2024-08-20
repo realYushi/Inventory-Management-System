@@ -72,7 +72,7 @@ public class CategoryService implements ICategoryService,IMapper<CategoryDto, Ca
 
     @Override
     public Category toModel(CategoryDto dto) {
-        return new Category( dto.getCategoryName(),dto.getCategoryID());
+        return new Category( dto.getCategoryName(),dto.getCategoryID(),dto.getSupplierID());
     }
 
     @Override

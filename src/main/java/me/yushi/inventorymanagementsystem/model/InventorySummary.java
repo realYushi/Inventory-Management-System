@@ -34,7 +34,6 @@ public class InventorySummary implements IInventorySummary{
     public List<Product> getExpirySoonProducts() {
         return this.expirySoonProducts;
     }
-
     @Override
     public List<Product> getExpriedProducts() {
         return this.expiriedProducts;

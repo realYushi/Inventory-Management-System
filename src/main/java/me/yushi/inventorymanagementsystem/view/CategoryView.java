@@ -5,7 +5,9 @@
 package me.yushi.inventorymanagementsystem.view;
 
 import com.googlecode.lanterna.gui2.Button;
+import com.googlecode.lanterna.gui2.Direction;
 import com.googlecode.lanterna.gui2.Label;
+import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
@@ -17,7 +19,8 @@ import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
 import me.yushi.inventorymanagementsystem.Dto.ICategoryDto;
 import me.yushi.inventorymanagementsystem.contoller.CategoryController;
 import me.yushi.inventorymanagementsystem.contoller.ICategoryController;
-import me.yushi.inventorymanagementsystem.repository.ICategoryRepository;
+import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
+import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
 
 /**
  *
@@ -30,8 +33,8 @@ public class CategoryView extends Panel {
     private WindowBasedTextGUI textGUI;
     private int selectedRow = -1;
 
-    public CategoryView(ICategoryRepository repository, WindowBasedTextGUI textGUI) {
-        this.controller = new CategoryController(repository);
+    public CategoryView(CategoryRepository categoryRepository, SupplierRepository supplierRepository, WindowBasedTextGUI textGUI) {
+        this.controller = new CategoryController(categoryRepository, supplierRepository);
         this.textGUI = textGUI;
         setupUI();
         loadCategories();
@@ -39,33 +42,51 @@ public class CategoryView extends Panel {
     }
 
     private void setupUI() {
-        categoryTable = new Table<>(" ", "ID", "Name"); // Add "Selected" column
-        this.addComponent(new Label("Category Management"));
+        // Create a vertical panel to hold all components
+        Panel mainPanel = new Panel();
+        mainPanel.setLayoutManager(new LinearLayout(Direction.VERTICAL));
+
+        // Add a label for the title
+        mainPanel.addComponent(new Label("Category Management").setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center)));
 
         // Create a table to display categories
-        this.addComponent(categoryTable);
+        categoryTable = new Table<>(" ",  "Name", "Supplier");
+
+        mainPanel.addComponent(categoryTable);
+
+        // Create a horizontal panel for buttons
+        Panel buttonPanel = new Panel();
+        buttonPanel.setLayoutManager(new LinearLayout(Direction.HORIZONTAL));
 
         // Button to refresh the category list
         Button refreshButton = new Button("Refresh", () -> loadCategories());
-        this.addComponent(refreshButton);
+        buttonPanel.addComponent(refreshButton);
 
         // Button to add a new category
         Button addCategoryButton = new Button("Add Category", () -> addCategory());
-        this.addComponent(addCategoryButton);
-        //Button to update a category
+        buttonPanel.addComponent(addCategoryButton);
+
+        // Button to update a category
         Button updateCategoryButton = new Button("Update Category", () -> updateCategory());
-        this.addComponent(updateCategoryButton);
-        //Button to delete a category
-        Button deleteCategoryButton= new Button("Delete Category",()->deleteCategory());
-        this.addComponent(deleteCategoryButton);
+        buttonPanel.addComponent(updateCategoryButton);
+
+        // Button to delete a category
+        Button deleteCategoryButton = new Button("Delete Category", () -> deleteCategory());
+        buttonPanel.addComponent(deleteCategoryButton);
+
+        // Add the button panel to the main panel
+        mainPanel.addComponent(buttonPanel);
+
+        // Add the main panel to the current panel
+        this.addComponent(mainPanel);
     }
 
     private void loadCategories() {
         categoryTable.getTableModel().clear();
         List<CategoryDto> categories = controller.getAllCategorys();
         for (ICategoryDto category : categories) {
-            categoryTable.getTableModel().addRow("", String.valueOf(category.getCategoryID()),
-                    category.getCategoryName());
+            String supplierName= controller.getSupplier(category.getSupplierID()).getSupplierName().toString();
+            categoryTable.getTableModel().addRow("",category.getCategoryName(), supplierName);
         }
     }
 
@@ -164,4 +185,5 @@ public class CategoryView extends Panel {
             }
         });
     }
+
 }

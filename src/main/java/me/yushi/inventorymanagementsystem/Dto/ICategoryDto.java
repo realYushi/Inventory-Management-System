@@ -12,5 +12,6 @@ public interface ICategoryDto {
     String getCategoryID();
 
     String getCategoryName();
+    String getSupplierID();
     
 }

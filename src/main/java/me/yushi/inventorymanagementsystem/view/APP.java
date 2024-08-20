@@ -13,6 +13,8 @@ import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
 import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
+import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
+import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
@@ -24,7 +26,6 @@ import me.yushi.inventorymanagementsystem.model.Product;
 import me.yushi.inventorymanagementsystem.model.Supplier;
 import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
 import me.yushi.inventorymanagementsystem.repository.FileHandler;
-import me.yushi.inventorymanagementsystem.repository.ICategoryRepository;
 import me.yushi.inventorymanagementsystem.repository.InventoryTransactionRepository;
 import me.yushi.inventorymanagementsystem.repository.ProductRepository;
 import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
@@ -55,7 +56,7 @@ public class APP {
 
     }
 
-    public void start() {
+    public void start() throws IOException {
         Terminal terminal = null;
         Screen screen = null;
         try {
@@ -73,10 +74,11 @@ public class APP {
             // Create top navigation panel
             Panel topNavPanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
             topNavPanel.addComponent(new Button("Dashboard", () -> showDashboard(bodyPanel)));
-            topNavPanel.addComponent(new Button("Product", () -> showProduct(bodyPanel)));
+            topNavPanel.addComponent(new Button("Product", () -> showProduct(bodyPanel,productRepository,textGUI)));
             topNavPanel.addComponent(new Button("Supplier", () -> showSupplier(bodyPanel)));
             topNavPanel.addComponent(new Button("Transaction", () -> showTransaction(bodyPanel)));
-            topNavPanel.addComponent(new Button("Category", () -> showCategory(bodyPanel,categoryRepository,textGUI)));
+            topNavPanel.addComponent(new Button("Category", () -> showCategory(bodyPanel, categoryRepository, supplierRepository,textGUI)));
+            topNavPanel.addComponent(new Button("Exit", () -> confirmExit(textGUI)));
 
             // Create bottom panel for help
             Panel bottomPanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
@@ -111,9 +113,9 @@ public class APP {
         bodyPanel.addComponent(new Label("Dashboard Content"));
     }
 
-    private static void showProduct(Panel bodyPanel) {
+    private static void showProduct(Panel bodyPanel,ProductRepository productRepository,WindowBasedTextGUI textGUI) {
         bodyPanel.removeAllComponents();
-        bodyPanel.addComponent(new Label("Product Content"));
+        bodyPanel.addComponent(new ProductView(productRepository,textGUI));
     }
 
     private static void showSupplier(Panel bodyPanel) {
@@ -126,8 +128,17 @@ public class APP {
         bodyPanel.addComponent(new Label("Transaction Content"));
     }
 
-    private static void showCategory(Panel bodyPanel,ICategoryRepository categoryRepository,WindowBasedTextGUI textGUI) {
+    private static void showCategory(Panel bodyPanel, CategoryRepository categoryRepository,SupplierRepository supplierRepository, WindowBasedTextGUI textGUI) {
         bodyPanel.removeAllComponents();
-        bodyPanel.addComponent(new CategoryView(categoryRepository,textGUI));
+        bodyPanel.addComponent(new CategoryView(categoryRepository,supplierRepository, textGUI));
+    }
+
+    private static void confirmExit(WindowBasedTextGUI textGUI) {
+        boolean confirmExit = MessageDialog.showMessageDialog(textGUI, "Exit", "Are you sure you want to exit?", MessageDialogButton.Yes, MessageDialogButton.No) == MessageDialogButton.Yes;
+
+        if (confirmExit) {
+            textGUI.getActiveWindow().close();
+            System.exit(0);
+        }
     }
 }

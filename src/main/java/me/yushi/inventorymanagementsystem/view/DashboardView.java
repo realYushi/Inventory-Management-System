@@ -9,5 +9,4 @@ package me.yushi.inventorymanagementsystem.view;
  * @author yushi
  */
 public class DashboardView {
-    
 }
