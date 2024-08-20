@@ -75,7 +75,7 @@ public class APP {
             Panel topNavPanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
             topNavPanel.addComponent(new Button("Dashboard", () -> showDashboard(bodyPanel)));
             topNavPanel.addComponent(new Button("Product", () -> showProduct(bodyPanel,productRepository,textGUI)));
-            topNavPanel.addComponent(new Button("Supplier", () -> showSupplier(bodyPanel)));
+            topNavPanel.addComponent(new Button("Supplier", () -> showSupplier(bodyPanel,supplierRepository,textGUI)));
             topNavPanel.addComponent(new Button("Transaction", () -> showTransaction(bodyPanel)));
             topNavPanel.addComponent(new Button("Category", () -> showCategory(bodyPanel, categoryRepository, supplierRepository,textGUI)));
             topNavPanel.addComponent(new Button("Exit", () -> confirmExit(textGUI)));
@@ -118,9 +118,10 @@ public class APP {
         bodyPanel.addComponent(new ProductView(productRepository,textGUI));
     }
 
-    private static void showSupplier(Panel bodyPanel) {
+    private static void showSupplier(Panel bodyPanel,SupplierRepository repository,WindowBasedTextGUI textGUI) {
+
         bodyPanel.removeAllComponents();
-        bodyPanel.addComponent(new Label("Supplier Content"));
+        bodyPanel.addComponent(new SupplierView(repository, textGUI));
     }
 
     private static void showTransaction(Panel bodyPanel) {

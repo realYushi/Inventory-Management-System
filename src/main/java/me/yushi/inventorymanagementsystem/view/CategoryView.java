@@ -10,6 +10,7 @@ import com.googlecode.lanterna.gui2.Label;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
+import com.googlecode.lanterna.gui2.dialogs.ListSelectDialog;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
 import com.googlecode.lanterna.gui2.dialogs.TextInputDialog;
@@ -17,6 +18,7 @@ import com.googlecode.lanterna.gui2.table.Table;
 import java.util.List;
 import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
 import me.yushi.inventorymanagementsystem.Dto.ICategoryDto;
+import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
 import me.yushi.inventorymanagementsystem.contoller.CategoryController;
 import me.yushi.inventorymanagementsystem.contoller.ICategoryController;
 import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
@@ -50,7 +52,7 @@ public class CategoryView extends Panel {
         mainPanel.addComponent(new Label("Category Management").setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center)));
 
         // Create a table to display categories
-        categoryTable = new Table<>(" ",  "Name", "Supplier");
+        categoryTable = new Table<>(" ", "ID", "Name", "Supplier");
 
         mainPanel.addComponent(categoryTable);
 
@@ -85,68 +87,59 @@ public class CategoryView extends Panel {
         categoryTable.getTableModel().clear();
         List<CategoryDto> categories = controller.getAllCategorys();
         for (ICategoryDto category : categories) {
-            String supplierName= controller.getSupplier(category.getSupplierID()).getSupplierName().toString();
-            categoryTable.getTableModel().addRow("",category.getCategoryName(), supplierName);
+            SupplierDto supplier = controller.getSupplier(category.getSupplierID());
+            String supplierName = supplier != null ? supplier.getSupplierName() : "N/A";
+            categoryTable.getTableModel().addRow("", category.getCategoryID(), category.getCategoryName(), supplierName);
         }
     }
 
     private void addCategory() {
         String categoryName = TextInputDialog.showDialog(textGUI, "Add Category", "Category Name:", "");
-        if (categoryName != null && !categoryName.trim().isEmpty()) {
-            CategoryDto category = new CategoryDto.Builder().categoryName(categoryName).build();
+        String supplierID = selectSupplier(); // Get supplier ID from the selection dialog
+        if (categoryName != null && !categoryName.trim().isEmpty() && supplierID != null) {
+            CategoryDto category = new CategoryDto.Builder()
+                    .categoryName(categoryName)
+                    .supplierID(supplierID)
+                    .build();
             ICategoryDto newCategory = controller.createCategory(category);
-
             if (newCategory != null) {
                 loadCategories();
+                MessageDialog.showMessageDialog(textGUI, "Success", "Category added successfully!", MessageDialogButton.OK);
+            } else {
+                MessageDialog.showMessageDialog(textGUI, "Error", "Failed to add category.", MessageDialogButton.OK);
             }
-            MessageDialog.showMessageDialog(textGUI, "Success", "Category added successfully!",
-                    com.googlecode.lanterna.gui2.dialogs.MessageDialogButton.OK);
         } else {
-            MessageDialog.showMessageDialog(textGUI, "Error", "Failed to add category.",
-                    com.googlecode.lanterna.gui2.dialogs.MessageDialogButton.OK);
+            MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input or no supplier selected.", MessageDialogButton.OK);
         }
     }
 
     private void updateCategory() {
-        // Prompt the user to select a category from the table
         selectedRow = categoryTable.getSelectedRow();
-        if (selectedRow == -1) { // Check if no row is selected
+        if (selectedRow == -1) {
             MessageDialog.showMessageDialog(textGUI, "Error", "No category selected.", MessageDialogButton.OK);
-            selectedRow = -1;
             return;
         }
-
-        // Get the selected category ID and name
         String categoryID = categoryTable.getTableModel().getRow(selectedRow).get(1);
         String categoryName = categoryTable.getTableModel().getRow(selectedRow).get(2);
-
-        // Prompt the user to input new values for the category
-        String newCategoryName = TextInputDialog.showDialog(textGUI, "Update Category", "New Category Name:",
-                categoryName);
-
-        if (newCategoryName != null && !newCategoryName.trim().isEmpty()) {
-            // Create a new CategoryDto with the updated values
+        String newCategoryName = TextInputDialog.showDialog(textGUI, "Update Category", "New Category Name:", categoryName);
+        String newSupplierID = selectSupplier(); // Allow changing the supplier
+        if (newCategoryName != null && !newCategoryName.trim().isEmpty() && newSupplierID != null) {
             CategoryDto updatedCategory = new CategoryDto.Builder()
                     .categoryID(categoryID)
                     .categoryName(newCategoryName)
+                    .supplierID(newSupplierID)
                     .build();
-
-            // Use the controller to update the category
             CategoryDto result = controller.updateCategory(updatedCategory);
-
             if (result != null) {
                 loadCategories();
-                MessageDialog.showMessageDialog(textGUI, "Success", "Category updated successfully!",
-                        MessageDialogButton.OK);
+                MessageDialog.showMessageDialog(textGUI, "Success", "Category updated successfully!", MessageDialogButton.OK);
             } else {
-                MessageDialog.showMessageDialog(textGUI, "Error", "Failed to update category.",
-                        MessageDialogButton.OK);
+                MessageDialog.showMessageDialog(textGUI, "Error", "Failed to update category.", MessageDialogButton.OK);
             }
         } else {
-            MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input.", MessageDialogButton.OK);
+            MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input or no supplier selected.", MessageDialogButton.OK);
         }
         selectedRow = -1;
-
     }
 
     private void deleteCategory() {
@@ -184,6 +177,25 @@ public class CategoryView extends Panel {
                 categoryTable.getTableModel().setCell(0, selectedRow, "*");
             }
         });
+    }
+
+    private String selectSupplier() {
+        List<SupplierDto> suppliers = controller.getAllSupplier();
+        if (suppliers.isEmpty()) {
+            MessageDialog.showMessageDialog(textGUI, "No Suppliers", "There are no suppliers available.", MessageDialogButton.OK);
+            return null;
+        }
+        String[] supplierNames = suppliers.stream().map(SupplierDto::getSupplierName).toArray(String[]::new);
+        String selectedSupplierName = ListSelectDialog.showDialog(textGUI, "Select Supplier", "Choose a supplier:", supplierNames);
+        if (selectedSupplierName != null) {
+            
+            return suppliers.stream()
+                            .filter(s -> s.getSupplierName().equals(selectedSupplierName))
+                            .findFirst()
+                            .map(SupplierDto::getSupplierID)
+                            .orElse(null);
+        }
+        return null;
     }
 
 }

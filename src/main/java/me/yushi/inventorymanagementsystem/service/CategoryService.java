@@ -65,6 +65,7 @@ public class CategoryService implements ICategoryService,IMapper<CategoryDto, Ca
     @Override
     public CategoryDto toDto(Category model) {
         return new CategoryDto.Builder()
+                .supplierID(model.getSupplierID())
                 .categoryID(model.getCategoryID())
                 .categoryName(model.getCategoryName())
                 .build();

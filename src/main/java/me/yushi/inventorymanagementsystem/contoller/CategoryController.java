@@ -55,8 +55,16 @@ public class CategoryController implements ICategoryController{
 
     @Override
     public SupplierDto getSupplier(String supplierID) {
+        if(supplierID==null){
+            return null;
+        }
         return supplierService.getSupplierByID(supplierID);
 
+    }
+
+    @Override
+    public List<SupplierDto> getAllSupplier() {
+        return supplierService.getAllSuppliers();
     }
     
 }

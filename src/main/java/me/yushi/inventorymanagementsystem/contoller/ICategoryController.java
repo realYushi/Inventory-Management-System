@@ -20,4 +20,5 @@ public interface ICategoryController{
 
     List<CategoryDto> getAllCategorys();
     SupplierDto getSupplier(String supplierID);
+    List<SupplierDto> getAllSupplier();
 }

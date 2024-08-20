@@ -61,6 +61,9 @@ public class SupplierService implements ISupplierService, IMapper<SupplierDto, S
 
     @Override
     public SupplierDto toDto(Supplier model) {
+        if(model==null){
+            return null;
+        }
         return new SupplierDto.Builder()
                 .supplierID(model.getSupplierID())
                 .supplierName(model.getSupplierName())
