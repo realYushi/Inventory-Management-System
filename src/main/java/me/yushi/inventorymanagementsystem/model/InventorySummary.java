@@ -13,14 +13,10 @@ import java.util.List;
 public class InventorySummary implements IInventorySummary{
 
     private List<Product> lowStockProducts;
-    private List<Product> expirySoonProducts;
-    private List<Product> expiriedProducts;
     private List<InventoryTransaction> recentInventoryTransactions; 
 
-    public InventorySummary(List<Product> lowStock,List<Product> expritySoon,List<Product> expried,List<InventoryTransaction> transatioins) {
+    public InventorySummary(List<Product> lowStock,List<InventoryTransaction> transatioins) {
         this.lowStockProducts=lowStock;
-        this.expiriedProducts=expried;
-        this.expirySoonProducts=expritySoon;
         this.recentInventoryTransactions=transatioins;
     }
     
@@ -30,14 +26,6 @@ public class InventorySummary implements IInventorySummary{
         return this.lowStockProducts;
     }
 
-    @Override
-    public List<Product> getExpirySoonProducts() {
-        return this.expirySoonProducts;
-    }
-    @Override
-    public List<Product> getExpriedProducts() {
-        return this.expiriedProducts;
-    }
 
     @Override
     public List<InventoryTransaction> getRecentInventoryTransactions() {

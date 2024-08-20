@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "productID": "353eeba7-a4f7-42c0-b0d9-275e63431b79",
+    "name": "test product",
+    "categoryID": "4d82abbb-33c0-47fc-8c9a-d9ae2b249aae",
+    "quantity": 11,
+    "unit": "L",
+    "price": 12.0
+  }
+]

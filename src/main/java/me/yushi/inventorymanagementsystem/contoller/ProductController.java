@@ -5,8 +5,11 @@
 package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
+import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
 import me.yushi.inventorymanagementsystem.Dto.ProductDto;
+import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
 import me.yushi.inventorymanagementsystem.repository.ProductRepository;
+import me.yushi.inventorymanagementsystem.service.CategoryService;
 import me.yushi.inventorymanagementsystem.service.ProductService;
 
 /**
@@ -15,9 +18,11 @@ import me.yushi.inventorymanagementsystem.service.ProductService;
  */
 public class ProductController implements IProductController{
     private ProductService productService;
+    private CategoryService categoryService;
 
-    public ProductController(ProductRepository repository) {
-        this.productService=new ProductService(repository);
+    public ProductController(ProductRepository productRepository,CategoryRepository categoryRepository) {
+        this.productService=new ProductService(productRepository);
+        this.categoryService=new CategoryService(categoryRepository);
     }
     
 
@@ -44,6 +49,17 @@ public class ProductController implements IProductController{
     @Override
     public List<ProductDto> getAllProducts() {
         return productService.getAllProducts();
+    }
+
+    @Override
+    public CategoryDto getCategory(String categoryID) {
+        return categoryService.getCategoryByID(categoryID);
+
+    }
+
+    @Override
+    public List<CategoryDto> getAllCategory() {
+        return categoryService.getAllCategorys();
     }
     
     

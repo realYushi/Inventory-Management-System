@@ -4,8 +4,6 @@
  */
 package me.yushi.inventorymanagementsystem.Dto;
 
-import java.util.Date;
-
 /**
  *
  * @author yushi
@@ -17,5 +15,4 @@ public interface IProductDto {
     String getCategoryID();
     int getQuantity();
     double getPrice();
-    Date getExpirationDate();
 }

@@ -35,20 +35,25 @@ public class ProductService implements IProductService, IMapper<ProductDto, Prod
     @Override
     public ProductDto updateProduct(ProductDto updatedProductDto) {
         Product product = toModel(updatedProductDto);
-        ProductDto productDto=toDto(repository.updateProduct(product));
+        ProductDto productDto = toDto(repository.updateProduct(product));
         this.save();
         return productDto;
     }
 
     @Override
     public ProductDto getProductByID(String productID) {
+        Product product = repository.readProduct(productID);
+        if (product == null) {
+            System.out.print("No product found with ID: " + productID);
+            return null;
+        }
 
-        return toDto(repository.readProduct(productID));
+        return toDto(product);
     }
 
     @Override
     public boolean deleteProduct(String productID) {
-        boolean result =repository.deleteProduct(productID);
+        boolean result = repository.deleteProduct(productID);
         this.save();
         return result;
     }
@@ -63,9 +68,11 @@ public class ProductService implements IProductService, IMapper<ProductDto, Prod
 
     @Override
     public ProductDto toDto(Product model) {
+        if (model == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
         return new ProductDto.Builder()
                 .categoryID(model.getCategoryID())
-                .expirationDate(model.getExpirationDate())
                 .name(model.getName())
                 .unit(model.getUnit())
                 .price(model.getPrice())
@@ -82,8 +89,8 @@ public class ProductService implements IProductService, IMapper<ProductDto, Prod
                 dto.getCategoryID(),
                 dto.getQuantity(),
                 dto.getUnit(),
-                dto.getPrice(),
-                dto.getExpirationDate());
+                dto.getPrice()
+        );
     }
 
     @Override

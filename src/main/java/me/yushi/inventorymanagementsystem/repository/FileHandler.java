@@ -5,6 +5,7 @@
 package me.yushi.inventorymanagementsystem.repository;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
@@ -28,11 +29,12 @@ import java.util.logging.Logger;
  */
 public class FileHandler<T> implements IFileHandler<T> {
 
-    private final Gson gson = new Gson();
+    private final Gson gson;
     private final Class<T> targetClass;
     private final String fileLocation;
 
     public FileHandler(Class<T> targetClass, String fileLocation) throws IOException {
+        this.gson = new GsonBuilder().setPrettyPrinting().create();
         this.targetClass = targetClass;
         this.fileLocation = fileLocation;
         checkFile();

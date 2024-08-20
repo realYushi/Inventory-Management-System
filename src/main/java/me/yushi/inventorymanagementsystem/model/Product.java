@@ -4,7 +4,6 @@
  */
 package me.yushi.inventorymanagementsystem.model;
 
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -19,9 +18,8 @@ public class Product implements IProduct {
     private int quantity;
     private String unit;
     private double price;
-    private Date expirationDate;
 
-    public Product(String productID,String name, String categoryID,int quantity, String unit, double price, Date expirationDate) {
+    public Product(String productID,String name, String categoryID,int quantity, String unit, double price) {
         this.productID=productID;
         this.productID =(this.productID==null?UUID.randomUUID().toString():productID);
 
@@ -30,7 +28,6 @@ public class Product implements IProduct {
         this.quantity = quantity;
         this.unit = unit;
         this.price = price;
-        this.expirationDate = expirationDate;
     }
 
     @Override
@@ -74,15 +71,7 @@ public class Product implements IProduct {
         this.price=price;
     }
 
-    @Override
-    public Date getExpirationDate() {
-        return this.expirationDate;
-    }
 
-    @Override
-    public void setExpirationDate(Date expirationDate) {
-        this.expirationDate=expirationDate;
-    }
 
     @Override
     public String getUnit() {

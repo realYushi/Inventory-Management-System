@@ -26,7 +26,10 @@ public class InventoryTransactionService implements IInventoryTransactionService
     @Override
     public InventoryTransactionDto createInventoryTransaction(InventoryTransactionDto newInventoryTransactionDto) {
         InventoryTransaction inventoryTransaton = toModel(newInventoryTransactionDto);
-        InventoryTransactionDto inventoryTransactionDto=toDto(repository.createInventoryTransaction(inventoryTransaton));
+        if (inventoryTransaton == null) {
+            throw new IllegalArgumentException("Transaction Model cannot be null");
+        }
+        InventoryTransactionDto inventoryTransactionDto = toDto(repository.createInventoryTransaction(inventoryTransaton));
         this.save();
         return inventoryTransactionDto;
     }
@@ -34,7 +37,7 @@ public class InventoryTransactionService implements IInventoryTransactionService
     @Override
     public InventoryTransactionDto updateInventoryTransaction(InventoryTransactionDto updatedInventoryTransactionDto) {
         InventoryTransaction inventoryTransaction = toModel(updatedInventoryTransactionDto);
-        InventoryTransactionDto inventoryTransactionDto=toDto(repository.updateInventoryTransaction(inventoryTransaction));
+        InventoryTransactionDto inventoryTransactionDto = toDto(repository.updateInventoryTransaction(inventoryTransaction));
         this.save();
         return inventoryTransactionDto;
     }
@@ -46,7 +49,7 @@ public class InventoryTransactionService implements IInventoryTransactionService
 
     @Override
     public boolean deleteInventoryTransaction(String inventoryTransationID) {
-        boolean result =repository.deleteInventoryTransaction(inventoryTransationID);
+        boolean result = repository.deleteInventoryTransaction(inventoryTransationID);
         this.save();
         return result;
     }
@@ -61,7 +64,15 @@ public class InventoryTransactionService implements IInventoryTransactionService
 
     @Override
     public InventoryTransactionDto toDto(InventoryTransaction model) {
+        if (model == null) {
+            throw new IllegalArgumentException("Transaction cannot be null");
+        }
+        // Check if any other accessed object might be null, e.g., transaction.getDate()
+        if (model.getDate() == null) {
+            throw new IllegalArgumentException("Transaction date cannot be null");
+        }
         return new InventoryTransactionDto.Builder()
+                .transactionID(model.getTransactionID())
                 .productID(model.getProductID())
                 .date(model.getDate())
                 .quantity(model.getQuantity())
@@ -86,11 +97,11 @@ public class InventoryTransactionService implements IInventoryTransactionService
     @Override
     public InventoryTransaction toModel(InventoryTransactionDto dto) {
         return new InventoryTransaction(dto.getTransactionID(),
-                 dto.getProductID(),
-                 dto.getQuantity(),
-                 dto.getDate(),
-                 mapDtoToModelType(dto.getTransactionType()),
-                 dto.getPrice());
+                dto.getProductID(),
+                dto.getQuantity(),
+                dto.getDate(),
+                mapDtoToModelType(dto.getTransactionType()),
+                dto.getPrice());
 
     }
 

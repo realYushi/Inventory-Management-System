@@ -1,188 +1,186 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package me.yushi.inventorymanagementsystem.view;
 
-import com.googlecode.lanterna.gui2.Button;
-import com.googlecode.lanterna.gui2.Direction;
-import com.googlecode.lanterna.gui2.Label;
-import com.googlecode.lanterna.gui2.LinearLayout;
-import com.googlecode.lanterna.gui2.Panel;
-import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
-import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
-import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
-import com.googlecode.lanterna.gui2.dialogs.TextInputDialog;
+import com.googlecode.lanterna.gui2.*;
+import com.googlecode.lanterna.gui2.dialogs.*;
 import com.googlecode.lanterna.gui2.table.Table;
 import java.util.List;
+import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
 import me.yushi.inventorymanagementsystem.Dto.IProductDto;
 import me.yushi.inventorymanagementsystem.Dto.ProductDto;
 import me.yushi.inventorymanagementsystem.contoller.ProductController;
+import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
 import me.yushi.inventorymanagementsystem.repository.ProductRepository;
 
 /**
- *
+ * Product management view using Lanterna GUI framework.
  * @author yushi
  */
 public class ProductView extends Panel {
 
     private ProductController controller;
-    private Table<String> ProductTable;
+    private Table<String> productTable;
     private WindowBasedTextGUI textGUI;
     private int selectedRow = -1;
 
-    public ProductView(ProductRepository repository, WindowBasedTextGUI textGUI) {
-        this.controller = new ProductController(repository);
+    public ProductView(ProductRepository productRepository, CategoryRepository categoryRepository, WindowBasedTextGUI textGUI) {
+        this.controller = new ProductController(productRepository, categoryRepository);
         this.textGUI = textGUI;
         setupUI();
-        loadCategories();
+        loadProducts();
         addTableSelectionListener();
     }
 
     private void setupUI() {
-        // Create a vertical panel to hold all components
         Panel mainPanel = new Panel();
         mainPanel.setLayoutManager(new LinearLayout(Direction.VERTICAL));
 
-        // Add a label for the title
-        mainPanel.addComponent(new Label("Product Management")
-                .setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center)));
+        mainPanel.addComponent(new Label("Product Management").setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center)));
 
-        // Create a table to display categories
-        ProductTable = new Table<>(" ", "ID", "Name");
-        mainPanel.addComponent(ProductTable);
+        productTable = new Table<>(" ", "ID", "Name", "Category", "Quantity", "Unit","Price" );
+        mainPanel.addComponent(productTable);
 
-        // Create a horizontal panel for buttons
         Panel buttonPanel = new Panel();
         buttonPanel.setLayoutManager(new LinearLayout(Direction.HORIZONTAL));
 
-        // Button to refresh the Product list
-        Button refreshButton = new Button("Refresh", () -> loadCategories());
+        Button refreshButton = new Button("Refresh", this::loadProducts);
         buttonPanel.addComponent(refreshButton);
 
-        // Button to add a new Product
-        Button addProductButton = new Button("Add Product", () -> addProduct());
+        Button addProductButton = new Button("Add Product", this::addProduct);
         buttonPanel.addComponent(addProductButton);
 
-        // Button to update a Product
-        Button updateProductButton = new Button("Update Product", () -> updateProduct());
+        Button updateProductButton = new Button("Update Product", this::updateProduct);
         buttonPanel.addComponent(updateProductButton);
 
-        // Button to delete a Product
-        Button deleteProductButton = new Button("Delete Product", () -> deleteProduct());
+        Button deleteProductButton = new Button("Delete Product", this::deleteProduct);
         buttonPanel.addComponent(deleteProductButton);
 
-        // Add the button panel to the main panel
         mainPanel.addComponent(buttonPanel);
-
-        // Add the main panel to the current panel
         this.addComponent(mainPanel);
     }
 
-    private void loadCategories() {
-        ProductTable.getTableModel().clear();
-        List<ProductDto> categories = controller.getAllProducts();
-        for (IProductDto Product : categories) {
-            ProductTable.getTableModel().addRow("",
-                    Product.getName());
-
+    private void loadProducts() {
+        productTable.getTableModel().clear();
+        List<ProductDto> products = controller.getAllProducts();
+        for (IProductDto product : products) {
+            CategoryDto category = controller.getCategory(product.getCategoryID());
+            String categoryName = category != null ? category.getCategoryName() : "N/A";
+            String price = String.valueOf(product.getPrice())+" $";
+            productTable.getTableModel().addRow("",
+                product.getProductID(),
+                product.getName(),
+                categoryName,
+                String.valueOf(product.getQuantity()),
+                product.getUnit(),
+                price
+                );
         }
     }
-
+    
     private void addProduct() {
-        String ProductName = TextInputDialog.showDialog(textGUI, "Add Product", "Product Name:", "");
-        if (ProductName != null && !ProductName.trim().isEmpty()) {
-            ProductDto Product = new ProductDto.Builder().name(ProductName).build();
-            IProductDto newProduct = controller.createProduct(Product);
-
+        String productName = TextInputDialog.showDialog(textGUI, "Add Product", "Product Name:", "");
+        String productQuantity=TextInputDialog.showDialog(textGUI, "Add Product", "Product Quantity:", "");
+        String productUnit =TextInputDialog.showDialog(textGUI, "Add Product", "Product Unit:", "");
+        String productPrice= TextInputDialog.showDialog(textGUI, "Add Product", "Product Price:", "");
+        String categoryID = selectCategory();
+        if (productName != null && !productName.trim().isEmpty() && categoryID != null) {
+            ProductDto product = new ProductDto.Builder()
+                    .name(productName)
+                    .quantity(Integer.parseInt(productQuantity))
+                    .price(Double.parseDouble(productPrice))
+                    .unit(productUnit)
+                    .categoryID(categoryID)
+                    .build();
+            IProductDto newProduct = controller.createProduct(product);
             if (newProduct != null) {
-                loadCategories();
+                loadProducts();
+                MessageDialog.showMessageDialog(textGUI, "Success", "Product added successfully!", MessageDialogButton.OK);
+            } else {
+                MessageDialog.showMessageDialog(textGUI, "Error", "Failed to add product.", MessageDialogButton.OK);
             }
-            MessageDialog.showMessageDialog(textGUI, "Success", "Product added successfully!",
-                    com.googlecode.lanterna.gui2.dialogs.MessageDialogButton.OK);
         } else {
-            MessageDialog.showMessageDialog(textGUI, "Error", "Failed to add Product.",
-                    com.googlecode.lanterna.gui2.dialogs.MessageDialogButton.OK);
+            MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input or no category selected.", MessageDialogButton.OK);
         }
     }
-
+    
     private void updateProduct() {
-        // Prompt the user to select a Product from the table
-        selectedRow = ProductTable.getSelectedRow();
-        if (selectedRow == -1) { // Check if no row is selected
-            MessageDialog.showMessageDialog(textGUI, "Error", "No Product selected.", MessageDialogButton.OK);
-            selectedRow = -1;
+        selectedRow = productTable.getSelectedRow();
+        if (selectedRow == -1) {
+            MessageDialog.showMessageDialog(textGUI, "Error", "No product selected.", MessageDialogButton.OK);
             return;
         }
-
-        // Get the selected Product ID and name
-        String ProductID = ProductTable.getTableModel().getRow(selectedRow).get(1);
-        String ProductName = ProductTable.getTableModel().getRow(selectedRow).get(2);
-
-        // Prompt the user to input new values for the Product
-        String newProductName = TextInputDialog.showDialog(textGUI, "Update Product", "New Product Name:",
-                ProductName);
-
-        if (newProductName != null && !newProductName.trim().isEmpty()) {
-            // Create a new ProductDto with the updated values
+        String productID = productTable.getTableModel().getRow(selectedRow).get(1);
+        
+        String newProductName = TextInputDialog.showDialog(textGUI, "Add Product", "Product Name:", "");
+        String newProductQuantity=TextInputDialog.showDialog(textGUI, "Add Product", "Product Quantity:", "");
+        String newProductUnit =TextInputDialog.showDialog(textGUI, "Add Product", "Product Unit:", "");
+        String newProductPrice= TextInputDialog.showDialog(textGUI, "Add Product", "Product Price:", "");
+        String newCategoryID = selectCategory();
+        if (newProductName != null && !newProductName.trim().isEmpty() && newCategoryID != null) {
             ProductDto updatedProduct = new ProductDto.Builder()
-                    .productID(ProductID)
                     .name(newProductName)
+                    .quantity(Integer.parseInt(newProductQuantity))
+                    .price(Double.parseDouble(newProductPrice))
+                    .unit(newProductUnit)
+                    .categoryID(newCategoryID)
+                    .productID(productID)
                     .build();
-
-            // Use the controller to update the Product
             ProductDto result = controller.updateProduct(updatedProduct);
-
             if (result != null) {
-                loadCategories();
-                MessageDialog.showMessageDialog(textGUI, "Success", "Product updated successfully!",
-                        MessageDialogButton.OK);
+                loadProducts();
+                MessageDialog.showMessageDialog(textGUI, "Success", "Product updated successfully!", MessageDialogButton.OK);
             } else {
-                MessageDialog.showMessageDialog(textGUI, "Error", "Failed to update Product.",
-                        MessageDialogButton.OK);
+                MessageDialog.showMessageDialog(textGUI, "Error", "Failed to update product.", MessageDialogButton.OK);
             }
         } else {
-            MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input.", MessageDialogButton.OK);
+            MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input or no category selected.", MessageDialogButton.OK);
         }
         selectedRow = -1;
-
     }
 
     private void deleteProduct() {
-        // Prompt the user to select a Product from the table
-        selectedRow = ProductTable.getSelectedRow();
-        if (selectedRow == -1) { // Check if no row is selected
-            MessageDialog.showMessageDialog(textGUI, "Error", "No Product selected.", MessageDialogButton.OK);
-            selectedRow = -1;
+        selectedRow = productTable.getSelectedRow();
+        if (selectedRow == -1) {
+            MessageDialog.showMessageDialog(textGUI, "Error", "No product selected.", MessageDialogButton.OK);
             return;
         }
-        String ProductID = ProductTable.getTableModel().getRow(selectedRow).get(1);
-        Boolean result = controller.deleteProduct(ProductID);
-
+        String productID = productTable.getTableModel().getRow(selectedRow).get(1);
+        Boolean result = controller.deleteProduct(productID);
         if (result != null) {
-            loadCategories();
-            MessageDialog.showMessageDialog(textGUI, "Success", "Product delete successfully!",
-                    MessageDialogButton.OK);
+            loadProducts();
+            MessageDialog.showMessageDialog(textGUI, "Success", "Product deleted successfully!", MessageDialogButton.OK);
         } else {
-            MessageDialog.showMessageDialog(textGUI, "Error", "Failed to delete Product.",
-                    MessageDialogButton.OK);
+            MessageDialog.showMessageDialog(textGUI, "Error", "Failed to delete product.", MessageDialogButton.OK);
         }
         selectedRow = -1;
-
     }
 
     private void addTableSelectionListener() {
-        ProductTable.setSelectAction(() -> {
-            int selectedRow = ProductTable.getSelectedRow();
+        productTable.setSelectAction(() -> {
+            int selectedRow = productTable.getSelectedRow();
             if (selectedRow != -1) {
-                // Clear previous selection
-                for (int row = 0; row < ProductTable.getTableModel().getRowCount(); row++) {
-                    ProductTable.getTableModel().setCell(0, row, "");
+                for (int row = 0; row < productTable.getTableModel().getRowCount(); row++) {
+                    productTable.getTableModel().setCell(0, row, "");
                 }
-                // Mark the selected row with a star
-                ProductTable.getTableModel().setCell(0, selectedRow, "*");
+                productTable.getTableModel().setCell(0, selectedRow, "*");
             }
         });
     }
 
+    private String selectCategory() {
+        List<CategoryDto> categoryDtos = controller.getAllCategory();
+        if (categoryDtos.isEmpty()) {
+            MessageDialog.showMessageDialog(textGUI, "No Category", "There are no categories available.", MessageDialogButton.OK);
+            return null;
+        }
+        String[] categoryNames = categoryDtos.stream().map(CategoryDto::getCategoryName).toArray(String[]::new);
+        String selectedCategoryName = ListSelectDialog.showDialog(textGUI, "Select Category", "Choose a Category:", categoryNames);
+        if (selectedCategoryName != null) {
+            return categoryDtos.stream()
+                            .filter(s -> s.getCategoryName().equals(selectedCategoryName))
+                            .findFirst()
+                            .map(CategoryDto::getCategoryID)
+                            .orElse(null);
+        }
+        return null;
+    }
 }

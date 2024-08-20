@@ -27,7 +27,6 @@ public class DashboardService implements IDashboardService {
     InventoryTransactionRepository inventoryTransactionRepository;
     ProductRepository productRepository;
     private final int TRANSATION_DATE_RANGE = 30;
-    private final int EXPRIY_SOON_DATE_RANGE = 7;
     private final double PROFIT_RATE = 1.2;
     private final int LOW_STOCK_TRIGGER = 10;
     private List<InventoryTransaction> recentTransationData;
@@ -67,11 +66,8 @@ public class DashboardService implements IDashboardService {
     public InventorySummary getIentorySummary() {
         List<Product> allData = productRepository.getAllProducts().values().stream().collect(Collectors.toList());
         List<Product> lowStock = new ArrayList<>();
-        List<Product> expirySoon = new ArrayList<>();
-        List<Product> expired = new ArrayList<>();
 
         Date currentDate = new Date();
-        Date expirySoonDate = getEndDate(EXPRIY_SOON_DATE_RANGE);
 
         for (Product product : allData) {
             // Check for low stock 
@@ -80,15 +76,8 @@ public class DashboardService implements IDashboardService {
             }
 
             // Check for expiry
-            if (product.getExpirationDate() != null) {
-                if (product.getExpirationDate().before(currentDate)) {
-                    expired.add(product);
-                } else if (product.getExpirationDate().before(expirySoonDate)) {
-                    expirySoon.add(product);
-                }
-            }
         }
-        return new InventorySummary(lowStock, expirySoon, expired, recentTransationData);
+        return new InventorySummary(lowStock, recentTransationData);
 
     }
 

@@ -74,9 +74,9 @@ public class APP {
             // Create top navigation panel
             Panel topNavPanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
             topNavPanel.addComponent(new Button("Dashboard", () -> showDashboard(bodyPanel)));
-            topNavPanel.addComponent(new Button("Product", () -> showProduct(bodyPanel,productRepository,textGUI)));
+            topNavPanel.addComponent(new Button("Product", () -> showProduct(bodyPanel,productRepository,categoryRepository,textGUI)));
             topNavPanel.addComponent(new Button("Supplier", () -> showSupplier(bodyPanel,supplierRepository,textGUI)));
-            topNavPanel.addComponent(new Button("Transaction", () -> showTransaction(bodyPanel)));
+            topNavPanel.addComponent(new Button("Transaction", () -> showTransaction(bodyPanel,transactionRepository,productRepository,textGUI)));
             topNavPanel.addComponent(new Button("Category", () -> showCategory(bodyPanel, categoryRepository, supplierRepository,textGUI)));
             topNavPanel.addComponent(new Button("Exit", () -> confirmExit(textGUI)));
 
@@ -113,9 +113,9 @@ public class APP {
         bodyPanel.addComponent(new Label("Dashboard Content"));
     }
 
-    private static void showProduct(Panel bodyPanel,ProductRepository productRepository,WindowBasedTextGUI textGUI) {
+    private static void showProduct(Panel bodyPanel,ProductRepository productRepository,CategoryRepository categoryRepository,WindowBasedTextGUI textGUI) {
         bodyPanel.removeAllComponents();
-        bodyPanel.addComponent(new ProductView(productRepository,textGUI));
+        bodyPanel.addComponent(new ProductView(productRepository,categoryRepository,textGUI));
     }
 
     private static void showSupplier(Panel bodyPanel,SupplierRepository repository,WindowBasedTextGUI textGUI) {
@@ -124,9 +124,9 @@ public class APP {
         bodyPanel.addComponent(new SupplierView(repository, textGUI));
     }
 
-    private static void showTransaction(Panel bodyPanel) {
+    private static void showTransaction(Panel bodyPanel,InventoryTransactionRepository transactionRepository,ProductRepository productRepository,WindowBasedTextGUI textGUI) {
         bodyPanel.removeAllComponents();
-        bodyPanel.addComponent(new Label("Transaction Content"));
+        bodyPanel.addComponent(new InventoryTransactionView(transactionRepository,productRepository,textGUI));
     }
 
     private static void showCategory(Panel bodyPanel, CategoryRepository categoryRepository,SupplierRepository supplierRepository, WindowBasedTextGUI textGUI) {

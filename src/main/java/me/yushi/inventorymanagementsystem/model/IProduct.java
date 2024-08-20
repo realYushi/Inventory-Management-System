@@ -4,8 +4,6 @@
  */
 package me.yushi.inventorymanagementsystem.model;
 
-import java.util.Date;
-
 /**
  *
  * @author yushi
@@ -27,6 +25,4 @@ public interface IProduct {
     double getPrice();
     void setPrice(double price);
 
-    Date getExpirationDate();
-    void setExpirationDate(Date expirationDate);
 }

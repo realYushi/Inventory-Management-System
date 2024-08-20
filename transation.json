@@ -1,0 +1,10 @@
+[
+  {
+    "transactionID": "b718c339-ec6c-4f98-a902-df7653a0a3cf",
+    "productID": "353eeba7-a4f7-42c0-b0d9-275e63431b79",
+    "quantity": 11,
+    "date": "Dec 11, 1212, 12:00:00 AM",
+    "transactionType": "SALE",
+    "price": 12.0
+  }
+]

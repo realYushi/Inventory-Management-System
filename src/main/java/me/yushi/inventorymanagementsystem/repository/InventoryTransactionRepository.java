@@ -22,12 +22,12 @@ public class InventoryTransactionRepository implements IInventoryTransactionRepo
         inventoryTransactionFileHandler=fileHandler;
         this.inventoryTransactionMap = inventoryTransactionFileHandler.readFromFile()
                 .stream()
-                .collect(Collectors.toMap(i -> i.getTransactionID(), i -> i));
+                .collect(Collectors.toMap(transation -> transation.getTransactionID(), i -> i));
     }
 
     @Override
     public InventoryTransaction createInventoryTransaction(InventoryTransaction newInventoryTransaction) {
-        inventoryTransactionMap.put(newInventoryTransaction.getProductID(), newInventoryTransaction);
+        inventoryTransactionMap.put(newInventoryTransaction.getTransactionID(), newInventoryTransaction);
         return inventoryTransactionMap.get(newInventoryTransaction.getTransactionID());
 
     }

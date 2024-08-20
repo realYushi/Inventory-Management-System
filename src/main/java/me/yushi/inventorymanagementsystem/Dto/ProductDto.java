@@ -4,8 +4,6 @@
  */
 package me.yushi.inventorymanagementsystem.Dto;
 
-import java.util.Date;
-
 /**
  *
  * @author yushi
@@ -18,7 +16,6 @@ public class ProductDto implements IProductDto {
     private final int quantity;
     private final String unit;
     private final double price;
-    private final Date expirationDate;
 
     private ProductDto(Builder builder) {
         this.productID = builder.productID;
@@ -27,7 +24,6 @@ public class ProductDto implements IProductDto {
         this.quantity = builder.quantity;
         this.unit = builder.unit;
         this.price = builder.price;
-        this.expirationDate = builder.expirationDate;
     }
 
     public static class Builder {
@@ -38,7 +34,6 @@ public class ProductDto implements IProductDto {
         private int quantity;
         private String unit;
         private double price;
-        private Date expirationDate;
 
         public Builder productID(String productID) {
             this.productID = productID;
@@ -70,10 +65,6 @@ public class ProductDto implements IProductDto {
             return this;
         }
 
-        public Builder expirationDate(Date expirationDate) {
-            this.expirationDate = expirationDate;
-            return this;
-        }
 
         public ProductDto build() {
             return new ProductDto(this);
@@ -111,9 +102,5 @@ public class ProductDto implements IProductDto {
         return this.price;
     }
 
-    @Override
-    public Date getExpirationDate() {
-        return this.expirationDate;
-    }
 
 }

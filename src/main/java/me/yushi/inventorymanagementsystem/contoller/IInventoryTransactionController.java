@@ -6,6 +6,7 @@ package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
 import me.yushi.inventorymanagementsystem.Dto.InventoryTransactionDto;
+import me.yushi.inventorymanagementsystem.Dto.ProductDto;
 
 /**
  *
@@ -17,6 +18,8 @@ public interface IInventoryTransactionController{
     InventoryTransactionDto getInventoryTransactionByID(String inventoryTransationID);
     boolean deleteInventoryTransaction(String inventoryTransationID);
     List<InventoryTransactionDto> getAllInventoryTransations();
+    List<ProductDto> getAllProduct();
+    ProductDto getProduct(String produdctID);
     
     
 }
