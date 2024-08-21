@@ -57,9 +57,14 @@ public class SupplierView extends Panel {
     private void loadSuppliers() {
         supplierTable.getTableModel().clear();
         List<SupplierDto> suppliers = controller.getAllSuppliers();
+        if (suppliers.size()==0) {
+            return;
+            
+        }
         for (SupplierDto supplier : suppliers) {
             supplierTable.getTableModel().addRow("", supplier.getSupplierID(), supplier.getSupplierName() );
         }
+        selectedRow= -1;
     }
 
     private void addSupplier() {
@@ -78,10 +83,10 @@ public class SupplierView extends Panel {
         } else {
             MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input.", MessageDialogButton.OK);
         }
+        selectedRow= -1;
     }
 
     private void updateSupplier() {
-        selectedRow = supplierTable.getSelectedRow();
         if (selectedRow == -1) {
             MessageDialog.showMessageDialog(textGUI, "Error", "No supplier selected.", MessageDialogButton.OK);
             return;
@@ -108,7 +113,6 @@ public class SupplierView extends Panel {
     }
 
     private void deleteSupplier() {
-        selectedRow = supplierTable.getSelectedRow();
         if (selectedRow == -1) {
             MessageDialog.showMessageDialog(textGUI, "Error", "No supplier selected.", MessageDialogButton.OK);
             return;
@@ -126,11 +130,13 @@ public class SupplierView extends Panel {
 
     private void addTableSelectionListener() {
         supplierTable.setSelectAction(() -> {
-            int selectedRow = supplierTable.getSelectedRow();
-            if (selectedRow != -1) {
-                for (int row = 0; row < supplierTable.getTableModel().getRowCount(); row++) {
-                    supplierTable.getTableModel().setCell(0, row, "");
-                }
+            selectedRow = supplierTable.getSelectedRow();
+            // Clear the selection marker from all rows
+            for (int row = 0; row < supplierTable.getTableModel().getRowCount(); row++) {
+                supplierTable.getTableModel().setCell(0, row, "");
+            }
+            if (selectedRow >= 0 && selectedRow < supplierTable.getTableModel().getRowCount()) {
+                // Set the selection marker on the selected row
                 supplierTable.getTableModel().setCell(0, selectedRow, "*");
             }
         });

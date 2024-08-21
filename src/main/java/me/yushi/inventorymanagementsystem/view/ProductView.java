@@ -13,6 +13,7 @@ import me.yushi.inventorymanagementsystem.repository.ProductRepository;
 
 /**
  * Product management view using Lanterna GUI framework.
+ *
  * @author yushi
  */
 public class ProductView extends Panel {
@@ -36,7 +37,7 @@ public class ProductView extends Panel {
 
         mainPanel.addComponent(new Label("Product Management").setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center)));
 
-        productTable = new Table<>(" ", "ID", "Name", "Category", "Quantity", "Unit","Price" );
+        productTable = new Table<>(" ", "ID", "Name", "Category", "Quantity", "Unit", "Price");
         mainPanel.addComponent(productTable);
 
         Panel buttonPanel = new Panel();
@@ -61,28 +62,33 @@ public class ProductView extends Panel {
     private void loadProducts() {
         productTable.getTableModel().clear();
         List<ProductDto> products = controller.getAllProducts();
+        if (products.size() == 0) {
+            return;
+
+        }
         for (IProductDto product : products) {
             CategoryDto category = controller.getCategory(product.getCategoryID());
             String categoryName = category != null ? category.getCategoryName() : "N/A";
-            String price = String.valueOf(product.getPrice())+" $";
+            String price = String.valueOf(product.getPrice()) + " $";
             productTable.getTableModel().addRow("",
-                product.getProductID(),
-                product.getName(),
-                categoryName,
-                String.valueOf(product.getQuantity()),
-                product.getUnit(),
-                price
-                );
+                    product.getProductID(),
+                    product.getName(),
+                    categoryName,
+                    String.valueOf(product.getQuantity()),
+                    product.getUnit(),
+                    price
+            );
         }
+        selectedRow = -1;
     }
-    
+
     private void addProduct() {
         String productName = TextInputDialog.showDialog(textGUI, "Add Product", "Product Name:", "");
-        String productQuantity=TextInputDialog.showDialog(textGUI, "Add Product", "Product Quantity:", "");
-        String productUnit =TextInputDialog.showDialog(textGUI, "Add Product", "Product Unit:", "");
-        String productPrice= TextInputDialog.showDialog(textGUI, "Add Product", "Product Price:", "");
+        String productQuantity = TextInputDialog.showDialog(textGUI, "Add Product", "Product Quantity:", "");
+        String productUnit = TextInputDialog.showDialog(textGUI, "Add Product", "Product Unit:", "");
+        String productPrice = TextInputDialog.showDialog(textGUI, "Add Product", "Product Price:", "");
         String categoryID = selectCategory();
-        if (productName != null && !productName.trim().isEmpty() && categoryID != null) {
+        if (isValidInput(productName, productQuantity, productUnit, productPrice) && categoryID != null) {
             ProductDto product = new ProductDto.Builder()
                     .name(productName)
                     .quantity(Integer.parseInt(productQuantity))
@@ -100,22 +106,23 @@ public class ProductView extends Panel {
         } else {
             MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input or no category selected.", MessageDialogButton.OK);
         }
+        selectedRow = -1;
     }
-    
+
     private void updateProduct() {
-        selectedRow = productTable.getSelectedRow();
         if (selectedRow == -1) {
             MessageDialog.showMessageDialog(textGUI, "Error", "No product selected.", MessageDialogButton.OK);
             return;
         }
         String productID = productTable.getTableModel().getRow(selectedRow).get(1);
-        
+
         String newProductName = TextInputDialog.showDialog(textGUI, "Add Product", "Product Name:", "");
-        String newProductQuantity=TextInputDialog.showDialog(textGUI, "Add Product", "Product Quantity:", "");
-        String newProductUnit =TextInputDialog.showDialog(textGUI, "Add Product", "Product Unit:", "");
-        String newProductPrice= TextInputDialog.showDialog(textGUI, "Add Product", "Product Price:", "");
+
+        String newProductQuantity = TextInputDialog.showDialog(textGUI, "Add Product", "Product Quantity:", "");
+        String newProductUnit = TextInputDialog.showDialog(textGUI, "Add Product", "Product Unit:", "");
+        String newProductPrice = TextInputDialog.showDialog(textGUI, "Add Product", "Product Price:", "");
         String newCategoryID = selectCategory();
-        if (newProductName != null && !newProductName.trim().isEmpty() && newCategoryID != null) {
+        if (isValidInput(newProductName, newProductQuantity, newProductUnit, newProductPrice) && newCategoryID != null) {
             ProductDto updatedProduct = new ProductDto.Builder()
                     .name(newProductName)
                     .quantity(Integer.parseInt(newProductQuantity))
@@ -138,7 +145,6 @@ public class ProductView extends Panel {
     }
 
     private void deleteProduct() {
-        selectedRow = productTable.getSelectedRow();
         if (selectedRow == -1) {
             MessageDialog.showMessageDialog(textGUI, "Error", "No product selected.", MessageDialogButton.OK);
             return;
@@ -156,11 +162,13 @@ public class ProductView extends Panel {
 
     private void addTableSelectionListener() {
         productTable.setSelectAction(() -> {
-            int selectedRow = productTable.getSelectedRow();
-            if (selectedRow != -1) {
-                for (int row = 0; row < productTable.getTableModel().getRowCount(); row++) {
-                    productTable.getTableModel().setCell(0, row, "");
-                }
+            selectedRow = productTable.getSelectedRow();
+            // Clear the selection marker from all rows
+            for (int row = 0; row < productTable.getTableModel().getRowCount(); row++) {
+                productTable.getTableModel().setCell(0, row, "");
+            }
+            if (selectedRow >= 0 && selectedRow < productTable.getTableModel().getRowCount()) {
+                // Set the selection marker on the selected row
                 productTable.getTableModel().setCell(0, selectedRow, "*");
             }
         });
@@ -176,11 +184,21 @@ public class ProductView extends Panel {
         String selectedCategoryName = ListSelectDialog.showDialog(textGUI, "Select Category", "Choose a Category:", categoryNames);
         if (selectedCategoryName != null) {
             return categoryDtos.stream()
-                            .filter(s -> s.getCategoryName().equals(selectedCategoryName))
-                            .findFirst()
-                            .map(CategoryDto::getCategoryID)
-                            .orElse(null);
+                    .filter(s -> s.getCategoryName().equals(selectedCategoryName))
+                    .findFirst()
+                    .map(CategoryDto::getCategoryID)
+                    .orElse(null);
         }
         return null;
+    }
+
+    private boolean isValidInput(String productName, String productQuantity, String productUnit, String productPrice) {
+        if (productName == null || productName.trim().isEmpty()
+                || productQuantity == null || !productQuantity.matches("\\d+")
+                || productUnit == null || productUnit.trim().isEmpty()
+                || productPrice == null || !productPrice.matches("\\d+(\\.\\d+)?")) {
+            return false;
+        }
+        return true;
     }
 }

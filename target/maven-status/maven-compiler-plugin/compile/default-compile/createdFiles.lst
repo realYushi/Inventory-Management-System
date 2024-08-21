@@ -46,6 +46,7 @@ me/yushi/inventorymanagementsystem/view/InventoryTransactionView.class
 me/yushi/inventorymanagementsystem/repository/InventoryTransactionRepository.class
 me/yushi/inventorymanagementsystem/repository/CategoryRepository.class
 me/yushi/inventorymanagementsystem/contoller/SupplierController.class
+me/yushi/inventorymanagementsystem/contoller/InventoryTransactionController$1.class
 me/yushi/inventorymanagementsystem/service/CategoryService.class
 me/yushi/inventorymanagementsystem/model/Product.class
 me/yushi/inventorymanagementsystem/Dto/ICategoryDto.class

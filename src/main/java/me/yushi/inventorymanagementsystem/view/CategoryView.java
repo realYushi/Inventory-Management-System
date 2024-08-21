@@ -86,11 +86,15 @@ public class CategoryView extends Panel {
     private void loadCategories() {
         categoryTable.getTableModel().clear();
         List<CategoryDto> categories = controller.getAllCategorys();
+        if(categories.size()==0){
+            return;
+        }
         for (ICategoryDto category : categories) {
             SupplierDto supplier = controller.getSupplier(category.getSupplierID());
             String supplierName = supplier != null ? supplier.getSupplierName() : "N/A";
             categoryTable.getTableModel().addRow("", category.getCategoryID(), category.getCategoryName(), supplierName);
         }
+        selectedRow=-1;
     }
 
     private void addCategory() {
@@ -111,10 +115,10 @@ public class CategoryView extends Panel {
         } else {
             MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input or no supplier selected.", MessageDialogButton.OK);
         }
+        selectedRow=-1;
     }
 
     private void updateCategory() {
-        selectedRow = categoryTable.getSelectedRow();
         if (selectedRow == -1) {
             MessageDialog.showMessageDialog(textGUI, "Error", "No category selected.", MessageDialogButton.OK);
             return;
@@ -144,10 +148,8 @@ public class CategoryView extends Panel {
 
     private void deleteCategory() {
         // Prompt the user to select a category from the table
-        selectedRow = categoryTable.getSelectedRow();
         if (selectedRow == -1) { // Check if no row is selected
             MessageDialog.showMessageDialog(textGUI, "Error", "No category selected.", MessageDialogButton.OK);
-            selectedRow = -1;
             return;
         }
         String categoryID = categoryTable.getTableModel().getRow(selectedRow).get(1);
@@ -167,13 +169,13 @@ public class CategoryView extends Panel {
 
     private void addTableSelectionListener() {
         categoryTable.setSelectAction(() -> {
-            int selectedRow = categoryTable.getSelectedRow();
-            if (selectedRow != -1) {
-                // Clear previous selection
-                for (int row = 0; row < categoryTable.getTableModel().getRowCount(); row++) {
-                    categoryTable.getTableModel().setCell(0, row, "");
-                }
-                // Mark the selected row with a star
+            selectedRow = categoryTable.getSelectedRow();
+            // Clear the selection marker from all rows
+            for (int row = 0; row < categoryTable.getTableModel().getRowCount(); row++) {
+                categoryTable.getTableModel().setCell(0, row, "");
+            }
+            if (selectedRow >= 0 && selectedRow < categoryTable.getTableModel().getRowCount()) {
+                // Set the selection marker on the selected row
                 categoryTable.getTableModel().setCell(0, selectedRow, "*");
             }
         });

@@ -1,5 +1,7 @@
 package me.yushi.inventorymanagementsystem.view;
 
+import com.googlecode.lanterna.SGR;
+import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.gui2.*;
 import com.googlecode.lanterna.gui2.table.Table;
 import me.yushi.inventorymanagementsystem.contoller.DashBoardController;
@@ -26,50 +28,55 @@ public class DashboardView extends Panel {
     }
 
     private void setupUI() {
-        this.setLayoutManager(new LinearLayout(Direction.VERTICAL));
+        this.setLayoutManager(new LinearLayout(Direction.VERTICAL).setSpacing(1)); // Set spacing for better layout
 
         // Financial Summary
-        Panel financialSummaryPanel = new Panel(new GridLayout(2));
-        financialSummaryPanel.addComponent(new Label("Total Sales:"));
+        Panel financialSummaryPanel = new Panel(new GridLayout(2).setHorizontalSpacing(10)); // Set horizontal spacing
+        financialSummaryPanel.addComponent(new Label("Total Sales:"));// Bold label for clarity
         salesLabel = new Label("");
         financialSummaryPanel.addComponent(salesLabel);
 
-        financialSummaryPanel.addComponent(new Label("Total Cost:"));
+
+        financialSummaryPanel.addComponent(new Label("Total Cost:")); // Bold label for clarity
+        
         costLabel = new Label("");
         financialSummaryPanel.addComponent(costLabel);
 
         this.addComponent(financialSummaryPanel);
+        this.addComponent(new EmptySpace(new TerminalSize(0, 1))); // Add space between sections
 
         // Inventory Summary
-        Panel inventorySummaryPanel = new Panel(new GridLayout(2));
-
-        inventorySummaryPanel.addComponent(new Label("Low Stock Items:"));
+        Panel inventorySummaryPanel = new Panel(new GridLayout(2)); // Consistent spacing
+        inventorySummaryPanel.addComponent(new Label("Low Stock Items:").addStyle(SGR.BOLD)); // Bold label
         lowStockLabel = new Label("");
         inventorySummaryPanel.addComponent(lowStockLabel);
 
         this.addComponent(inventorySummaryPanel);
 
         // Low Stock Info Panel
-        lowStockInfoPanel = new Panel(new LinearLayout(Direction.VERTICAL));
-        lowStockInfoPanel.addComponent(new Label("Low Stock Items Details:"));
+        lowStockInfoPanel = new Panel(new LinearLayout(Direction.VERTICAL).setSpacing(1)); // Set spacing
+        lowStockInfoPanel.addComponent(new Label("Low Stock Items Details:").addStyle(SGR.BOLD)); // Bold label
         this.addComponent(lowStockInfoPanel);
     }
 
     private void updateSummaries() {
-        FinancialSummary financialSummary = controller.getFinancialSummary();
-        InventorySummary inventorySummary = controller.getInventorySummary();
+        try {
+            FinancialSummary financialSummary = controller.getFinancialSummary();
+            InventorySummary inventorySummary = controller.getInventorySummary();
 
-        salesLabel.setText(String.format("%.2f $", financialSummary.getTotalSales()));
-        costLabel.setText(String.format("%.2f $", financialSummary.getTotalCost()));
-        lowStockLabel.setText(String.valueOf(inventorySummary.getLowStrockProducts().size()) + " items");
-        lowStockInfoPanel.removeAllComponents();
-        Table lowStockTable = new Table<>("ID", "Name", "Quantity");
+            salesLabel.setText(String.format("%.2f $", financialSummary.getTotalSales()));
+            costLabel.setText(String.format("%.2f $", financialSummary.getTotalCost()));
+            lowStockLabel.setText(inventorySummary.getLowStrockProducts().size() + " items");
 
-        for (Product product : inventorySummary.getLowStrockProducts()) {
+            lowStockInfoPanel.removeAllComponents();
+            Table<String> lowStockTable = new Table<>("ID", "Name", "Quantity");
 
-            lowStockTable.getTableModel().addRow(product.getProductID(), product.getName(), product.getQuantity());
-
+            for (Product product : inventorySummary.getLowStrockProducts()) {
+                lowStockTable.getTableModel().addRow(product.getProductID(), product.getName(), String.valueOf(product.getQuantity()));
+            }
+            lowStockInfoPanel.addComponent(lowStockTable);
+        } catch (Exception e) {
+            this.addComponent(new Label("Error loading data."));
         }
-        lowStockInfoPanel.addComponent(lowStockTable);
     }
 }

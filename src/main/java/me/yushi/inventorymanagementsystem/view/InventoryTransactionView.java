@@ -65,11 +65,17 @@ public class InventoryTransactionView extends Panel {
         int rowIndex = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         List<InventoryTransactionDto> transactions = controller.getAllInventoryTransations();
-        if (transactions.size() == 0) {
+        if (transactions.size() == -1) {
             return;
         }
         for (InventoryTransactionDto transaction : transactions) {
-            String productName = controller.getProduct(transaction.getProductID()).getName();
+            String productID=transaction.getProductID();
+            ProductDto product = controller.getProduct(productID);
+            if(product==null){
+                continue;
+            }
+                
+            String productName = product.getName();
             String formattedDate = dateFormat.format(transaction.getDate());
             transactionTable.getTableModel().addRow("",
                     transaction.getProductID(),
@@ -82,6 +88,7 @@ public class InventoryTransactionView extends Panel {
             transactionIdMap.put(rowIndex, transaction.getTransactionID());
             rowIndex++;
         }
+        selectedRow= -1;
     }
 
     private void addTransaction() {
@@ -92,7 +99,6 @@ public class InventoryTransactionView extends Panel {
         }
 
         TransactionType type = selectTransactionType();
-
         if (type == null) {
             MessageDialog.showMessageDialog(textGUI, "Error", "No transaction type selected.", MessageDialogButton.OK);
             return;
@@ -118,21 +124,25 @@ public class InventoryTransactionView extends Panel {
         } else {
             MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input.", MessageDialogButton.OK);
         }
+        selectedRow= -1;
     }
 
     private void updateTransaction() {
-        selectedRow = transactionTable.getSelectedRow();
         if (selectedRow == -1) {
             MessageDialog.showMessageDialog(textGUI, "Error", "No transaction selected.", MessageDialogButton.OK);
             return;
         }
         String transactionID = transactionIdMap.get(selectedRow);
         String newQuantity = TextInputDialog.showDialog(textGUI, "Update Transaction", "New Quantity:", "");
-        if (transactionID == null || transactionID.trim().isEmpty()) {
+        if (newQuantity == null || newQuantity.trim().isEmpty()) {
             MessageDialog.showMessageDialog(textGUI, "Error", "Quantity is required.", MessageDialogButton.OK);
             return;
         }
         TransactionType newType = selectTransactionType();
+         if (newType == null) {
+            MessageDialog.showMessageDialog(textGUI, "Error", "No transaction type selected.", MessageDialogButton.OK);
+            return;
+        }
         double price = controller.getInventoryTransactionByID(transactionID).getPrice();
         Date newDate = requestDateInput();
         if (newQuantity != null && !newQuantity.trim().isEmpty()) {
@@ -159,7 +169,6 @@ public class InventoryTransactionView extends Panel {
     }
 
     private void deleteTransaction() {
-        selectedRow = transactionTable.getSelectedRow();
         if (selectedRow == -1) {
             MessageDialog.showMessageDialog(textGUI, "Error", "No transaction selected.", MessageDialogButton.OK);
             return;
@@ -177,11 +186,13 @@ public class InventoryTransactionView extends Panel {
 
     private void addTableSelectionListener() {
         transactionTable.setSelectAction(() -> {
-            int selectedRow = transactionTable.getSelectedRow();
-            if (selectedRow != -1) {
-                for (int row = 0; row < transactionTable.getTableModel().getRowCount(); row++) {
-                    transactionTable.getTableModel().setCell(0, row, "");
-                }
+            selectedRow = transactionTable.getSelectedRow();
+            // Clear the selection marker from all rows
+            for (int row = 0; row < transactionTable.getTableModel().getRowCount(); row++) {
+                transactionTable.getTableModel().setCell(0, row, "");
+            }
+            if (selectedRow >= 0 && selectedRow < transactionTable.getTableModel().getRowCount()) {
+                // Set the selection marker on the selected row
                 transactionTable.getTableModel().setCell(0, selectedRow, "*");
             }
         });

@@ -4,9 +4,12 @@
  */
 package me.yushi.inventorymanagementsystem.view;
 
+import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.gui2.BasicWindow;
+import com.googlecode.lanterna.gui2.Borders;
 import com.googlecode.lanterna.gui2.Button;
 import com.googlecode.lanterna.gui2.Direction;
+import com.googlecode.lanterna.gui2.EmptySpace;
 import com.googlecode.lanterna.gui2.GridLayout;
 import com.googlecode.lanterna.gui2.Label;
 import com.googlecode.lanterna.gui2.LinearLayout;
@@ -66,7 +69,6 @@ public class APP {
 
             WindowBasedTextGUI textGUI = new MultiWindowTextGUI(screen);
             BasicWindow window = new BasicWindow("Inventory Management System");
-            window.setHints(java.util.Arrays.asList(BasicWindow.Hint.FIT_TERMINAL_WINDOW, BasicWindow.Hint.CENTERED));
 
             Panel mainPanel = new Panel(new GridLayout(1));
             mainPanel.setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.CENTER, GridLayout.Alignment.CENTER, true, true));
@@ -84,10 +86,12 @@ public class APP {
             topNavPanel.addComponent(new Button("Exit", () -> confirmExit(textGUI)));
 
             // Create bottom panel for help
-            Panel bottomPanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
-            bottomPanel.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center));
-            bottomPanel.addComponent(new Label("Help: Press F1 for more info"));
+            Panel bottomPanel = new Panel(new LinearLayout(Direction.VERTICAL));
+            bottomPanel.addComponent(new EmptySpace(new TerminalSize(0, 1))); 
+             bottomPanel.withBorder(Borders.singleLine("Help"));
 
+            bottomPanel.addComponent(new Label("Help: Use arrow keys for navigation. Press Enter or Spacebar to activate buttons. "));
+            bottomPanel.addComponent(new Label("If display is abnormal, adjust the terminal size."));
             // Add sub-panels to main panel
             mainPanel.addComponent(topNavPanel);
             mainPanel.addComponent(bodyPanel);
