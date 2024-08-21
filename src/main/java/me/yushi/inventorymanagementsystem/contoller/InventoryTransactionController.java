@@ -31,14 +31,14 @@ public class InventoryTransactionController implements IInventoryTransactionCont
 
     @Override
     public InventoryTransactionDto createInventoryTransaction(InventoryTransactionDto newIInventoryTransactionDto) {
-        changingQuantity(newIInventoryTransactionDto);
+        changingQuantity(newIInventoryTransactionDto,false);
 
         return inventoryTransactionService.createInventoryTransaction(newIInventoryTransactionDto);
     }
 
     @Override
     public InventoryTransactionDto updateInventoryTransaction(InventoryTransactionDto updatedInventoryTransactionDto) {
-        changingQuantity(updatedInventoryTransactionDto);
+        changingQuantity(updatedInventoryTransactionDto,false);
         return inventoryTransactionService.updateInventoryTransaction(updatedInventoryTransactionDto);
     }
 
@@ -49,6 +49,7 @@ public class InventoryTransactionController implements IInventoryTransactionCont
 
     @Override
     public boolean deleteInventoryTransaction(String inventoryTransationID) {
+        this.changingQuantity(inventoryTransactionService.getInventoryTransactionByID(inventoryTransationID), true);
         return inventoryTransactionService.deleteInventoryTransaction(inventoryTransationID);
     }
 
@@ -67,20 +68,20 @@ public class InventoryTransactionController implements IInventoryTransactionCont
         return productService.getProductByID(produdctID);
     }
 
-    private void changingQuantity(InventoryTransactionDto transactionDto) {
+    private void changingQuantity(InventoryTransactionDto transactionDto,boolean isDelete) {
         String prodcutID = transactionDto.getProductID();
         ProductDto targetProdut = productService.getProductByID(prodcutID);
         int productQuantity = targetProdut.getQuantity();
         int changedQuantity = transactionDto.getQuantity();
         switch (transactionDto.getTransactionType()) {
             case SALE:
-                productQuantity = productQuantity - changedQuantity;
+                productQuantity = isDelete?productQuantity+changedQuantity:productQuantity - changedQuantity;
                 break;
             case PURCHASE:
-                productQuantity = productQuantity + changedQuantity;
+                productQuantity = isDelete?productQuantity-changedQuantity:productQuantity + changedQuantity;
                 break;
             case SPOILAGE:
-                productQuantity = productQuantity - changedQuantity;
+                productQuantity = isDelete?productQuantity+changedQuantity:productQuantity - changedQuantity;
                 break;
             default:
                 throw new AssertionError();

@@ -66,22 +66,26 @@ public class APP {
 
             WindowBasedTextGUI textGUI = new MultiWindowTextGUI(screen);
             BasicWindow window = new BasicWindow("Inventory Management System");
+            window.setHints(java.util.Arrays.asList(BasicWindow.Hint.FIT_TERMINAL_WINDOW, BasicWindow.Hint.CENTERED));
 
             Panel mainPanel = new Panel(new GridLayout(1));
+            mainPanel.setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.CENTER, GridLayout.Alignment.CENTER, true, true));
             // Create body panel
             Panel bodyPanel = new Panel(new LinearLayout(Direction.VERTICAL));
+            bodyPanel.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center));
 
             // Create top navigation panel
             Panel topNavPanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
-            topNavPanel.addComponent(new Button("Dashboard", () -> showDashboard(bodyPanel)));
-            topNavPanel.addComponent(new Button("Product", () -> showProduct(bodyPanel,productRepository,categoryRepository,textGUI)));
-            topNavPanel.addComponent(new Button("Supplier", () -> showSupplier(bodyPanel,supplierRepository,textGUI)));
-            topNavPanel.addComponent(new Button("Transaction", () -> showTransaction(bodyPanel,transactionRepository,productRepository,textGUI)));
-            topNavPanel.addComponent(new Button("Category", () -> showCategory(bodyPanel, categoryRepository, supplierRepository,textGUI)));
+            topNavPanel.addComponent(new Button("Dashboard", () -> showDashboard(bodyPanel, productRepository, transactionRepository, textGUI)));
+            topNavPanel.addComponent(new Button("Product", () -> showProduct(bodyPanel, productRepository, categoryRepository, textGUI)));
+            topNavPanel.addComponent(new Button("Supplier", () -> showSupplier(bodyPanel, supplierRepository, textGUI)));
+            topNavPanel.addComponent(new Button("Transaction", () -> showTransaction(bodyPanel, transactionRepository, productRepository, textGUI)));
+            topNavPanel.addComponent(new Button("Category", () -> showCategory(bodyPanel, categoryRepository, supplierRepository, textGUI)));
             topNavPanel.addComponent(new Button("Exit", () -> confirmExit(textGUI)));
 
             // Create bottom panel for help
             Panel bottomPanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
+            bottomPanel.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center));
             bottomPanel.addComponent(new Label("Help: Press F1 for more info"));
 
             // Add sub-panels to main panel
@@ -108,30 +112,30 @@ public class APP {
         }
     }
 
-    private static void showDashboard(Panel bodyPanel) {
+    private static void showDashboard(Panel bodyPanel, ProductRepository productRepository, InventoryTransactionRepository transactionRepository, WindowBasedTextGUI textGUI) {
         bodyPanel.removeAllComponents();
-        bodyPanel.addComponent(new Label("Dashboard Content"));
+        bodyPanel.addComponent(new DashboardView(transactionRepository, productRepository, textGUI));
     }
 
-    private static void showProduct(Panel bodyPanel,ProductRepository productRepository,CategoryRepository categoryRepository,WindowBasedTextGUI textGUI) {
+    private static void showProduct(Panel bodyPanel, ProductRepository productRepository, CategoryRepository categoryRepository, WindowBasedTextGUI textGUI) {
         bodyPanel.removeAllComponents();
-        bodyPanel.addComponent(new ProductView(productRepository,categoryRepository,textGUI));
+        bodyPanel.addComponent(new ProductView(productRepository, categoryRepository, textGUI));
     }
 
-    private static void showSupplier(Panel bodyPanel,SupplierRepository repository,WindowBasedTextGUI textGUI) {
+    private static void showSupplier(Panel bodyPanel, SupplierRepository repository, WindowBasedTextGUI textGUI) {
 
         bodyPanel.removeAllComponents();
         bodyPanel.addComponent(new SupplierView(repository, textGUI));
     }
 
-    private static void showTransaction(Panel bodyPanel,InventoryTransactionRepository transactionRepository,ProductRepository productRepository,WindowBasedTextGUI textGUI) {
+    private static void showTransaction(Panel bodyPanel, InventoryTransactionRepository transactionRepository, ProductRepository productRepository, WindowBasedTextGUI textGUI) {
         bodyPanel.removeAllComponents();
-        bodyPanel.addComponent(new InventoryTransactionView(transactionRepository,productRepository,textGUI));
+        bodyPanel.addComponent(new InventoryTransactionView(transactionRepository, productRepository, textGUI));
     }
 
-    private static void showCategory(Panel bodyPanel, CategoryRepository categoryRepository,SupplierRepository supplierRepository, WindowBasedTextGUI textGUI) {
+    private static void showCategory(Panel bodyPanel, CategoryRepository categoryRepository, SupplierRepository supplierRepository, WindowBasedTextGUI textGUI) {
         bodyPanel.removeAllComponents();
-        bodyPanel.addComponent(new CategoryView(categoryRepository,supplierRepository, textGUI));
+        bodyPanel.addComponent(new CategoryView(categoryRepository, supplierRepository, textGUI));
     }
 
     private static void confirmExit(WindowBasedTextGUI textGUI) {

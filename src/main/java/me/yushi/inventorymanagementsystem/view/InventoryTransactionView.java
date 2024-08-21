@@ -6,7 +6,9 @@ import com.googlecode.lanterna.gui2.table.Table;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import me.yushi.inventorymanagementsystem.Dto.IInventoryTransactionDto.TransactionType;
 import me.yushi.inventorymanagementsystem.Dto.InventoryTransactionDto;
 import me.yushi.inventorymanagementsystem.Dto.ProductDto;
@@ -20,6 +22,7 @@ public class InventoryTransactionView extends Panel {
     private Table<String> transactionTable;
     private WindowBasedTextGUI textGUI;
     private int selectedRow = -1;
+    private Map<Integer, String> transactionIdMap = new HashMap<>();
 
     public InventoryTransactionView(InventoryTransactionRepository transactionRepository, ProductRepository productRepository, WindowBasedTextGUI textGUI) {
         this.controller = new InventoryTransactionController(transactionRepository, productRepository);
@@ -35,7 +38,7 @@ public class InventoryTransactionView extends Panel {
 
         mainPanel.addComponent(new Label("Inventory Transactions").setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center)));
 
-        transactionTable = new Table<>(" ", "Transaction ID", "Product ID", "Product Name", "Quantity", "Date", "Type", "Price");
+        transactionTable = new Table<>(" ", "Product ID", "Product Name", "Quantity", "Date", "Type", "Price");
         mainPanel.addComponent(transactionTable);
 
         Panel buttonPanel = new Panel();
@@ -59,14 +62,16 @@ public class InventoryTransactionView extends Panel {
 
     private void loadTransactions() {
         transactionTable.getTableModel().clear();
+        int rowIndex = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         List<InventoryTransactionDto> transactions = controller.getAllInventoryTransations();
-        System.out.print(transactions.get(0).getTransactionID());
+        if (transactions.size() == 0) {
+            return;
+        }
         for (InventoryTransactionDto transaction : transactions) {
             String productName = controller.getProduct(transaction.getProductID()).getName();
             String formattedDate = dateFormat.format(transaction.getDate());
             transactionTable.getTableModel().addRow("",
-                    transaction.getTransactionID(),
                     transaction.getProductID(),
                     productName,
                     String.valueOf(transaction.getQuantity()),
@@ -74,6 +79,8 @@ public class InventoryTransactionView extends Panel {
                     transaction.getTransactionType().toString(),
                     String.format("%.2f $", transaction.getPrice())
             );
+            transactionIdMap.put(rowIndex, transaction.getTransactionID());
+            rowIndex++;
         }
     }
 
@@ -83,20 +90,22 @@ public class InventoryTransactionView extends Panel {
             MessageDialog.showMessageDialog(textGUI, "Error", "No product selected.", MessageDialogButton.OK);
             return;
         }
-        String quantity = TextInputDialog.showDialog(textGUI, "Add Transaction", "Quantity:", "");
+
         TransactionType type = selectTransactionType();
 
         if (type == null) {
             MessageDialog.showMessageDialog(textGUI, "Error", "No transaction type selected.", MessageDialogButton.OK);
             return;
         }
+        String quantity = TextInputDialog.showDialog(textGUI, "Add Transaction", "Quantity:", "");
         Date newDate = requestDateInput();
         if (!quantity.trim().isEmpty()) {
+            int Iquantity = Integer.parseInt(quantity);
             InventoryTransactionDto transaction = new InventoryTransactionDto.Builder()
                     .date(newDate)
                     .productID(productID)
-                    .quantity(Integer.parseInt(quantity))
-                    .price(controller.getProduct(productID).getPrice())
+                    .quantity(Iquantity)
+                    .price(controller.getProduct(productID).getPrice() * Iquantity)
                     .transactionType(type)
                     .build();
             InventoryTransactionDto newTransaction = controller.createInventoryTransaction(transaction);
@@ -117,7 +126,7 @@ public class InventoryTransactionView extends Panel {
             MessageDialog.showMessageDialog(textGUI, "Error", "No transaction selected.", MessageDialogButton.OK);
             return;
         }
-        String transactionID = transactionTable.getTableModel().getRow(selectedRow).get(1);
+        String transactionID = transactionIdMap.get(selectedRow);
         String newQuantity = TextInputDialog.showDialog(textGUI, "Update Transaction", "New Quantity:", "");
         if (transactionID == null || transactionID.trim().isEmpty()) {
             MessageDialog.showMessageDialog(textGUI, "Error", "Quantity is required.", MessageDialogButton.OK);
@@ -127,12 +136,13 @@ public class InventoryTransactionView extends Panel {
         double price = controller.getInventoryTransactionByID(transactionID).getPrice();
         Date newDate = requestDateInput();
         if (newQuantity != null && !newQuantity.trim().isEmpty()) {
+            int quantity = Integer.parseInt(newQuantity);
             InventoryTransactionDto updatedTransaction = new InventoryTransactionDto.Builder()
                     .date(newDate)
                     .productID(controller.getInventoryTransactionByID(transactionID).getProductID())
                     .transactionID(transactionID)
-                    .quantity(Integer.parseInt(newQuantity))
-                    .price(price)
+                    .quantity(quantity)
+                    .price(price * quantity)
                     .transactionType(newType)
                     .build();
             InventoryTransactionDto result = controller.updateInventoryTransaction(updatedTransaction);
@@ -154,7 +164,7 @@ public class InventoryTransactionView extends Panel {
             MessageDialog.showMessageDialog(textGUI, "Error", "No transaction selected.", MessageDialogButton.OK);
             return;
         }
-        String transactionID = transactionTable.getTableModel().getRow(selectedRow).get(0);
+        String transactionID = transactionIdMap.get(selectedRow);
         boolean result = controller.deleteInventoryTransaction(transactionID);
         if (result) {
             loadTransactions();
