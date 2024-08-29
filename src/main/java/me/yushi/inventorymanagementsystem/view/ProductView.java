@@ -11,7 +11,7 @@ import me.yushi.inventorymanagementsystem.contoller.ProductController;
 import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 
 /**
- * Product management view using Lanterna GUI framework.
+ * Product management view using Lanterna framework.
  *
  * @author yushi
  */
@@ -34,7 +34,8 @@ public class ProductView extends Panel {
         Panel mainPanel = new Panel();
         mainPanel.setLayoutManager(new LinearLayout(Direction.VERTICAL));
 
-        mainPanel.addComponent(new Label("Product Management").setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center)));
+        mainPanel.addComponent(new Label("Product Management")
+                .setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center)));
 
         productTable = new Table<>(" ", "ID", "Name", "Category", "Quantity", "Unit", "Price");
         mainPanel.addComponent(productTable);
@@ -66,7 +67,7 @@ public class ProductView extends Panel {
 
         }
         for (IProductDto product : products) {
-            CategoryDto category = controller.getCategory(product.getCategoryID());
+            CategoryDto category = controller.getCategoryById(product.getCategoryID());
             String categoryName = category != null ? category.getCategoryName() : "N/A";
             String price = String.valueOf(product.getPrice()) + " $";
             productTable.getTableModel().addRow("",
@@ -75,8 +76,7 @@ public class ProductView extends Panel {
                     categoryName,
                     String.valueOf(product.getQuantity()),
                     product.getUnit(),
-                    price
-            );
+                    price);
         }
         selectedRow = -1;
     }
@@ -98,12 +98,14 @@ public class ProductView extends Panel {
             IProductDto newProduct = controller.createProduct(product);
             if (newProduct != null) {
                 loadProducts();
-                MessageDialog.showMessageDialog(textGUI, "Success", "Product added successfully!", MessageDialogButton.OK);
+                MessageDialog.showMessageDialog(textGUI, "Success", "Product added successfully!",
+                        MessageDialogButton.OK);
             } else {
                 MessageDialog.showMessageDialog(textGUI, "Error", "Failed to add product.", MessageDialogButton.OK);
             }
         } else {
-            MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input or no category selected.", MessageDialogButton.OK);
+            MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input or no category selected.",
+                    MessageDialogButton.OK);
         }
         selectedRow = -1;
     }
@@ -121,7 +123,8 @@ public class ProductView extends Panel {
         String newProductUnit = TextInputDialog.showDialog(textGUI, "Add Product", "Product Unit:", "");
         String newProductPrice = TextInputDialog.showDialog(textGUI, "Add Product", "Product Price:", "");
         String newCategoryID = selectCategory();
-        if (isValidInput(newProductName, newProductQuantity, newProductUnit, newProductPrice) && newCategoryID != null) {
+        if (isValidInput(newProductName, newProductQuantity, newProductUnit, newProductPrice)
+                && newCategoryID != null) {
             ProductDto updatedProduct = new ProductDto.Builder()
                     .name(newProductName)
                     .quantity(Integer.parseInt(newProductQuantity))
@@ -133,12 +136,14 @@ public class ProductView extends Panel {
             ProductDto result = controller.updateProduct(updatedProduct);
             if (result != null) {
                 loadProducts();
-                MessageDialog.showMessageDialog(textGUI, "Success", "Product updated successfully!", MessageDialogButton.OK);
+                MessageDialog.showMessageDialog(textGUI, "Success", "Product updated successfully!",
+                        MessageDialogButton.OK);
             } else {
                 MessageDialog.showMessageDialog(textGUI, "Error", "Failed to update product.", MessageDialogButton.OK);
             }
         } else {
-            MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input or no category selected.", MessageDialogButton.OK);
+            MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input or no category selected.",
+                    MessageDialogButton.OK);
         }
         selectedRow = -1;
     }
@@ -152,7 +157,8 @@ public class ProductView extends Panel {
         Boolean result = controller.deleteProduct(productID);
         if (result != null) {
             loadProducts();
-            MessageDialog.showMessageDialog(textGUI, "Success", "Product deleted successfully!", MessageDialogButton.OK);
+            MessageDialog.showMessageDialog(textGUI, "Success", "Product deleted successfully!",
+                    MessageDialogButton.OK);
         } else {
             MessageDialog.showMessageDialog(textGUI, "Error", "Failed to delete product.", MessageDialogButton.OK);
         }
@@ -176,11 +182,13 @@ public class ProductView extends Panel {
     private String selectCategory() {
         List<CategoryDto> categoryDtos = controller.getAllCategory();
         if (categoryDtos.isEmpty()) {
-            MessageDialog.showMessageDialog(textGUI, "No Category", "There are no categories available.", MessageDialogButton.OK);
+            MessageDialog.showMessageDialog(textGUI, "No Category", "There are no categories available.",
+                    MessageDialogButton.OK);
             return null;
         }
         String[] categoryNames = categoryDtos.stream().map(CategoryDto::getCategoryName).toArray(String[]::new);
-        String selectedCategoryName = ListSelectDialog.showDialog(textGUI, "Select Category", "Choose a Category:", categoryNames);
+        String selectedCategoryName = ListSelectDialog.showDialog(textGUI, "Select Category", "Choose a Category:",
+                categoryNames);
         if (selectedCategoryName != null) {
             return categoryDtos.stream()
                     .filter(s -> s.getCategoryName().equals(selectedCategoryName))

@@ -5,9 +5,6 @@
 package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
-import static me.yushi.inventorymanagementsystem.Dto.IInventoryTransactionDto.TransactionType.PURCHASE;
-import static me.yushi.inventorymanagementsystem.Dto.IInventoryTransactionDto.TransactionType.SALE;
-import static me.yushi.inventorymanagementsystem.Dto.IInventoryTransactionDto.TransactionType.SPOILAGE;
 import me.yushi.inventorymanagementsystem.Dto.InventoryTransactionDto;
 import me.yushi.inventorymanagementsystem.Dto.ProductDto;
 import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
@@ -29,70 +26,84 @@ public class InventoryTransactionController implements IInventoryTransactionCont
     }
 
     @Override
+    // Create a new inventory transaction, save it to the repository, and return the
+    // created
     public InventoryTransactionDto createInventoryTransaction(InventoryTransactionDto newIInventoryTransactionDto) {
-        changingQuantity(newIInventoryTransactionDto,false);
-
+        // adjust the quantity of the product by the transation type
+        changingQuantity(newIInventoryTransactionDto, false);
         return inventoryTransactionService.createInventoryTransaction(newIInventoryTransactionDto);
     }
 
     @Override
+    // Update an inventory transaction, save it to the repository, and return the
+    // updated
     public InventoryTransactionDto updateInventoryTransaction(InventoryTransactionDto updatedInventoryTransactionDto) {
-        changingQuantity(updatedInventoryTransactionDto,false);
+        changingQuantity(updatedInventoryTransactionDto, false);
         return inventoryTransactionService.updateInventoryTransaction(updatedInventoryTransactionDto);
     }
 
     @Override
+    // Get an inventory transaction by its ID
     public InventoryTransactionDto getInventoryTransactionByID(String inventoryTransationID) {
         return inventoryTransactionService.getInventoryTransactionByID(inventoryTransationID);
     }
 
     @Override
+    // Delete an inventory transaction
     public boolean deleteInventoryTransaction(String inventoryTransationID) {
         this.changingQuantity(inventoryTransactionService.getInventoryTransactionByID(inventoryTransationID), true);
         return inventoryTransactionService.deleteInventoryTransaction(inventoryTransationID);
     }
 
     @Override
+    // Get all inventory transactions
     public List<InventoryTransactionDto> getAllInventoryTransations() {
         return inventoryTransactionService.getAllInventoryTransations();
     }
 
     @Override
+    // Get all products
     public List<ProductDto> getAllProduct() {
         return productService.getAllProducts();
     }
 
     @Override
+    // Get a product by its ID
     public ProductDto getProduct(String produdctID) {
         return productService.getProductByID(produdctID);
     }
 
-    private void changingQuantity(InventoryTransactionDto transactionDto,boolean isDelete) {
+    // Adjust the quantity of the product by the transation type, if isDelete is
+    // true, then the quantity will be reversed
+    private void changingQuantity(InventoryTransactionDto transactionDto, boolean isDelete) {
         String prodcutID = transactionDto.getProductID();
         ProductDto targetProdut = productService.getProductByID(prodcutID);
         int productQuantity = targetProdut.getQuantity();
         int changedQuantity = transactionDto.getQuantity();
+        // adjust the quantity of the product by the transation type
         switch (transactionDto.getTransactionType()) {
             case SALE:
-                productQuantity = isDelete?productQuantity+changedQuantity:productQuantity - changedQuantity;
+                // If the transaction type is SALE, then the quantity of the product will be
+                // decreased
+                productQuantity = isDelete ? productQuantity + changedQuantity : productQuantity - changedQuantity;
                 break;
             case PURCHASE:
-                productQuantity = isDelete?productQuantity-changedQuantity:productQuantity + changedQuantity;
+                // If the transaction type is PURCHASE, then the quantity of the product will be
+                // increased
+                productQuantity = isDelete ? productQuantity - changedQuantity : productQuantity + changedQuantity;
                 break;
             case SPOILAGE:
-                productQuantity = isDelete?productQuantity+changedQuantity:productQuantity - changedQuantity;
+                // If the transaction type is SPOILAGE, then the quantity of the product will be
+                // decreased
+                productQuantity = isDelete ? productQuantity + changedQuantity : productQuantity - changedQuantity;
                 break;
             default:
                 throw new AssertionError();
         }
-        productService.updateProduct(new ProductDto.Builder().
-                productID(targetProdut.getProductID()).
-                price(targetProdut.getPrice()).
-                quantity(productQuantity).
-                categoryID(targetProdut.getCategoryID()).
-                unit(targetProdut.getUnit()).
-                name(targetProdut.getName()).
-                build());
+        // Update the product quantity
+        productService.updateProduct(new ProductDto.Builder().productID(targetProdut.getProductID())
+                .price(targetProdut.getPrice()).quantity(productQuantity).categoryID(targetProdut.getCategoryID())
+                .unit(targetProdut.getUnit()).name(targetProdut.getName()).build());
     }
 
 }

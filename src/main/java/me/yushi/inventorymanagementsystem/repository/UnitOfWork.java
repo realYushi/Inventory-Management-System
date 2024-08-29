@@ -19,30 +19,35 @@ public class UnitOfWork implements IUnitOfWork {
             InventoryTransactionRepository inventoryTransactionRepository,
             ProductRepository productRepository,
             SupplierRepository supplierRepository) {
-        this.categoryRepository=categoryRepository;
-        this.inventoryTransactionRepository=inventoryTransactionRepository;
-        this.productRepository=productRepository;
-        this.supplierRepository=supplierRepository;
+        // Initialize Repositories
+        this.categoryRepository = categoryRepository;
+        this.inventoryTransactionRepository = inventoryTransactionRepository;
+        this.productRepository = productRepository;
+        this.supplierRepository = supplierRepository;
 
     }
 
     @Override
     public CategoryRepository getCategoryRepository() {
+        // Return CategoryRepository
         return this.categoryRepository;
     }
 
     @Override
     public InventoryTransactionRepository getInventoryTransactionRepository() {
+        // Return InventoryTransactionRepository
         return this.inventoryTransactionRepository;
     }
 
     @Override
     public ProductRepository getProductRepository() {
+        // Return ProductRepository
         return this.productRepository;
     }
 
     @Override
     public SupplierRepository getSupplierRepository() {
+        // Return SupplierRepository
         return this.supplierRepository;
     }
 

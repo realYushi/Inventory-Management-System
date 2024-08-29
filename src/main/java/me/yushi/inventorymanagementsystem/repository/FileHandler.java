@@ -34,12 +34,15 @@ public class FileHandler<T> implements IFileHandler<T> {
     private final String fileLocation;
 
     public FileHandler(Class<T> targetClass, String fileLocation) throws IOException {
+        // Initialize Gson, with pretty printing
         this.gson = new GsonBuilder().setPrettyPrinting().create();
         this.targetClass = targetClass;
         this.fileLocation = fileLocation;
+        // Check if file exists, if not create it
         checkFile();
     }
 
+    // Check if file exists, if not create it
     private void checkFile() throws IOException {
         File file = new File(this.fileLocation);
         if (!file.exists()) {
@@ -48,37 +51,30 @@ public class FileHandler<T> implements IFileHandler<T> {
     }
 
     @Override
+    // Read from file, return a list of objects
     public List<T> readFromFile() {
-        System.out.println("Reading from file: " + this.fileLocation);
         try (BufferedReader reader = new BufferedReader(new FileReader(this.fileLocation))) {
+            // Create a list type for Gson to parse
             Type listType = TypeToken.getParameterized(List.class, targetClass).getType();
+            // Parse the file into a list of objects
             List<T> loadedList = gson.fromJson(reader, listType);
             if (loadedList == null) {
                 loadedList = new ArrayList<>();
             }
             return loadedList;
-        } catch (FileNotFoundException ex) {
-            System.err.println("File not found: " + this.fileLocation);
-            ex.printStackTrace();
         } catch (IOException ex) {
-            System.err.println("I/O error reading file: " + ex.getMessage());
-            ex.printStackTrace();
-        } catch (JsonSyntaxException ex) {
-            System.err.println("JSON parsing error: " + ex.getMessage());
-            ex.printStackTrace();
-        } catch (Exception ex) {
-            System.err.println("Unexpected error: " + ex.getMessage());
-            ex.printStackTrace();
+            System.out.println("File not found");
         }
         return new ArrayList<>();
     }
 
     @Override
+    // Write to file, takes a map of objects
     public void writeToFile(Map<String, T> objectList) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.fileLocation))) {
             writer.write(gson.toJson(objectList.values()));
         } catch (IOException ex) {
-            Logger.getLogger(FileHandler.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("File not found");
         }
 
     }

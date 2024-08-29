@@ -27,9 +27,13 @@ public class DashboardService implements IDashboardService {
 
     InventoryTransactionRepository inventoryTransactionRepository;
     ProductRepository productRepository;
-    private final int TRANSATION_DATE_RANGE = 30;
-    private final double PROFIT_RATE = 1.2;
-    private final int LOW_STOCK_TRIGGER = 10;
+    // Number of days to consider for recent transactions
+    private static final int TRANSATION_DATE_RANGE = 30;
+    // Profit rate
+    private static final double PROFIT_RATE = 1.2;
+    // Low stock trigger
+    private static final int LOW_STOCK_TRIGGER = 10;
+    // Recent transaction data
     private List<InventoryTransaction> recentTransationData;
 
     public DashboardService(IUnitOfWork unitOfWork) {
@@ -40,12 +44,13 @@ public class DashboardService implements IDashboardService {
 
     @Override
     public FinancialSummary getFinancialSummary() {
-
         double totalSales = 0;
         double totalCost = 0;
         for (IInventoryTransaction t : recentTransationData) {
+            // Calculate total sales and total cost
             switch (t.getTransactionType()) {
                 case SALE:
+                    // Calculate total sales, including profit
                     totalSales = totalSales + (t.getPrice() * PROFIT_RATE);
                     break;
                 case PURCHASE:
@@ -57,44 +62,42 @@ public class DashboardService implements IDashboardService {
                 default:
                     throw new AssertionError();
             }
-
         }
         return new FinancialSummary(totalSales, totalCost);
 
     }
 
     @Override
+    // Get inventory summary, including low stock
     public InventorySummary getIentorySummary() {
         List<Product> allData = productRepository.getAllProducts().values().stream().collect(Collectors.toList());
         List<Product> lowStock = new ArrayList<>();
-
-        Date currentDate = new Date();
-
         for (Product product : allData) {
-            // Check for low stock 
+            // Check for low stock
             if (product.getQuantity() < LOW_STOCK_TRIGGER) {
                 lowStock.add(product);
             }
-
-            // Check for expiry
         }
         return new InventorySummary(lowStock, recentTransationData);
 
     }
 
+    // Get end date for recent transactions
     private Date getEndDate(int dataRange) {
         Date currentDate = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
+        // Subtract data range from current date
         calendar.add(Calendar.DAY_OF_MONTH, -dataRange);
-        Date endDate = calendar.getTime();
-        return endDate;
+        return calendar.getTime();
 
     }
 
+    // Get recent transaction data
     private List<InventoryTransaction> getRecentTransactionData() {
         Date endDate = getEndDate(TRANSATION_DATE_RANGE);
         Map<String, InventoryTransaction> allData = inventoryTransactionRepository.getAllInventoryTransations();
+        // Filter transactions by date
         recentTransationData = allData.values().stream()
                 .filter(transation -> transation.getDate().after(endDate))
                 .collect(Collectors.toList());

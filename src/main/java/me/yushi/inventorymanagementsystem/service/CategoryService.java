@@ -15,56 +15,71 @@ import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
  *
  * @author yushi
  */
-public class CategoryService implements ICategoryService,IMapper<CategoryDto, Category>{
+public class CategoryService implements ICategoryService, IMapper<CategoryDto, Category> {
     private CategoryRepository repository;
 
     public CategoryService(IUnitOfWork unitOfWork) {
-        this.repository=unitOfWork.getCategoryRepository();
+        this.repository = unitOfWork.getCategoryRepository();
     }
 
-    
     @Override
+    // Create a new category, save it to the repository, and return the created
+    // category
     public CategoryDto createCategory(CategoryDto newCategoryDto) {
-        Category category=toModel(newCategoryDto);
-        CategoryDto categoryDto=toDto(repository.createCategory(category));
+        Category category = toModel(newCategoryDto);
+        CategoryDto categoryDto = toDto(repository.createCategory(category));
         this.save();
         return categoryDto;
-        
+
     }
 
     @Override
+    // Get a category by its ID
     public CategoryDto getCategoryByID(String categoryID) {
-        Category category=repository.readCategory(categoryID);
+        if (repository.readCategory(categoryID) == null) {
+            System.out.print("No category found with ID: " + categoryID);
+            return null;
+        }
+        Category category = repository.readCategory(categoryID);
         return toDto(category);
     }
 
     @Override
+    // Update a category, save it to the repository, and return the updated category
     public CategoryDto updateCategory(CategoryDto updatedCategoryDto) {
-        Category newCategory=toModel(updatedCategoryDto);
-        Category category=repository.updateCategory(newCategory);
-        CategoryDto categoryDto=toDto(category);
+        Category newCategory = toModel(updatedCategoryDto);
+        // Check if the category exists
+        if (repository.readCategory(newCategory.getCategoryID()) == null) {
+            System.out.print("No category found with ID: " + newCategory.getCategoryID());
+            return null;
+        }
+        Category category = repository.updateCategory(newCategory);
+        CategoryDto categoryDto = toDto(category);
         this.save();
         return categoryDto;
     }
 
     @Override
+    // Delete a category by its ID
     public boolean deleteCategory(String categoryID) {
-        boolean result =repository.deleteCategory(categoryID);
+        boolean result = repository.deleteCategory(categoryID);
         this.save();
-        return result; 
+        return result;
     }
 
     @Override
+    // Get all categories, convert them to DTOs, and return the list of DTOs
     public List<CategoryDto> getAllCategorys() {
-        List<Category> categorys=repository.getAllCategorys()
+        // Get all categories from the repository, convert them to a list, and return
+        List<Category> categorys = repository.getAllCategorys()
                 .values().stream().collect(Collectors.toList());
-        return categorys.stream().map(category->this.toDto(category)).collect(Collectors.toList());
-        
-        
+        return categorys.stream().map(category -> this.toDto(category)).collect(Collectors.toList());
+
     }
 
     @Override
     public CategoryDto toDto(Category model) {
+        // Convert a category model to a category DTO, and return the DTO
         return new CategoryDto.Builder()
                 .supplierID(model.getSupplierID())
                 .categoryID(model.getCategoryID())
@@ -74,7 +89,8 @@ public class CategoryService implements ICategoryService,IMapper<CategoryDto, Ca
 
     @Override
     public Category toModel(CategoryDto dto) {
-        return new Category( dto.getCategoryName(),dto.getCategoryID(),dto.getSupplierID());
+        // Convert a category DTO to a category model, and return the model
+        return new Category(dto.getCategoryName(), dto.getCategoryID(), dto.getSupplierID());
     }
 
     @Override
@@ -82,7 +98,4 @@ public class CategoryService implements ICategoryService,IMapper<CategoryDto, Ca
         repository.save();
     }
 
-
-    
-    
 }

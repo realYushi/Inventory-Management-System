@@ -14,22 +14,23 @@ import me.yushi.inventorymanagementsystem.service.IDashboardService;
  *
  * @author yushi
  */
-public class DashBoardController implements IDashBoardController{
+public class DashBoardController implements IDashBoardController {
     IDashboardService dashboardService;
 
     public DashBoardController(IUnitOfWork unitOfWork) {
-        dashboardService=new DashboardService(unitOfWork);
+        dashboardService = new DashboardService(unitOfWork);
     }
-    
 
     @Override
+    // Get inventory summary
     public InventorySummary getInventorySummary() {
         return dashboardService.getIentorySummary();
     }
 
     @Override
+    // Get financial summary
     public FinancialSummary getFinancialSummary() {
         return dashboardService.getFinancialSummary();
     }
-    
+
 }

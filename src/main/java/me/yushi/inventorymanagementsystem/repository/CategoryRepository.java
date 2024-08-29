@@ -20,6 +20,7 @@ public class CategoryRepository implements ICategoryRepository {
 
     public CategoryRepository(FileHandler<Category> fileHandler) throws IOException {
         categoryFileHandler = fileHandler;
+        // Read all categories from file and store them in a map
         this.categoryMap = categoryFileHandler.readFromFile()
                 .stream()
                 .collect(Collectors.toMap(c -> c.getCategoryID(), c -> c));
@@ -27,6 +28,7 @@ public class CategoryRepository implements ICategoryRepository {
 
     @Override
     public Category createCategory(Category newCategory) {
+        // Add new category to the map
         categoryMap.put(newCategory.getCategoryID(), newCategory);
         return categoryMap.get(newCategory.getCategoryID());
     }
@@ -38,6 +40,7 @@ public class CategoryRepository implements ICategoryRepository {
 
     @Override
     public Category updateCategory(Category newCategory) {
+        // Update category in the map
         categoryMap.put(newCategory.getCategoryID(), newCategory);
         return categoryMap.get(newCategory.getCategoryID());
 
@@ -56,6 +59,7 @@ public class CategoryRepository implements ICategoryRepository {
 
     @Override
     public void save() {
+        // Write all categories to file
         categoryFileHandler.writeToFile(categoryMap);
     }
 
