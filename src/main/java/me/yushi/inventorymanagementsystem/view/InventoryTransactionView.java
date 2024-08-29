@@ -13,8 +13,7 @@ import me.yushi.inventorymanagementsystem.Dto.IInventoryTransactionDto.Transacti
 import me.yushi.inventorymanagementsystem.Dto.InventoryTransactionDto;
 import me.yushi.inventorymanagementsystem.Dto.ProductDto;
 import me.yushi.inventorymanagementsystem.contoller.InventoryTransactionController;
-import me.yushi.inventorymanagementsystem.repository.InventoryTransactionRepository;
-import me.yushi.inventorymanagementsystem.repository.ProductRepository;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 
 public class InventoryTransactionView extends Panel {
 
@@ -24,8 +23,8 @@ public class InventoryTransactionView extends Panel {
     private int selectedRow = -1;
     private Map<Integer, String> transactionIdMap = new HashMap<>();
 
-    public InventoryTransactionView(InventoryTransactionRepository transactionRepository, ProductRepository productRepository, WindowBasedTextGUI textGUI) {
-        this.controller = new InventoryTransactionController(transactionRepository, productRepository);
+    public InventoryTransactionView(IUnitOfWork unitOfWork, WindowBasedTextGUI textGUI) {
+        this.controller = new InventoryTransactionController(unitOfWork);
         this.textGUI = textGUI;
         setupUI();
         loadTransactions();

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import me.yushi.inventorymanagementsystem.Dto.InventoryTransactionDto;
 import static me.yushi.inventorymanagementsystem.model.IInventoryTransaction.TransactionType.PURCHASE;
 import me.yushi.inventorymanagementsystem.model.InventoryTransaction;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 import me.yushi.inventorymanagementsystem.repository.InventoryTransactionRepository;
 
 /**
@@ -19,8 +20,8 @@ public class InventoryTransactionService implements IInventoryTransactionService
 
     private InventoryTransactionRepository repository;
 
-    public InventoryTransactionService(InventoryTransactionRepository repository) {
-        this.repository = repository;
+    public InventoryTransactionService(IUnitOfWork unitOfWork) {
+        this.repository = unitOfWork.getInventoryTransactionRepository();
     }
 
     @Override

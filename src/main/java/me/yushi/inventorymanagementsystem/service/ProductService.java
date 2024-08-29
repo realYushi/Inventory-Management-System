@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import me.yushi.inventorymanagementsystem.Dto.ProductDto;
 import me.yushi.inventorymanagementsystem.model.Product;
 import me.yushi.inventorymanagementsystem.repository.IProductRepository;
-import me.yushi.inventorymanagementsystem.repository.ProductRepository;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 
 /**
  *
@@ -19,8 +19,8 @@ public class ProductService implements IProductService, IMapper<ProductDto, Prod
 
     IProductRepository repository;
 
-    public ProductService(ProductRepository repository) {
-        this.repository = repository;
+    public ProductService(IUnitOfWork unitOfWork) {
+        this.repository = unitOfWork.getProductRepository();
     }
 
     @Override

@@ -6,5 +6,13 @@
     "date": "Aug 20, 2024, 12:00:00 AM",
     "transactionType": "SPOILAGE",
     "price": 12.0
+  },
+  {
+    "transactionID": "5b03b120-7c32-4a50-88a8-6b3b181a53fd",
+    "productID": "7a5249f2-d63f-472d-a46d-070c8fdf0e66",
+    "quantity": 1,
+    "date": "Aug 29, 2024, 12:00:00 AM",
+    "transactionType": "SALE",
+    "price": 1.0
   }
 ]

@@ -8,8 +8,7 @@ import me.yushi.inventorymanagementsystem.contoller.DashBoardController;
 import me.yushi.inventorymanagementsystem.model.FinancialSummary;
 import me.yushi.inventorymanagementsystem.model.InventorySummary;
 import me.yushi.inventorymanagementsystem.model.Product;
-import me.yushi.inventorymanagementsystem.repository.InventoryTransactionRepository;
-import me.yushi.inventorymanagementsystem.repository.ProductRepository;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 
 public class DashboardView extends Panel {
 
@@ -20,8 +19,8 @@ public class DashboardView extends Panel {
     private Label lowStockLabel;
     private Panel lowStockInfoPanel;
 
-    public DashboardView(InventoryTransactionRepository transactionRepository, ProductRepository productRepository, WindowBasedTextGUI textGUI) {
-        this.controller = new DashBoardController(transactionRepository, productRepository);
+    public DashboardView(IUnitOfWork unitOfWork,WindowBasedTextGUI textGUI) {
+        this.controller = new DashBoardController(unitOfWork);
         this.textGUI = textGUI;
         setupUI();
         updateSummaries();

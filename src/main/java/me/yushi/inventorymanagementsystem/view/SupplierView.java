@@ -9,7 +9,7 @@ import java.util.List;
 import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
 import me.yushi.inventorymanagementsystem.contoller.ISupplierController;
 import me.yushi.inventorymanagementsystem.contoller.SupplierController;
-import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 
 public class SupplierView extends Panel {
 
@@ -18,8 +18,8 @@ public class SupplierView extends Panel {
     private WindowBasedTextGUI textGUI;
     private int selectedRow = -1;
 
-    public SupplierView(SupplierRepository supplierRepository, WindowBasedTextGUI textGUI) {
-        this.controller = new SupplierController(supplierRepository);
+    public SupplierView(IUnitOfWork unitOfWork, WindowBasedTextGUI textGUI) {
+        this.controller = new SupplierController(unitOfWork);
         this.textGUI = textGUI;
         setupUI();
         loadSuppliers();

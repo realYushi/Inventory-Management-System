@@ -6,7 +6,7 @@ package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
 import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
-import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 import me.yushi.inventorymanagementsystem.service.ISupplierService;
 import me.yushi.inventorymanagementsystem.service.SupplierService;
 
@@ -17,8 +17,8 @@ import me.yushi.inventorymanagementsystem.service.SupplierService;
 public class SupplierController implements ISupplierController{
     private ISupplierService supplierService;
 
-    public SupplierController(SupplierRepository repository) {
-        this.supplierService=new SupplierService(repository);
+    public SupplierController(IUnitOfWork unitOfWork) {
+        this.supplierService=new SupplierService(unitOfWork);
     }
     
 

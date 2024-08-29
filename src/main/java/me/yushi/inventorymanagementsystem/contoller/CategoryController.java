@@ -7,8 +7,7 @@ package me.yushi.inventorymanagementsystem.contoller;
 import java.util.List;
 import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
 import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
-import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
-import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 import me.yushi.inventorymanagementsystem.service.CategoryService;
 import me.yushi.inventorymanagementsystem.service.SupplierService;
 
@@ -20,9 +19,9 @@ public class CategoryController implements ICategoryController{
     private CategoryService categoryService;
     private SupplierService supplierService;
 
-    public CategoryController(CategoryRepository categoryRepository,SupplierRepository supplierRepository)  {
-        this.categoryService=new CategoryService(categoryRepository);
-        this.supplierService=new SupplierService(supplierRepository);
+    public CategoryController(IUnitOfWork unitOfWork)  {
+        this.categoryService=new CategoryService(unitOfWork);
+        this.supplierService=new SupplierService(unitOfWork);
     }
     
 

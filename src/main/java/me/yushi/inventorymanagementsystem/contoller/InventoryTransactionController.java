@@ -10,8 +10,7 @@ import static me.yushi.inventorymanagementsystem.Dto.IInventoryTransactionDto.Tr
 import static me.yushi.inventorymanagementsystem.Dto.IInventoryTransactionDto.TransactionType.SPOILAGE;
 import me.yushi.inventorymanagementsystem.Dto.InventoryTransactionDto;
 import me.yushi.inventorymanagementsystem.Dto.ProductDto;
-import me.yushi.inventorymanagementsystem.repository.InventoryTransactionRepository;
-import me.yushi.inventorymanagementsystem.repository.ProductRepository;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 import me.yushi.inventorymanagementsystem.service.InventoryTransactionService;
 import me.yushi.inventorymanagementsystem.service.ProductService;
 
@@ -24,9 +23,9 @@ public class InventoryTransactionController implements IInventoryTransactionCont
     InventoryTransactionService inventoryTransactionService;
     ProductService productService;
 
-    public InventoryTransactionController(InventoryTransactionRepository transactionRepository, ProductRepository productRepository) {
-        this.inventoryTransactionService = new InventoryTransactionService(transactionRepository);
-        this.productService = new ProductService(productRepository);
+    public InventoryTransactionController(IUnitOfWork unitOfWork) {
+        this.inventoryTransactionService = new InventoryTransactionService(unitOfWork);
+        this.productService = new ProductService(unitOfWork);
     }
 
     @Override

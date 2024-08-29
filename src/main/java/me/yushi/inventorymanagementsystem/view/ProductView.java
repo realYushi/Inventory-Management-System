@@ -8,8 +8,7 @@ import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
 import me.yushi.inventorymanagementsystem.Dto.IProductDto;
 import me.yushi.inventorymanagementsystem.Dto.ProductDto;
 import me.yushi.inventorymanagementsystem.contoller.ProductController;
-import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
-import me.yushi.inventorymanagementsystem.repository.ProductRepository;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 
 /**
  * Product management view using Lanterna GUI framework.
@@ -23,8 +22,8 @@ public class ProductView extends Panel {
     private WindowBasedTextGUI textGUI;
     private int selectedRow = -1;
 
-    public ProductView(ProductRepository productRepository, CategoryRepository categoryRepository, WindowBasedTextGUI textGUI) {
-        this.controller = new ProductController(productRepository, categoryRepository);
+    public ProductView(IUnitOfWork unitOfWork, WindowBasedTextGUI textGUI) {
+        this.controller = new ProductController(unitOfWork);
         this.textGUI = textGUI;
         setupUI();
         loadProducts();

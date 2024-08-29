@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
 import me.yushi.inventorymanagementsystem.model.Supplier;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
 
 /**
@@ -18,8 +19,8 @@ public class SupplierService implements ISupplierService, IMapper<SupplierDto, S
 
     private SupplierRepository repository;
 
-    public SupplierService(SupplierRepository repository) {
-        this.repository = repository;
+    public SupplierService(IUnitOfWork unitOfWork) {
+        this.repository = unitOfWork.getSupplierRepository();
     }
 
     @Override

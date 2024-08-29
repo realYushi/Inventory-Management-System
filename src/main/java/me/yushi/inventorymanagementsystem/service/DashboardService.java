@@ -15,6 +15,7 @@ import me.yushi.inventorymanagementsystem.model.IInventoryTransaction;
 import me.yushi.inventorymanagementsystem.model.InventorySummary;
 import me.yushi.inventorymanagementsystem.model.InventoryTransaction;
 import me.yushi.inventorymanagementsystem.model.Product;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 import me.yushi.inventorymanagementsystem.repository.InventoryTransactionRepository;
 import me.yushi.inventorymanagementsystem.repository.ProductRepository;
 
@@ -31,9 +32,9 @@ public class DashboardService implements IDashboardService {
     private final int LOW_STOCK_TRIGGER = 10;
     private List<InventoryTransaction> recentTransationData;
 
-    public DashboardService(InventoryTransactionRepository inventoryTransactionRepository, ProductRepository productRepository) {
-        this.inventoryTransactionRepository = inventoryTransactionRepository;
-        this.productRepository = productRepository;
+    public DashboardService(IUnitOfWork unitOfWork) {
+        this.inventoryTransactionRepository = unitOfWork.getInventoryTransactionRepository();
+        this.productRepository = unitOfWork.getProductRepository();
         recentTransationData = getRecentTransactionData();
     }
 

@@ -21,8 +21,7 @@ import me.yushi.inventorymanagementsystem.Dto.ICategoryDto;
 import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
 import me.yushi.inventorymanagementsystem.contoller.CategoryController;
 import me.yushi.inventorymanagementsystem.contoller.ICategoryController;
-import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
-import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 
 /**
  *
@@ -35,8 +34,8 @@ public class CategoryView extends Panel {
     private WindowBasedTextGUI textGUI;
     private int selectedRow = -1;
 
-    public CategoryView(CategoryRepository categoryRepository, SupplierRepository supplierRepository, WindowBasedTextGUI textGUI) {
-        this.controller = new CategoryController(categoryRepository, supplierRepository);
+    public CategoryView(IUnitOfWork unitOfWork, WindowBasedTextGUI textGUI) {
+        this.controller = new CategoryController(unitOfWork);
         this.textGUI = textGUI;
         setupUI();
         loadCategories();

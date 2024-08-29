@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "productID": "7a5249f2-d63f-472d-a46d-070c8fdf0e66",
+    "name": "easy milk",
+    "categoryID": "080f8ef0-6823-4a36-b1c1-765951dea56e",
+    "quantity": 9,
+    "unit": "L",
+    "price": 1.0
+  }
+]

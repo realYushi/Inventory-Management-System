@@ -8,17 +8,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
 import me.yushi.inventorymanagementsystem.model.Category;
-import me.yushi.inventorymanagementsystem.repository.ICategoryRepository;
+import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 
 /**
  *
  * @author yushi
  */
 public class CategoryService implements ICategoryService,IMapper<CategoryDto, Category>{
-    private ICategoryRepository repository;
+    private CategoryRepository repository;
 
-    public CategoryService(ICategoryRepository categoryRepository) {
-        this.repository=categoryRepository;
+    public CategoryService(IUnitOfWork unitOfWork) {
+        this.repository=unitOfWork.getCategoryRepository();
     }
 
     
