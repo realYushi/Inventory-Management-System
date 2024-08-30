@@ -76,6 +76,10 @@
 
 <!-- ABOUT THE PROJECT -->
 
+
+https://github.com/user-attachments/assets/3d6fc573-3c93-4331-8179-b140dcfbc6c0
+
+
 ## About The Project
 
 The Inventory Management System is a personal project developed to handle the intricacies of managing inventory across various categories and suppliers. It offers a detailed and intuitive interface for monitoring product details, transactions, and stock levels, ensuring that inventory management is both efficient and straightforward.
