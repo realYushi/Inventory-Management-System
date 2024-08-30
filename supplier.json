@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "supplierID": "58df5641-5798-424c-a802-765e78b0a213",
+    "supplierName": "blue bird"
+  },
+  {
+    "supplierID": "b8b4742f-c0c2-4628-8150-17e52d70e3b2",
+    "supplierName": "CWP"
+  },
+  {
+    "supplierID": "89039923-b8e7-4e4b-b40f-9e220a23363b",
+    "supplierName": "w-mart"
+  }
+]

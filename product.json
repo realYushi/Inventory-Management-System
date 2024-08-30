@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "productID": "3f5570f6-a7ab-48a1-a446-04cccf413c1f",
+    "name": "pie",
+    "categoryID": "ba968c6c-bed6-4934-8ae4-91a04b0d7ac9",
+    "quantity": 4,
+    "unit": "each",
+    "price": 2.6
+  },
+  {
+    "productID": "3e3bd762-f239-4866-aab2-98af25542731",
+    "name": "milk",
+    "categoryID": "a0e85716-2013-47a5-97c9-9911c6fa165c",
+    "quantity": 10,
+    "unit": "bottol",
+    "price": 1.2
+  },
+  {
+    "productID": "d5ba4a54-c80c-45f4-943b-d373624f040e",
+    "name": "nerf",
+    "categoryID": "5db88c86-5466-44dd-b264-336e356f1289",
+    "quantity": 10,
+    "unit": "each",
+    "price": 13.0
+  }
+]

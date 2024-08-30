@@ -4,6 +4,7 @@
  */
 package me.yushi.inventorymanagementsystem.view;
 
+import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.gui2.BasicWindow;
 import com.googlecode.lanterna.gui2.Borders;
@@ -15,23 +16,31 @@ import com.googlecode.lanterna.gui2.Label;
 import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
 import com.googlecode.lanterna.gui2.Panel;
+import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
+import com.googlecode.lanterna.gui2.WindowListenerAdapter;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import me.yushi.inventorymanagementsystem.model.Category;
 import me.yushi.inventorymanagementsystem.model.InventoryTransaction;
 import me.yushi.inventorymanagementsystem.model.Product;
 import me.yushi.inventorymanagementsystem.model.Supplier;
 import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
 import me.yushi.inventorymanagementsystem.repository.FileHandler;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 import me.yushi.inventorymanagementsystem.repository.InventoryTransactionRepository;
 import me.yushi.inventorymanagementsystem.repository.ProductRepository;
 import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
+import me.yushi.inventorymanagementsystem.repository.UnitOfWork;
 
 /**
  *
@@ -39,23 +48,28 @@ import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
  */
 public class APP {
 
-    private final CategoryRepository categoryRepository;
-    private ProductRepository productRepository;
-    private InventoryTransactionRepository transactionRepository;
-    private SupplierRepository supplierRepository;
+    private IUnitOfWork unitOfWork;
+    private WindowBasedTextGUI textGUI;
 
-    public APP(String categoryFile, String transationFile, String productFile, String supplierFile) throws IOException {
+    public APP(String categoryFile, String transactionFile, String productFile, String supplierFile)
+            throws IOException {
+        // Initialize FileHandlers
         FileHandler<Category> categoryFileHandler = new FileHandler<>(Category.class, categoryFile);
-        categoryRepository = new CategoryRepository(categoryFileHandler);
-
         FileHandler<Product> productFileHandler = new FileHandler<>(Product.class, productFile);
-        productRepository = new ProductRepository(productFileHandler);
-
-        FileHandler<InventoryTransaction> transationFileHandler = new FileHandler<>(InventoryTransaction.class, transationFile);
-        transactionRepository = new InventoryTransactionRepository(transationFileHandler);
-
+        FileHandler<InventoryTransaction> transactionFileHandler = new FileHandler<>(InventoryTransaction.class,
+                transactionFile);
         FileHandler<Supplier> supplierFileHandler = new FileHandler<>(Supplier.class, supplierFile);
-        supplierRepository = new SupplierRepository(supplierFileHandler);
+
+        // Initialize Repositories
+        CategoryRepository categoryRepository = new CategoryRepository(categoryFileHandler);
+        ProductRepository productRepository = new ProductRepository(productFileHandler);
+        InventoryTransactionRepository transactionRepository = new InventoryTransactionRepository(
+                transactionFileHandler);
+        SupplierRepository supplierRepository = new SupplierRepository(supplierFileHandler);
+
+        // Initialize UnitOfWork
+        this.unitOfWork = new UnitOfWork(categoryRepository, transactionRepository, productRepository,
+                supplierRepository);
 
     }
 
@@ -63,35 +77,38 @@ public class APP {
         Terminal terminal = null;
         Screen screen = null;
         try {
+            // Create terminal and screen
             terminal = new DefaultTerminalFactory().createTerminal();
             screen = new TerminalScreen(terminal);
             screen.startScreen();
-
-            WindowBasedTextGUI textGUI = new MultiWindowTextGUI(screen);
+            // Create text GUI and window
+            textGUI = new MultiWindowTextGUI(screen);
             BasicWindow window = new BasicWindow("Inventory Management System");
-
+            // Create main panel
             Panel mainPanel = new Panel(new GridLayout(1));
-            mainPanel.setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.CENTER, GridLayout.Alignment.CENTER, true, true));
+            mainPanel.setLayoutData(
+                    GridLayout.createLayoutData(GridLayout.Alignment.CENTER, GridLayout.Alignment.CENTER, true, true));
             // Create body panel
             Panel bodyPanel = new Panel(new LinearLayout(Direction.VERTICAL));
             bodyPanel.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center));
 
             // Create top navigation panel
             Panel topNavPanel = new Panel(new LinearLayout(Direction.HORIZONTAL));
-            topNavPanel.addComponent(new Button("Dashboard", () -> showDashboard(bodyPanel, productRepository, transactionRepository, textGUI)));
-            topNavPanel.addComponent(new Button("Product", () -> showProduct(bodyPanel, productRepository, categoryRepository, textGUI)));
-            topNavPanel.addComponent(new Button("Supplier", () -> showSupplier(bodyPanel, supplierRepository, textGUI)));
-            topNavPanel.addComponent(new Button("Transaction", () -> showTransaction(bodyPanel, transactionRepository, productRepository, textGUI)));
-            topNavPanel.addComponent(new Button("Category", () -> showCategory(bodyPanel, categoryRepository, supplierRepository, textGUI)));
-            topNavPanel.addComponent(new Button("Exit", () -> confirmExit(textGUI)));
+            // Add navigation buttons
+            topNavPanel.addComponent(new Button("Dashboard", () -> showDashboard(bodyPanel)));
+            topNavPanel.addComponent(new Button("Product", () -> showProduct(bodyPanel)));
+            topNavPanel.addComponent(new Button("Supplier", () -> showSupplier(bodyPanel)));
+            topNavPanel.addComponent(new Button("Transaction", () -> showTransaction(bodyPanel)));
+            topNavPanel.addComponent(new Button("Category", () -> showCategory(bodyPanel)));
+            topNavPanel.addComponent(new Button("Exit", this::confirmExit));
 
             // Create bottom panel for help
             Panel bottomPanel = new Panel(new LinearLayout(Direction.VERTICAL));
-            bottomPanel.addComponent(new EmptySpace(new TerminalSize(0, 1))); 
-             bottomPanel.withBorder(Borders.singleLine("Help"));
+            bottomPanel.addComponent(new EmptySpace(new TerminalSize(0, 1)));
+            bottomPanel.withBorder(Borders.singleLine("Quick Help"));
+            bottomPanel.addComponent(new Label("Press F1 for detailed help"));
+            bottomPanel.addComponent(new Label("Use arrow keys to navigate, Enter or Spacebar to activate"));
 
-            bottomPanel.addComponent(new Label("Help: Use arrow keys for navigation. Press Enter or Spacebar to activate buttons. "));
-            bottomPanel.addComponent(new Label("If display is abnormal, adjust the terminal size."));
             // Add sub-panels to main panel
             mainPanel.addComponent(topNavPanel);
             mainPanel.addComponent(bodyPanel);
@@ -99,6 +116,16 @@ public class APP {
 
             // Set main panel as the content of the window
             window.setComponent(mainPanel);
+            // Add window listener for F1 key
+            window.addWindowListener(new WindowListenerAdapter() {
+                @Override
+                public void onInput(Window basePane, KeyStroke keyStroke, AtomicBoolean deliverEvent) {
+                    if (keyStroke.getKeyType() == KeyType.F1) {
+                        showHelpPanel(textGUI);
+                        deliverEvent.set(false);
+                    }
+                }
+            });
 
             // Add window to the GUI and run
             textGUI.addWindowAndWait(window);
@@ -116,38 +143,91 @@ public class APP {
         }
     }
 
-    private static void showDashboard(Panel bodyPanel, ProductRepository productRepository, InventoryTransactionRepository transactionRepository, WindowBasedTextGUI textGUI) {
+    // Navigation item
+    private void showDashboard(Panel bodyPanel) {
         bodyPanel.removeAllComponents();
-        bodyPanel.addComponent(new DashboardView(transactionRepository, productRepository, textGUI));
+        bodyPanel.addComponent(new DashboardView(this.unitOfWork));
     }
 
-    private static void showProduct(Panel bodyPanel, ProductRepository productRepository, CategoryRepository categoryRepository, WindowBasedTextGUI textGUI) {
+    // Navigation item
+    private void showProduct(Panel bodyPanel) {
         bodyPanel.removeAllComponents();
-        bodyPanel.addComponent(new ProductView(productRepository, categoryRepository, textGUI));
+        bodyPanel.addComponent(new ProductView(this.unitOfWork, this.textGUI));
     }
 
-    private static void showSupplier(Panel bodyPanel, SupplierRepository repository, WindowBasedTextGUI textGUI) {
-
+    // Navigation item
+    private void showSupplier(Panel bodyPanel) {
         bodyPanel.removeAllComponents();
-        bodyPanel.addComponent(new SupplierView(repository, textGUI));
+        bodyPanel.addComponent(new SupplierView(this.unitOfWork, this.textGUI));
     }
 
-    private static void showTransaction(Panel bodyPanel, InventoryTransactionRepository transactionRepository, ProductRepository productRepository, WindowBasedTextGUI textGUI) {
+    // navigation item
+    private void showTransaction(Panel bodyPanel) {
         bodyPanel.removeAllComponents();
-        bodyPanel.addComponent(new InventoryTransactionView(transactionRepository, productRepository, textGUI));
+        bodyPanel.addComponent(new InventoryTransactionView(this.unitOfWork, this.textGUI));
     }
 
-    private static void showCategory(Panel bodyPanel, CategoryRepository categoryRepository, SupplierRepository supplierRepository, WindowBasedTextGUI textGUI) {
+    // navigation item
+    private void showCategory(Panel bodyPanel) {
         bodyPanel.removeAllComponents();
-        bodyPanel.addComponent(new CategoryView(categoryRepository, supplierRepository, textGUI));
+        bodyPanel.addComponent(new CategoryView(this.unitOfWork, this.textGUI));
     }
 
-    private static void confirmExit(WindowBasedTextGUI textGUI) {
-        boolean confirmExit = MessageDialog.showMessageDialog(textGUI, "Exit", "Are you sure you want to exit?", MessageDialogButton.Yes, MessageDialogButton.No) == MessageDialogButton.Yes;
-
+    // Exit confirmation dialog
+    private void confirmExit() {
+        boolean confirmExit = MessageDialog.showMessageDialog(this.textGUI, "Exit", "Are you sure you want to exit?",
+                MessageDialogButton.Yes, MessageDialogButton.No) == MessageDialogButton.Yes;
         if (confirmExit) {
             textGUI.getActiveWindow().close();
             System.exit(0);
         }
+    }
+
+    private void showHelpPanel(WindowBasedTextGUI textGUI) {
+        BasicWindow helpWindow = new BasicWindow("Help");
+        Panel helpPanel = new Panel(new GridLayout(1));
+
+        Panel helpContent = new Panel(new LinearLayout(Direction.VERTICAL));
+
+        helpContent.addComponent(new Label("Navigation:").addStyle(SGR.BOLD));
+        helpContent.addComponent(new Label("- Use arrow keys to navigate"));
+        helpContent.addComponent(new Label("- Press Enter or Spacebar to activate buttons"));
+        helpContent.addComponent(new Label("- Press F1 to open this help panel"));
+
+        helpContent.addComponent(new EmptySpace(new TerminalSize(0, 1)));
+        helpContent.addComponent(new Label("Order Creation Process:").addStyle(SGR.BOLD));
+
+        String[] steps = {
+                "1. Add Supplier: 'Suppliers' > 'Add Supplier'",
+                "2. Add Category: 'Categories' > 'Add Category'",
+                "3. Add Product: 'Products' > 'Add Product'",
+                "4. Transaction: 'Transactions' > 'Add Transaction'"
+        };
+
+        for (String step : steps) {
+            helpContent.addComponent(new Label(step));
+        }
+        // Add an empty space for padding
+
+        helpPanel.addComponent(helpContent);
+
+        // Add an empty space for padding
+        helpPanel.addComponent(new EmptySpace(new TerminalSize(0, 1)));
+
+        // Create and add the exit button
+        Button exitButton = new Button("Exit Help", new Runnable() {
+            @Override
+            public void run() {
+                helpWindow.close();
+            }
+        });
+
+        Panel buttonPanel = new Panel(new GridLayout(1).setLeftMarginSize(1).setRightMarginSize(1));
+        buttonPanel.addComponent(exitButton);
+        helpPanel.addComponent(buttonPanel);
+
+        helpWindow.setComponent(helpPanel);
+
+        textGUI.addWindowAndWait(helpWindow);
     }
 }

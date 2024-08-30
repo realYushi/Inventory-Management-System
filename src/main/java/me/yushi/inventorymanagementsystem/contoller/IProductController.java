@@ -18,6 +18,6 @@ public interface IProductController{
     ProductDto getProductByID(String productID);
     boolean deleteProduct(String productID);
     List<ProductDto> getAllProducts();
-    CategoryDto getCategory(String cagetoryID);
+    CategoryDto getCategoryById(String cagetoryID);
     List<CategoryDto> getAllCategory();
 }

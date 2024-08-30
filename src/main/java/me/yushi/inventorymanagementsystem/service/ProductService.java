@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import me.yushi.inventorymanagementsystem.Dto.ProductDto;
 import me.yushi.inventorymanagementsystem.model.Product;
 import me.yushi.inventorymanagementsystem.repository.IProductRepository;
-import me.yushi.inventorymanagementsystem.repository.ProductRepository;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 
 /**
  *
@@ -19,21 +19,28 @@ public class ProductService implements IProductService, IMapper<ProductDto, Prod
 
     IProductRepository repository;
 
-    public ProductService(ProductRepository repository) {
-        this.repository = repository;
+    public ProductService(IUnitOfWork unitOfWork) {
+        this.repository = unitOfWork.getProductRepository();
     }
 
     @Override
+    // Create a new product, save it to the repository, and return the created
     public ProductDto createProduct(ProductDto newProductDto) {
         Product product = toModel(newProductDto);
-
         ProductDto productDto = toDto(repository.createProduct(product));
         this.save();
         return productDto;
     }
 
     @Override
+    // Update a product, save it to the repository, and return the updated
     public ProductDto updateProduct(ProductDto updatedProductDto) {
+        // Check if the product exists
+        if (repository.readProduct(updatedProductDto.getProductID()) == null) {
+            System.out.print("No product found with ID: " + updatedProductDto.getProductID());
+            return null;
+
+        }
         Product product = toModel(updatedProductDto);
         ProductDto productDto = toDto(repository.updateProduct(product));
         this.save();
@@ -41,13 +48,14 @@ public class ProductService implements IProductService, IMapper<ProductDto, Prod
     }
 
     @Override
+    // Get a product by its ID
     public ProductDto getProductByID(String productID) {
-        Product product = repository.readProduct(productID);
-        if (product == null) {
+        // Check if the product exists
+        if (repository.readProduct(productID) == null) {
             System.out.print("No product found with ID: " + productID);
             return null;
         }
-
+        Product product = repository.readProduct(productID);
         return toDto(product);
     }
 
@@ -59,6 +67,7 @@ public class ProductService implements IProductService, IMapper<ProductDto, Prod
     }
 
     @Override
+    // Get all products
     public List<ProductDto> getAllProducts() {
         List<Product> products = repository.getAllProducts().values().stream()
                 .collect(Collectors.toList());
@@ -67,10 +76,8 @@ public class ProductService implements IProductService, IMapper<ProductDto, Prod
     }
 
     @Override
+    // Convert a product to a DTO
     public ProductDto toDto(Product model) {
-        if (model == null) {
-            throw new IllegalArgumentException("Product cannot be null");
-        }
         return new ProductDto.Builder()
                 .categoryID(model.getCategoryID())
                 .name(model.getName())
@@ -82,6 +89,7 @@ public class ProductService implements IProductService, IMapper<ProductDto, Prod
     }
 
     @Override
+    // Convert a DTO to a product
     public Product toModel(ProductDto dto) {
         return new Product(
                 dto.getProductID(),
@@ -89,8 +97,7 @@ public class ProductService implements IProductService, IMapper<ProductDto, Prod
                 dto.getCategoryID(),
                 dto.getQuantity(),
                 dto.getUnit(),
-                dto.getPrice()
-        );
+                dto.getPrice());
     }
 
     @Override
