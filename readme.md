@@ -237,7 +237,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 ## Contact
 
 Yushi Cui - realYushi@gmail.com
+
 LinkedIn: [https://www.linkedin.com/in/yushi-cui-6043aa285/](https://www.linkedin.com/in/yushi-cui-6043aa285/)
+
 Project Link: [https://github.com/realYushi/Inventory-Management-System](https://github.com/realYushi/Inventory-Management-System)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
