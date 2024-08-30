@@ -21,25 +21,28 @@ import me.yushi.inventorymanagementsystem.Dto.ICategoryDto;
 import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
 import me.yushi.inventorymanagementsystem.contoller.CategoryController;
 import me.yushi.inventorymanagementsystem.contoller.ICategoryController;
-import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
-import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 
 /**
  *
  * @author yushi
  */
-public class CategoryView extends Panel {
-
+public class CategoryView extends Panel implements ISelectedble{
     private ICategoryController controller;
     private Table<String> categoryTable;
     private WindowBasedTextGUI textGUI;
+    // Store the index of the selected row in the table, -1 means no row is selected
     private int selectedRow = -1;
 
-    public CategoryView(CategoryRepository categoryRepository, SupplierRepository supplierRepository, WindowBasedTextGUI textGUI) {
-        this.controller = new CategoryController(categoryRepository, supplierRepository);
+    public CategoryView(IUnitOfWork unitOfWork, WindowBasedTextGUI textGUI) {
+        // Initialize the controller and textGUI
+        this.controller = new CategoryController(unitOfWork);
         this.textGUI = textGUI;
+        // Setup the UI components
         setupUI();
+        // Load the categories from the database
         loadCategories();
+        // listen for table selection events
         addTableSelectionListener();
     }
 
@@ -49,11 +52,11 @@ public class CategoryView extends Panel {
         mainPanel.setLayoutManager(new LinearLayout(Direction.VERTICAL));
 
         // Add a label for the title
-        mainPanel.addComponent(new Label("Category Management").setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center)));
+        mainPanel.addComponent(new Label("Category Management")
+                .setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.Center)));
 
         // Create a table to display categories
         categoryTable = new Table<>(" ", "ID", "Name", "Supplier");
-
         mainPanel.addComponent(categoryTable);
 
         // Create a horizontal panel for buttons
@@ -61,19 +64,19 @@ public class CategoryView extends Panel {
         buttonPanel.setLayoutManager(new LinearLayout(Direction.HORIZONTAL));
 
         // Button to refresh the category list
-        Button refreshButton = new Button("Refresh", () -> loadCategories());
+        Button refreshButton = new Button("Refresh", this::loadCategories);
         buttonPanel.addComponent(refreshButton);
 
         // Button to add a new category
-        Button addCategoryButton = new Button("Add Category", () -> addCategory());
+        Button addCategoryButton = new Button("Add Category", this::addCategory);
         buttonPanel.addComponent(addCategoryButton);
 
         // Button to update a category
-        Button updateCategoryButton = new Button("Update Category", () -> updateCategory());
+        Button updateCategoryButton = new Button("Update Category", this::updateCategory);
         buttonPanel.addComponent(updateCategoryButton);
 
         // Button to delete a category
-        Button deleteCategoryButton = new Button("Delete Category", () -> deleteCategory());
+        Button deleteCategoryButton = new Button("Delete Category", this::deleteCategory);
         buttonPanel.addComponent(deleteCategoryButton);
 
         // Add the button panel to the main panel
@@ -84,75 +87,113 @@ public class CategoryView extends Panel {
     }
 
     private void loadCategories() {
+        // Clear the table before loading new data
         categoryTable.getTableModel().clear();
+        // Get all categories from the database
         List<CategoryDto> categories = controller.getAllCategorys();
-        if(categories.size()==0){
+        // If there are no categories, skip the loop
+        if (categories.isEmpty()) {
             return;
         }
+        // Add each category to the table
         for (ICategoryDto category : categories) {
             SupplierDto supplier = controller.getSupplier(category.getSupplierID());
-            String supplierName = supplier != null ? supplier.getSupplierName() : "N/A";
-            categoryTable.getTableModel().addRow("", category.getCategoryID(), category.getCategoryName(), supplierName);
+            // If the supplier does not exist, delete the category
+            if (supplier == null) {
+                controller.deleteCategory(category.getCategoryID());
+                continue;
+            }
+            // Get the supplier name
+            String supplierName = supplier.getSupplierName();
+            // Add the category to the table
+            categoryTable.getTableModel().addRow("", category.getCategoryID(), category.getCategoryName(),
+                    supplierName);
         }
-        selectedRow=-1;
+        // Reset the selected row index
+        selectedRow = -1;
     }
 
     private void addCategory() {
-        String categoryName = TextInputDialog.showDialog(textGUI, "Add Category", "Category Name:", "");
-        String supplierID = selectSupplier(); // Get supplier ID from the selection dialog
-        if (categoryName != null && !categoryName.trim().isEmpty() && supplierID != null) {
-            CategoryDto category = new CategoryDto.Builder()
-                    .categoryName(categoryName)
-                    .supplierID(supplierID)
-                    .build();
-            ICategoryDto newCategory = controller.createCategory(category);
-            if (newCategory != null) {
-                loadCategories();
-                MessageDialog.showMessageDialog(textGUI, "Success", "Category added successfully!", MessageDialogButton.OK);
-            } else {
-                MessageDialog.showMessageDialog(textGUI, "Error", "Failed to add category.", MessageDialogButton.OK);
-            }
-        } else {
-            MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input or no supplier selected.", MessageDialogButton.OK);
+        // Prompt the user to select a supplier
+        String supplierID = selectSupplier();
+        if (supplierID == null) {
+            MessageDialog.showMessageDialog(textGUI, "Error", "No supplier selected.", MessageDialogButton.OK);
+            return;
+
         }
-        selectedRow=-1;
+        // Prompt the user to enter a category name
+        String categoryName = TextInputDialog.showDialog(textGUI, "Add Category", "Category Name:", "");
+        if (categoryName == null || categoryName.trim().isEmpty()) {
+            MessageDialog.showMessageDialog(textGUI, "Error", "No Category name input.", MessageDialogButton.OK);
+            return;
+        }
+
+        // Create a new category object
+        CategoryDto category = new CategoryDto.Builder()
+                .categoryName(categoryName)
+                .supplierID(supplierID)
+                .build();
+        ICategoryDto newCategory = controller.createCategory(category);
+        if (newCategory != null) {
+            loadCategories();
+            MessageDialog.showMessageDialog(textGUI, "Success", "Category added successfully!",
+                    MessageDialogButton.OK);
+        } else {
+            MessageDialog.showMessageDialog(textGUI, "Error", "Failed to add category.", MessageDialogButton.OK);
+        }
+
+        // Reset the selected row index
+        selectedRow = -1;
     }
 
     private void updateCategory() {
+        // Prompt the user to select a category from the table
         if (selectedRow == -1) {
             MessageDialog.showMessageDialog(textGUI, "Error", "No category selected.", MessageDialogButton.OK);
             return;
         }
+        // Get the category ID and name from the selected row
         String categoryID = categoryTable.getTableModel().getRow(selectedRow).get(1);
         String categoryName = categoryTable.getTableModel().getRow(selectedRow).get(2);
-        String newCategoryName = TextInputDialog.showDialog(textGUI, "Update Category", "New Category Name:", categoryName);
-        String newSupplierID = selectSupplier(); // Allow changing the supplier
+        // Prompt the user to enter a new category name
+        String newCategoryName = TextInputDialog.showDialog(textGUI, "Update Category", "New Category Name:",
+                categoryName);
+        // Prompt the user to select a supplier
+        String newSupplierID = selectSupplier();
+        // Check if the input is valid and a supplier is selected
         if (newCategoryName != null && !newCategoryName.trim().isEmpty() && newSupplierID != null) {
+            // Create a new category object with the updated values
             CategoryDto updatedCategory = new CategoryDto.Builder()
                     .categoryID(categoryID)
                     .categoryName(newCategoryName)
                     .supplierID(newSupplierID)
                     .build();
+            // Update the category in the database
             CategoryDto result = controller.updateCategory(updatedCategory);
             if (result != null) {
                 loadCategories();
-                MessageDialog.showMessageDialog(textGUI, "Success", "Category updated successfully!", MessageDialogButton.OK);
+                MessageDialog.showMessageDialog(textGUI, "Success", "Category updated successfully!",
+                        MessageDialogButton.OK);
             } else {
                 MessageDialog.showMessageDialog(textGUI, "Error", "Failed to update category.", MessageDialogButton.OK);
             }
         } else {
-            MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input or no supplier selected.", MessageDialogButton.OK);
+            MessageDialog.showMessageDialog(textGUI, "Error", "Invalid input or no supplier selected.",
+                    MessageDialogButton.OK);
         }
+        // Reset the selected row index
         selectedRow = -1;
     }
 
     private void deleteCategory() {
         // Prompt the user to select a category from the table
-        if (selectedRow == -1) { // Check if no row is selected
+        if (selectedRow == -1) {
             MessageDialog.showMessageDialog(textGUI, "Error", "No category selected.", MessageDialogButton.OK);
             return;
         }
+        // Get the category ID from the selected row
         String categoryID = categoryTable.getTableModel().getRow(selectedRow).get(1);
+        // Delete the category from the database
         Boolean result = controller.deleteCategory(categoryID);
 
         if (result != null) {
@@ -163,11 +204,12 @@ public class CategoryView extends Panel {
             MessageDialog.showMessageDialog(textGUI, "Error", "Failed to delete category.",
                     MessageDialogButton.OK);
         }
+        // Reset the selected row index
         selectedRow = -1;
 
     }
-
-    private void addTableSelectionListener() {
+    @Override
+    public void addTableSelectionListener() {
         categoryTable.setSelectAction(() -> {
             selectedRow = categoryTable.getSelectedRow();
             // Clear the selection marker from all rows
@@ -182,20 +224,26 @@ public class CategoryView extends Panel {
     }
 
     private String selectSupplier() {
+        // Get all suppliers from the database
         List<SupplierDto> suppliers = controller.getAllSupplier();
+        // If there are no suppliers, show a message and return null
         if (suppliers.isEmpty()) {
-            MessageDialog.showMessageDialog(textGUI, "No Suppliers", "There are no suppliers available.", MessageDialogButton.OK);
+            MessageDialog.showMessageDialog(textGUI, "No Suppliers", "There are no suppliers available.",
+                    MessageDialogButton.OK);
             return null;
         }
+        // Create an array of supplier names
         String[] supplierNames = suppliers.stream().map(SupplierDto::getSupplierName).toArray(String[]::new);
-        String selectedSupplierName = ListSelectDialog.showDialog(textGUI, "Select Supplier", "Choose a supplier:", supplierNames);
+        // Show a dialog to select a supplier
+        String selectedSupplierName = ListSelectDialog.showDialog(textGUI, "Select Supplier", "Choose a supplier:",
+                supplierNames);
         if (selectedSupplierName != null) {
-            
+            // Find the supplier ID based on the selected supplier name
             return suppliers.stream()
-                            .filter(s -> s.getSupplierName().equals(selectedSupplierName))
-                            .findFirst()
-                            .map(SupplierDto::getSupplierID)
-                            .orElse(null);
+                    .filter(s -> s.getSupplierName().equals(selectedSupplierName))
+                    .findFirst()
+                    .map(SupplierDto::getSupplierID)
+                    .orElse(null);
         }
         return null;
     }

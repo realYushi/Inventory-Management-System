@@ -19,6 +19,7 @@ public class SupplierRepository implements ISupplierRepository {
     private FileHandler<Supplier> supplierFileHandler;
 
     public SupplierRepository(FileHandler<Supplier> fileHandler) throws IOException {
+        // Read all suppliers from file and store them in a map
         supplierFileHandler = fileHandler;
         this.supplierMap = supplierFileHandler.readFromFile()
                 .stream()
@@ -27,34 +28,40 @@ public class SupplierRepository implements ISupplierRepository {
 
     @Override
     public Supplier createSupplier(Supplier newSupplier) {
+        // Add new supplier to the map
         supplierMap.put(newSupplier.getSupplierID(), newSupplier);
         return supplierMap.get(newSupplier.getSupplierID());
     }
 
     @Override
     public Supplier readSupplier(String supplierID) {
+        // Read supplier from the map
         return supplierMap.get(supplierID);
     }
 
     @Override
     public Supplier updateSupplier(Supplier updatedSupplier) {
+        // Update supplier in the map
         supplierMap.put(updatedSupplier.getSupplierID(), updatedSupplier);
         return supplierMap.get(updatedSupplier.getSupplierID());
     }
 
     @Override
     public boolean deleteSupplier(String supplierID) {
+        // Delete supplier from the map
         supplierMap.remove(supplierID);
         return !supplierMap.containsKey(supplierID);
     }
 
     @Override
     public Map<String, Supplier> getAllSuppliers() {
+        // Return all suppliers
         return supplierMap;
     }
 
     @Override
     public void save() {
+        // Write all suppliers to file
         supplierFileHandler.writeToFile(supplierMap);
     }
 

@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "productID": "efe2b576-fe58-4c62-bb5a-72c9b53be97d",
+    "name": "pie",
+    "categoryID": "b2b3c5cf-6914-419c-b66e-30c0522dc575",
+    "quantity": 9,
+    "unit": "each",
+    "price": 2.0
+  }
+]

@@ -6,8 +6,7 @@ package me.yushi.inventorymanagementsystem.contoller;
 
 import me.yushi.inventorymanagementsystem.model.FinancialSummary;
 import me.yushi.inventorymanagementsystem.model.InventorySummary;
-import me.yushi.inventorymanagementsystem.repository.InventoryTransactionRepository;
-import me.yushi.inventorymanagementsystem.repository.ProductRepository;
+import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 import me.yushi.inventorymanagementsystem.service.DashboardService;
 import me.yushi.inventorymanagementsystem.service.IDashboardService;
 
@@ -15,22 +14,23 @@ import me.yushi.inventorymanagementsystem.service.IDashboardService;
  *
  * @author yushi
  */
-public class DashBoardController implements IDashBoardController{
+public class DashBoardController implements IDashBoardController {
     IDashboardService dashboardService;
 
-    public DashBoardController(InventoryTransactionRepository transactionRepository,ProductRepository productRepository) {
-        dashboardService=new DashboardService(transactionRepository,productRepository);
+    public DashBoardController(IUnitOfWork unitOfWork) {
+        dashboardService = new DashboardService(unitOfWork);
     }
-    
 
     @Override
+    // Get inventory summary
     public InventorySummary getInventorySummary() {
         return dashboardService.getIentorySummary();
     }
 
     @Override
+    // Get financial summary
     public FinancialSummary getFinancialSummary() {
         return dashboardService.getFinancialSummary();
     }
-    
+
 }

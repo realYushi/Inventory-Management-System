@@ -1,10 +1,18 @@
 [
   {
-    "transactionID": "4d14cd51-5790-47a6-9029-c2a6eea40797",
-    "productID": "353eeba7-a4f7-42c0-b0d9-275e63431b79",
+    "transactionID": "42c9c4e7-b5f9-40de-a99a-72749225d0ff",
+    "productID": "efe2b576-fe58-4c62-bb5a-72c9b53be97d",
     "quantity": 1,
-    "date": "Aug 20, 2024, 12:00:00 AM",
-    "transactionType": "SPOILAGE",
-    "price": 12.0
+    "date": "Aug 30, 2024, 12:00:00 AM",
+    "transactionType": "SALE",
+    "price": 2.0
+  },
+  {
+    "transactionID": "c0da61e2-a5fe-4fcd-9a59-fda1d8d2e0ab",
+    "productID": "efe2b576-fe58-4c62-bb5a-72c9b53be97d",
+    "quantity": 10,
+    "date": "Aug 30, 2024, 12:00:00 AM",
+    "transactionType": "PURCHASE",
+    "price": 20.0
   }
 ]

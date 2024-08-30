@@ -19,7 +19,8 @@ public class InventoryTransactionRepository implements IInventoryTransactionRepo
     private IFileHandler<InventoryTransaction> inventoryTransactionFileHandler;
 
     public InventoryTransactionRepository(IFileHandler<InventoryTransaction> fileHandler) throws IOException {
-        inventoryTransactionFileHandler=fileHandler;
+        // Read all inventory transactions from file and store them in a map
+        inventoryTransactionFileHandler = fileHandler;
         this.inventoryTransactionMap = inventoryTransactionFileHandler.readFromFile()
                 .stream()
                 .collect(Collectors.toMap(transation -> transation.getTransactionID(), i -> i));
@@ -27,6 +28,7 @@ public class InventoryTransactionRepository implements IInventoryTransactionRepo
 
     @Override
     public InventoryTransaction createInventoryTransaction(InventoryTransaction newInventoryTransaction) {
+        // Add new inventory transaction to the map
         inventoryTransactionMap.put(newInventoryTransaction.getTransactionID(), newInventoryTransaction);
         return inventoryTransactionMap.get(newInventoryTransaction.getTransactionID());
 
@@ -34,28 +36,33 @@ public class InventoryTransactionRepository implements IInventoryTransactionRepo
 
     @Override
     public InventoryTransaction readInventoryTransaction(String inventoryTransationID) {
+        // Read inventory transaction from the map
         return inventoryTransactionMap.get(inventoryTransationID);
     }
 
     @Override
     public InventoryTransaction updateInventoryTransaction(InventoryTransaction updatedIInventoryTransaction) {
+        // Update inventory transaction in the map
         inventoryTransactionMap.put(updatedIInventoryTransaction.getTransactionID(), updatedIInventoryTransaction);
         return inventoryTransactionMap.get(updatedIInventoryTransaction.getTransactionID());
     }
 
     @Override
     public boolean deleteInventoryTransaction(String inventoryTransationID) {
+        // Delete inventory transaction from the map
         inventoryTransactionMap.remove(inventoryTransationID);
         return !inventoryTransactionMap.containsKey(inventoryTransationID);
     }
 
     @Override
-    public Map<String,InventoryTransaction> getAllInventoryTransations() {
+    public Map<String, InventoryTransaction> getAllInventoryTransations() {
+        // Return all inventory transactions
         return inventoryTransactionMap;
     }
 
     @Override
     public void save() {
+        // Write all inventory transactions to file
         inventoryTransactionFileHandler.writeToFile(inventoryTransactionMap);
     }
 
