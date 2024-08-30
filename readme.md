@@ -217,7 +217,7 @@ For a deeper dive into the functionalities and user interaction flow, refer to t
 ## Roadmap
 
 -   [ ] Add GUI support
--   [ ] Implement real-time inventory updates
+-   [ ] Implement Database support for data persistence
 -   [ ] Integrate with external APIs for order management
 
 See the [open issues](https://github.com/realYushi/Inventory-Management-System/issues) for a full list of proposed features (and known issues).
@@ -237,7 +237,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 ## Contact
 
 Yushi Cui - realYushi@gmail.com
-
+LinkedIn: [https://www.linkedin.com/in/yushi-cui-6043aa285/](https://www.linkedin.com/in/yushi-cui-6043aa285/)
 Project Link: [https://github.com/realYushi/Inventory-Management-System](https://github.com/realYushi/Inventory-Management-System)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -266,4 +266,4 @@ Project Link: [https://github.com/realYushi/Inventory-Management-System](https:/
 [license-shield]: https://img.shields.io/github/license/realYushi/Inventory-Management-System.svg?style=for-the-badge
 [license-url]: https://github.com/realYushi/Inventory-Management-System/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
+[linkedin-url]: https://www.linkedin.com/in/yushi-cui-6043aa285/
