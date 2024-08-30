@@ -1,10 +1,10 @@
 [
   {
-    "productID": "7a5249f2-d63f-472d-a46d-070c8fdf0e66",
-    "name": "easy milk",
-    "categoryID": "080f8ef0-6823-4a36-b1c1-765951dea56e",
+    "productID": "efe2b576-fe58-4c62-bb5a-72c9b53be97d",
+    "name": "pie",
+    "categoryID": "b2b3c5cf-6914-419c-b66e-30c0522dc575",
     "quantity": 9,
-    "unit": "L",
-    "price": 1.0
+    "unit": "each",
+    "price": 2.0
   }
 ]

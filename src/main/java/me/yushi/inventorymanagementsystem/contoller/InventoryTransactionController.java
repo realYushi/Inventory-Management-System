@@ -78,6 +78,9 @@ public class InventoryTransactionController implements IInventoryTransactionCont
     private void changingQuantity(InventoryTransactionDto transactionDto, boolean isDelete) {
         String prodcutID = transactionDto.getProductID();
         ProductDto targetProdut = productService.getProductByID(prodcutID);
+        if(targetProdut==null){
+            return;
+        }
         int productQuantity = targetProdut.getQuantity();
         int changedQuantity = transactionDto.getQuantity();
         // adjust the quantity of the product by the transation type
