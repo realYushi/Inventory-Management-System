@@ -1,18 +1,34 @@
 [
   {
-    "transactionID": "42c9c4e7-b5f9-40de-a99a-72749225d0ff",
-    "productID": "efe2b576-fe58-4c62-bb5a-72c9b53be97d",
-    "quantity": 1,
+    "transactionID": "dfa16005-6742-40ce-8e26-11cf7f3bb005",
+    "productID": "3f5570f6-a7ab-48a1-a446-04cccf413c1f",
+    "quantity": 8,
     "date": "Aug 30, 2024, 12:00:00 AM",
     "transactionType": "SALE",
-    "price": 2.0
+    "price": 20.8
   },
   {
-    "transactionID": "c0da61e2-a5fe-4fcd-9a59-fda1d8d2e0ab",
-    "productID": "efe2b576-fe58-4c62-bb5a-72c9b53be97d",
+    "transactionID": "ea666268-b2e2-418c-8498-69ed3aec6684",
+    "productID": "d5ba4a54-c80c-45f4-943b-d373624f040e",
     "quantity": 10,
     "date": "Aug 30, 2024, 12:00:00 AM",
     "transactionType": "PURCHASE",
-    "price": 20.0
+    "price": 130.0
+  },
+  {
+    "transactionID": "799407ab-672d-46df-bbaa-9e44b518079b",
+    "productID": "3e3bd762-f239-4866-aab2-98af25542731",
+    "quantity": 10,
+    "date": "Aug 12, 2024, 12:00:00 AM",
+    "transactionType": "PURCHASE",
+    "price": 12.0
+  },
+  {
+    "transactionID": "74984754-2d34-410c-9eda-08609a258bdd",
+    "productID": "3f5570f6-a7ab-48a1-a446-04cccf413c1f",
+    "quantity": 12,
+    "date": "Aug 30, 2024, 12:00:00 AM",
+    "transactionType": "PURCHASE",
+    "price": 31.200000000000003
   }
 ]

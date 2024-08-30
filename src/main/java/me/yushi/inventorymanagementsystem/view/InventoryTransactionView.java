@@ -15,7 +15,7 @@ import me.yushi.inventorymanagementsystem.Dto.ProductDto;
 import me.yushi.inventorymanagementsystem.contoller.InventoryTransactionController;
 import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 
-public class InventoryTransactionView extends Panel implements ISelectedble{
+public class InventoryTransactionView extends Panel implements ISelectedble {
 
     private InventoryTransactionController controller;
     private Table<String> transactionTable;
@@ -129,7 +129,7 @@ public class InventoryTransactionView extends Panel implements ISelectedble{
         }
 
         String quantity = TextInputDialog.showDialog(textGUI, "Add Transaction", "Quantity:", "");
-        if (quantity == null || quantity.trim().isEmpty()) {
+        if (quantity == null || quantity.trim().isEmpty() || !quantity.matches("[0-9]+")) {
             MessageDialog.showMessageDialog(textGUI, "Error", "Quantity is required.", MessageDialogButton.OK);
             return;
 
@@ -167,7 +167,7 @@ public class InventoryTransactionView extends Panel implements ISelectedble{
         String transactionID = transactionIdMap.get(selectedRow);
         String newQuantity = TextInputDialog.showDialog(textGUI, "Update Transaction", "New Quantity:", "");
         // Check if the quantity is empty
-        if (newQuantity == null || newQuantity.trim().isEmpty()) {
+        if (newQuantity == null || newQuantity.trim().isEmpty() || !newQuantity.matches("[0-9]+")) {
             MessageDialog.showMessageDialog(textGUI, "Error", "Quantity is required.", MessageDialogButton.OK);
             return;
         }
