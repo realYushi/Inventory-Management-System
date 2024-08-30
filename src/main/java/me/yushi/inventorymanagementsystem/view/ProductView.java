@@ -15,7 +15,7 @@ import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
  *
  * @author yushi
  */
-public class ProductView extends Panel implements ISelectedble{
+public class ProductView extends Panel implements ISelectedble {
 
     private ProductController controller;
     private Table<String> productTable;
@@ -103,12 +103,13 @@ public class ProductView extends Panel implements ISelectedble{
             return;
         }
         String productUnit = TextInputDialog.showDialog(textGUI, "Add Product", "Product Unit:", "");
-        if (productName == null || productName.trim().isEmpty()) {
+        if (productUnit == null || productName.trim().isEmpty()) {
             MessageDialog.showMessageDialog(textGUI, "Error", "Product unit cannot be empty.", MessageDialogButton.OK);
             return;
         }
         String productPrice = TextInputDialog.showDialog(textGUI, "Add Product", "Product Price:", "");
-        if (productName == null || productName.trim().isEmpty()) {
+        if (productPrice == null || productPrice.trim().isEmpty()
+                || !productPrice.matches("^[0-9]+(\\.[0-9]{1,2})?$")) {
             MessageDialog.showMessageDialog(textGUI, "Error", "Product price cannot be empty.", MessageDialogButton.OK);
             return;
         }
@@ -158,7 +159,8 @@ public class ProductView extends Panel implements ISelectedble{
             return;
         }
         String newProductPrice = TextInputDialog.showDialog(textGUI, "Add Product", "Product Price:", "");
-        if (newProductPrice == null || newProductPrice.trim().isEmpty()) {
+        if (newProductPrice == null || newProductPrice.trim().isEmpty()
+                || !newProductPrice.matches("^[0-9]+(\\.[0-9]{1,2})?$")) {
             MessageDialog.showMessageDialog(textGUI, "Error", "Product price cannot be empty.", MessageDialogButton.OK);
             return;
         }
