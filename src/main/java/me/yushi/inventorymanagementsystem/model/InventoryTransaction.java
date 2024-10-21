@@ -7,23 +7,34 @@ package me.yushi.inventorymanagementsystem.model;
 import java.util.Date;
 import java.util.UUID;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
 /**
  *
  * @author yushi
  */
+@Entity
 public class InventoryTransaction implements IInventoryTransaction {
-
+ @Id
     private String transactionID;
-    private String productID;
+
+    @ManyToOne
+    @JoinColumn(name = "productID", nullable = false)
+    private Product product;
     private int quantity;
     private Date date;
+    @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
     private double price;
 
-    public InventoryTransaction(String transactionID, String productID, int quantity, Date date, TransactionType transactionType, double price) {
-        this.transactionID=transactionID;
+    public InventoryTransaction(String transactionID, Product product, int quantity, Date date, TransactionType transactionType, double price) {
         this.transactionID = (transactionID==null?UUID.randomUUID().toString():transactionID);
-        this.productID = productID;
+        this.product = product;
         this.quantity = quantity;
         this.date = date;
         this.transactionType =transactionType; 
@@ -33,13 +44,12 @@ public class InventoryTransaction implements IInventoryTransaction {
     @Override
     public String getTransactionID() {
         return this.transactionID;
-        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 
     @Override
     public String getProductID() {
-        return this.productID;
+        return this.product.getProductID();
     }
 
 

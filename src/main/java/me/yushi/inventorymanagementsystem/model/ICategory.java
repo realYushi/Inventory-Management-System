@@ -4,15 +4,15 @@
  */
 package me.yushi.inventorymanagementsystem.model;
 
+import java.util.List;
+
 /**
  *
  * @author yushi
  */
 public interface ICategory {
     String getCategoryID();
-
     String getCategoryName();
     void setCategoryName(String categoryName);
-    String getSupplierID();
-    void setSupplierID(String suppierID);
+    List<IProduct> getProducts();
 }

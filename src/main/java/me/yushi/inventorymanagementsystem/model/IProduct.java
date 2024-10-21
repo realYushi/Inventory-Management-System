@@ -18,6 +18,7 @@ public interface IProduct {
     void setName(String name);
 
     String getCategoryID();
+    String getSupplierID();
 
     int getQuantity();
     void setQuantity(int quantity);

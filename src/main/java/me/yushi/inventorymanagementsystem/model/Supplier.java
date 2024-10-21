@@ -5,19 +5,31 @@
 package me.yushi.inventorymanagementsystem.model;
 
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 /**
  *
  * @author yushi
  */
+@Entity
 public class Supplier implements ISupplier {
 
-    private String supplierID;
-    private String supplierName;
 
+    @Id
+    private String supplierID;
+    @Column(name = "supplierName", nullable = false)
+    private String supplierName;
+    @OneToMany(mappedBy = "supplier")
+    private List<IProduct> products = new ArrayList<>();
+    public Supplier() {
+    }
     public Supplier(String supplierID,String supplierName) {
-        this.supplierID=supplierID;
-        this.supplierID = (this.supplierID==null?UUID.randomUUID().toString():supplierID);
+        this.supplierID = (supplierID==null?UUID.randomUUID().toString():supplierID);
         this.supplierName = supplierName;
     }
 
@@ -35,6 +47,10 @@ public class Supplier implements ISupplier {
     @Override
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
+    }
+    @Override
+    public List<IProduct> getProducts() {
+        return this.products;
     }
 
 }

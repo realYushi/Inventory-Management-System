@@ -6,28 +6,42 @@ package me.yushi.inventorymanagementsystem.model;
 
 import java.util.UUID;
 
+import java.util.List;
+import java.util.ArrayList;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
 /**
  *
  * @author yushi
  */
+@Entity
+@Table(name = "Category")
 public class Category implements ICategory {
-
+    @Id
     private String categoryID;
+    @Column(name = "categoryName", nullable = false)
     private String categoryName;
-    private String supplierID;
 
-    public Category(String categoryName,String categoryID,String supplierID) {
+    @OneToMany(mappedBy = "category")
+    private List<IProduct> products = new ArrayList<>();
+    public Category() {
+    }
+
+    public Category(String categoryName, String categoryID) {
         this.categoryName = categoryName;
-        this.categoryID=categoryID;
-        this.supplierID=supplierID;
-        this.categoryID= (categoryID==null?UUID.randomUUID().toString():categoryID);
+        this.categoryID = categoryID;
+        this.categoryID = (categoryID == null ? UUID.randomUUID().toString() : categoryID);
     }
 
     @Override
     public String getCategoryID() {
         return this.categoryID;
     }
-
 
     @Override
     public String getCategoryName() {
@@ -36,17 +50,13 @@ public class Category implements ICategory {
 
     @Override
     public void setCategoryName(String categoryName) {
-        this.categoryName=categoryName;
+        this.categoryName = categoryName;
     }
 
     @Override
-    public String getSupplierID() {
-        return this.supplierID;
+    public List<IProduct> getProducts() {
+        return this.products;
     }
-
-    @Override
-    public void setSupplierID(String suppierID) {
-        this.supplierID=suppierID;
-    }
+    
 
 }

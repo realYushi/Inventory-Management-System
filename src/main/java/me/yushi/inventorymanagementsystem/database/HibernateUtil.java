@@ -33,7 +33,7 @@ public class HibernateUtil {
                     me.yushi.inventorymanagementsystem.model.Category.class,
                     me.yushi.inventorymanagementsystem.model.Supplier.class,
                     me.yushi.inventorymanagementsystem.model.InventoryTransaction.class,
-            });
+        });
 
             entityManagerFactory = Persistence.createEntityManagerFactory("Inventory-Management-Unit", settings);
 

@@ -6,25 +6,46 @@ package me.yushi.inventorymanagementsystem.model;
 
 import java.util.UUID;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
 /**
  *
  * @author yushi
  */
+@Entity
+@Table(name = "Product")
 public class Product implements IProduct {
-
+    @ManyToOne
+    @JoinColumn(name = "categoryID", nullable = false)
+    private Category category;
+    @ManyToOne
+    @JoinColumn(name = "supplierID", nullable = false)
+    private Supplier supplier;
+    @Id
     private String productID;
+    @Column(name = "name", nullable = false)
     private String name;
-    private String categoryID;
+    @Column(name = "quantity", nullable = false)
     private int quantity;
+    @Column(name = "unit", nullable = false)
     private String unit;
+    @Column(name = "price", nullable = false)
     private double price;
 
-    public Product(String productID,String name, String categoryID,int quantity, String unit, double price) {
-        this.productID=productID;
-        this.productID =(this.productID==null?UUID.randomUUID().toString():productID);
+    public Product() {
+    }
 
+    public Product(String productID, String name, Category category, Supplier supplier, int quantity, String unit,
+            double price) {
+        this.category = category;
+        this.supplier = supplier;
+        this.productID = (productID == null ? UUID.randomUUID().toString() : productID);
         this.name = name;
-        this.categoryID = categoryID;
         this.quantity = quantity;
         this.unit = unit;
         this.price = price;
@@ -42,14 +63,13 @@ public class Product implements IProduct {
 
     @Override
     public void setName(String name) {
-        this.name=name;
+        this.name = name;
     }
 
     @Override
     public String getCategoryID() {
-        return this.categoryID;
+        return this.category.getCategoryID();
     }
-
 
     @Override
     public int getQuantity() {
@@ -58,7 +78,7 @@ public class Product implements IProduct {
 
     @Override
     public void setQuantity(int quantity) {
-        this.quantity=quantity;
+        this.quantity = quantity;
     }
 
     @Override
@@ -68,10 +88,13 @@ public class Product implements IProduct {
 
     @Override
     public void setPrice(double price) {
-        this.price=price;
+        this.price = price;
     }
 
-
+    @Override
+    public String getSupplierID() {
+        return this.supplier.getSupplierID();
+    }
 
     @Override
     public String getUnit() {
@@ -80,7 +103,7 @@ public class Product implements IProduct {
 
     @Override
     public void setUnit(String unit) {
-        this.unit=unit;
+        this.unit = unit;
     }
 
 }
