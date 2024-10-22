@@ -3,10 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package me.yushi.inventorymanagementsystem.repository;
-
-import java.io.IOException;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.List;
+import jakarta.persistence.EntityManager;
 import me.yushi.inventorymanagementsystem.model.Product;
 
 /**
@@ -15,54 +13,40 @@ import me.yushi.inventorymanagementsystem.model.Product;
  */
 public class ProductRepository implements IProductRepository {
 
-    private Map<String, Product> productMap;
-    private FileHandler<Product> productFileHandler;
 
-    public ProductRepository(FileHandler<Product> fileHandler) throws IOException {
-        // Read all products from file and store them in a map
-        productFileHandler = fileHandler;
-        this.productMap = productFileHandler.readFromFile()
-                .stream()
-                .collect(Collectors.toMap(product -> product.getProductID(), product -> product));
+    public ProductRepository() {
     }
 
     @Override
-    public Product createProduct(Product newProduct) {
-        // Add new product to the map
-        productMap.put(newProduct.getProductID(), newProduct);
+    public Product createProduct(Product newProduct,EntityManager em) {
+        em.persist(newProduct);
         return newProduct;
     }
 
     @Override
-    public Product readProduct(String productID) {
-        // Read product from the map
-        return productMap.get(productID);
+    public Product readProduct(String productID,EntityManager em) {
+        return em.find(Product.class, productID);
     }
 
     @Override
-    public Product updateProduct(Product updatedProduct) {
-        // Update product in the map
-        productMap.put(updatedProduct.getProductID(), updatedProduct);
-        return productMap.get(updatedProduct.getProductID());
+    public Product updateProduct(Product updatedProduct,EntityManager em) {
+        return em.merge(updatedProduct);
     }
 
     @Override
-    public boolean deleteProduct(String productID) {
-        // Delete product from the map
-        productMap.remove(productID);
-        return productMap.containsKey(productID);
+    public boolean deleteProduct(String productID,EntityManager em) {
+        if (em.find(Product.class, productID) != null) {
+            em.remove(em.find(Product.class, productID));
+            return true;
+        }
+        return false;
+        
     }
 
     @Override
-    public Map<String, Product> getAllProducts() {
-        // Return all products
-        return productMap;
+    public List<Product> getAllProducts(EntityManager em) {
+        return em.createQuery("SELECT p FROM Product p", Product.class).getResultList();
     }
 
-    @Override
-    public void save() {
-        // Write all products to file
-        productFileHandler.writeToFile(productMap);
-    }
 
 }

@@ -5,8 +5,11 @@
 package me.yushi.inventorymanagementsystem.repository;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import jakarta.persistence.EntityManager;
 import me.yushi.inventorymanagementsystem.model.Supplier;
 
 /**
@@ -14,55 +17,38 @@ import me.yushi.inventorymanagementsystem.model.Supplier;
  * @author yushi
  */
 public class SupplierRepository implements ISupplierRepository {
-
-    private Map<String, Supplier> supplierMap;
-    private FileHandler<Supplier> supplierFileHandler;
-
-    public SupplierRepository(FileHandler<Supplier> fileHandler) throws IOException {
-        // Read all suppliers from file and store them in a map
-        supplierFileHandler = fileHandler;
-        this.supplierMap = supplierFileHandler.readFromFile()
-                .stream()
-                .collect(Collectors.toMap(s -> s.getSupplierID(), s -> s));
+    public SupplierRepository() {
     }
 
     @Override
-    public Supplier createSupplier(Supplier newSupplier) {
-        // Add new supplier to the map
-        supplierMap.put(newSupplier.getSupplierID(), newSupplier);
-        return supplierMap.get(newSupplier.getSupplierID());
+    public Supplier createSupplier(Supplier newSupplier,EntityManager em) {
+        em.persist(newSupplier);
+        return newSupplier;
     }
 
     @Override
-    public Supplier readSupplier(String supplierID) {
-        // Read supplier from the map
-        return supplierMap.get(supplierID);
+    public Supplier readSupplier(String supplierID,EntityManager em) {
+        return em.find(Supplier.class, supplierID);
     }
 
     @Override
-    public Supplier updateSupplier(Supplier updatedSupplier) {
-        // Update supplier in the map
-        supplierMap.put(updatedSupplier.getSupplierID(), updatedSupplier);
-        return supplierMap.get(updatedSupplier.getSupplierID());
+    public Supplier updateSupplier(Supplier updatedSupplier,EntityManager em) {
+        return em.merge(updatedSupplier);
     }
 
     @Override
-    public boolean deleteSupplier(String supplierID) {
-        // Delete supplier from the map
-        supplierMap.remove(supplierID);
-        return !supplierMap.containsKey(supplierID);
+    public boolean deleteSupplier(String supplierID,EntityManager em) {
+        if (em.find(Supplier.class, supplierID) != null) {
+            em.remove(em.find(Supplier.class, supplierID));
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public Map<String, Supplier> getAllSuppliers() {
-        // Return all suppliers
-        return supplierMap;
+    public List<Supplier> getAllSuppliers(EntityManager em) {
+        return em.createQuery("SELECT s FROM Supplier s", Supplier.class).getResultList();
     }
 
-    @Override
-    public void save() {
-        // Write all suppliers to file
-        supplierFileHandler.writeToFile(supplierMap);
-    }
 
 }

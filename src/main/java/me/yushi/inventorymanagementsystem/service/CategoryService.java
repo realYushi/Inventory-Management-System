@@ -7,40 +7,44 @@ package me.yushi.inventorymanagementsystem.service;
 import java.util.List;
 import java.util.stream.Collectors;
 import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
+import me.yushi.inventorymanagementsystem.database.TransactionUtil;
 import me.yushi.inventorymanagementsystem.model.Category;
 import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
-import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 
 /**
  *
  * @author yushi
  */
 public class CategoryService implements ICategoryService, IMapper<CategoryDto, Category> {
-    private CategoryRepository repository;
+    private CategoryRepository repository = new CategoryRepository();
 
-    public CategoryService(IUnitOfWork unitOfWork) {
-        this.repository = unitOfWork.getCategoryRepository();
+    public CategoryService() {
     }
 
     @Override
-    // Create a new category, save it to the repository, and return the created
-    // category
+    // Create a new category, save it to the repository, and return the created category
     public CategoryDto createCategory(CategoryDto newCategoryDto) {
         Category category = toModel(newCategoryDto);
-        CategoryDto categoryDto = toDto(repository.createCategory(category));
-        this.save();
-        return categoryDto;
-
+        Category newCategory = TransactionUtil.executeTransaction(em -> {
+            return repository.createCategory(category, em);
+        });
+        if (newCategory == null) {
+            System.out.println("Failed to create category: " + newCategoryDto.getCategoryName());
+            return null;
+        }
+        return toDto(newCategory);
     }
 
     @Override
     // Get a category by its ID
     public CategoryDto getCategoryByID(String categoryID) {
-        if (repository.readCategory(categoryID) == null) {
-            System.out.print("No category found with ID: " + categoryID);
+        Category category = TransactionUtil.executeTransaction(em -> {
+            return repository.readCategory(categoryID, em);
+        });
+        if(category == null) {
+            System.out.println("No category found with ID: " + categoryID);
             return null;
         }
-        Category category = repository.readCategory(categoryID);
         return toDto(category);
     }
 
@@ -48,32 +52,31 @@ public class CategoryService implements ICategoryService, IMapper<CategoryDto, C
     // Update a category, save it to the repository, and return the updated category
     public CategoryDto updateCategory(CategoryDto updatedCategoryDto) {
         Category newCategory = toModel(updatedCategoryDto);
-        // Check if the category exists
-        if (repository.readCategory(newCategory.getCategoryID()) == null) {
-            System.out.print("No category found with ID: " + newCategory.getCategoryID());
+        Category updatedCategory = TransactionUtil.executeTransaction(em -> {
+            return repository.updateCategory(newCategory, em);
+        });
+        if (updatedCategory == null) {
+            System.out.println("Failed to update category: " + updatedCategoryDto.getCategoryName());
             return null;
         }
-        Category category = repository.updateCategory(newCategory);
-        CategoryDto categoryDto = toDto(category);
-        this.save();
-        return categoryDto;
+        return toDto(updatedCategory);
     }
 
     @Override
     // Delete a category by its ID
     public boolean deleteCategory(String categoryID) {
-        boolean result = repository.deleteCategory(categoryID);
-        this.save();
-        return result;
+        return TransactionUtil.executeTransaction(em -> {
+            return repository.deleteCategory(categoryID, em);
+        });
     }
 
     @Override
-    // Get all categories, convert them to DTOs, and return the list of DTOs
     public List<CategoryDto> getAllCategorys() {
-        // Get all categories from the repository, convert them to a list, and return
-        List<Category> categorys = repository.getAllCategorys()
-                .values().stream().collect(Collectors.toList());
-        return categorys.stream().map(category -> this.toDto(category)).collect(Collectors.toList());
+        List<Category> categories = TransactionUtil.executeTransaction(em -> {
+            return repository.getAllCategories(em);
+        });
+        List<CategoryDto> categoryDtos = categories.stream().map(this::toDto).collect(Collectors.toList());
+        return categoryDtos;
 
     }
 
@@ -81,7 +84,6 @@ public class CategoryService implements ICategoryService, IMapper<CategoryDto, C
     public CategoryDto toDto(Category model) {
         // Convert a category model to a category DTO, and return the DTO
         return new CategoryDto.Builder()
-                .supplierID(model.getSupplierID())
                 .categoryID(model.getCategoryID())
                 .categoryName(model.getCategoryName())
                 .build();
@@ -90,12 +92,8 @@ public class CategoryService implements ICategoryService, IMapper<CategoryDto, C
     @Override
     public Category toModel(CategoryDto dto) {
         // Convert a category DTO to a category model, and return the model
-        return new Category(dto.getCategoryName(), dto.getCategoryID(), dto.getSupplierID());
+        return new Category(dto.getCategoryName(), dto.getCategoryID());
     }
 
-    @Override
-    public void save() {
-        repository.save();
-    }
 
 }

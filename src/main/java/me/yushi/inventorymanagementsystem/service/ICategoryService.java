@@ -16,7 +16,5 @@ public interface ICategoryService {
     CategoryDto getCategoryByID( String categoryID);
     CategoryDto updateCategory(CategoryDto updatedCategoryDto);
     boolean deleteCategory(String categoryID);
-    void save();
-
     List<CategoryDto> getAllCategorys();
 }

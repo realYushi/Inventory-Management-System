@@ -4,7 +4,8 @@
  */
 package me.yushi.inventorymanagementsystem.repository;
 
-import java.util.Map;
+import java.util.List;
+import jakarta.persistence.EntityManager;
 import me.yushi.inventorymanagementsystem.model.InventoryTransaction;
 
 /**
@@ -12,11 +13,9 @@ import me.yushi.inventorymanagementsystem.model.InventoryTransaction;
  * @author yushi
  */
 public interface IInventoryTransactionRepository {
-    InventoryTransaction createInventoryTransaction(InventoryTransaction newIInventoryTransaction);
-    InventoryTransaction readInventoryTransaction(String inventoryTransationID);
-    InventoryTransaction updateInventoryTransaction(InventoryTransaction updatedIInventoryTransaction);
-    boolean deleteInventoryTransaction(String inventoryTransationID); 
-
-    Map<String,InventoryTransaction> getAllInventoryTransations();
-    void save();
+    InventoryTransaction createInventoryTransaction(InventoryTransaction newInventoryTransaction, EntityManager em);
+    InventoryTransaction readInventoryTransaction(String inventoryTransationID, EntityManager em);
+    InventoryTransaction updateInventoryTransaction(InventoryTransaction updatedIInventoryTransaction, EntityManager em);
+    boolean deleteInventoryTransaction(String inventoryTransationID, EntityManager em); 
+    List<InventoryTransaction> getAllInventoryTransations(EntityManager em);
 }

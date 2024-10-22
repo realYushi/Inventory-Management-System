@@ -3,10 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package me.yushi.inventorymanagementsystem.repository;
-
-import java.io.IOException;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.List;
+import jakarta.persistence.EntityManager;
 import me.yushi.inventorymanagementsystem.model.Category;
 
 /**
@@ -15,52 +13,41 @@ import me.yushi.inventorymanagementsystem.model.Category;
  */
 public class CategoryRepository implements ICategoryRepository {
 
-    private Map<String, Category> categoryMap;
-    private FileHandler<Category> categoryFileHandler;
 
-    public CategoryRepository(FileHandler<Category> fileHandler) throws IOException {
-        categoryFileHandler = fileHandler;
-        // Read all categories from file and store them in a map
-        this.categoryMap = categoryFileHandler.readFromFile()
-                .stream()
-                .collect(Collectors.toMap(c -> c.getCategoryID(), c -> c));
+    public CategoryRepository() {
     }
 
     @Override
-    public Category createCategory(Category newCategory) {
-        // Add new category to the map
-        categoryMap.put(newCategory.getCategoryID(), newCategory);
-        return categoryMap.get(newCategory.getCategoryID());
+    public Category createCategory(Category newCategory,EntityManager em) {
+        em.persist(newCategory);
+        return newCategory;
     }
 
     @Override
-    public Category readCategory(String categoryID) {
-        return categoryMap.get(categoryID);
+    public Category readCategory(String categoryID,EntityManager em) {
+        Category category = em.find(Category.class, categoryID);
+        return category;
     }
 
     @Override
-    public Category updateCategory(Category newCategory) {
-        // Update category in the map
-        categoryMap.put(newCategory.getCategoryID(), newCategory);
-        return categoryMap.get(newCategory.getCategoryID());
-
+    public Category updateCategory(Category newCategory,EntityManager em) {
+        em.merge(newCategory);
+        return newCategory;
     }
 
     @Override
-    public boolean deleteCategory(String categoryID) {
-        categoryMap.remove(categoryID);
-        return !categoryMap.containsKey(categoryID);
+    public boolean deleteCategory(String categoryID,EntityManager em) {
+        Category category = em.find(Category.class, categoryID);
+        if (category != null) {
+            em.remove(category);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public Map<String, Category> getAllCategorys() {
-        return categoryMap;
-    }
-
-    @Override
-    public void save() {
-        // Write all categories to file
-        categoryFileHandler.writeToFile(categoryMap);
+    public List<Category> getAllCategories(EntityManager em) {
+        return em.createQuery("SELECT c FROM Category c", Category.class).getResultList();
     }
 
 }

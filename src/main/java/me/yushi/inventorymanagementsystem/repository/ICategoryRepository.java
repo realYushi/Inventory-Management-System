@@ -4,7 +4,9 @@
  */
 package me.yushi.inventorymanagementsystem.repository;
 
-import java.util.Map;
+import java.util.List;
+
+import jakarta.persistence.EntityManager;
 import me.yushi.inventorymanagementsystem.model.Category;
 
 /**
@@ -12,11 +14,9 @@ import me.yushi.inventorymanagementsystem.model.Category;
  * @author yushi
  */
 public interface ICategoryRepository {
-    Category createCategory(Category newCategory);
-    Category readCategory(String categoryID);
-    Category updateCategory(Category newCategory);
-    boolean deleteCategory(String categoryID);
-
-    Map<String,Category> getAllCategorys();
-    void save();
+    Category createCategory(Category newCategory,EntityManager em);
+    Category readCategory(String categoryID,EntityManager em);
+    Category updateCategory(Category newCategory,EntityManager em);
+    boolean deleteCategory(String categoryID,EntityManager em);
+    List<Category> getAllCategories(EntityManager em);
 }

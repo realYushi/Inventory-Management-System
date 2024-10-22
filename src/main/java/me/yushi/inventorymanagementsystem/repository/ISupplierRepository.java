@@ -3,8 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 package me.yushi.inventorymanagementsystem.repository;
-
-import java.util.Map;
+import java.util.List;
+import jakarta.persistence.EntityManager;
 import me.yushi.inventorymanagementsystem.model.Supplier;
 
 /**
@@ -12,11 +12,10 @@ import me.yushi.inventorymanagementsystem.model.Supplier;
  * @author yushi
  */
 public interface ISupplierRepository {
-    Supplier createSupplier(Supplier newSupplier);
-    Supplier readSupplier(String supplierID);
-    Supplier updateSupplier(Supplier updatedSupplier);
-    boolean deleteSupplier(String supplierID);
-    Map<String,Supplier>getAllSuppliers();
-    void save();
+    Supplier createSupplier(Supplier newSupplier,EntityManager em);
+    Supplier readSupplier(String supplierID,EntityManager em);
+    Supplier updateSupplier(Supplier updatedSupplier,EntityManager em);
+    boolean deleteSupplier(String supplierID,EntityManager em);
+    List<Supplier>getAllSuppliers(EntityManager em);
     
 }
