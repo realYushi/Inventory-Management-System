@@ -7,8 +7,8 @@ package me.yushi.inventorymanagementsystem.service;
 import java.util.List;
 import java.util.stream.Collectors;
 import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
+import me.yushi.inventorymanagementsystem.database.TransactionUtil;
 import me.yushi.inventorymanagementsystem.model.Supplier;
-import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
 
 /**
@@ -16,61 +16,60 @@ import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
  * @author yushi
  */
 public class SupplierService implements ISupplierService, IMapper<SupplierDto, Supplier> {
-
-    private SupplierRepository repository;
-
-    public SupplierService(IUnitOfWork unitOfWork) {
-        this.repository = unitOfWork.getSupplierRepository();
+    SupplierRepository repository;
+    public SupplierService(SupplierRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     // Create a new supplier, save it to the repository, and return the created
     public SupplierDto createSupplier(SupplierDto newSupplierDto) {
 
-        Supplier supplier = toModel(newSupplierDto);
-        SupplierDto supplierDto = toDto(repository.createSupplier(supplier));
-        this.save();
-        return supplierDto;
+        Supplier supplier=TransactionUtil.executeTransaction(em -> {
+            return repository.createSupplier(toModel(newSupplierDto), em);
+        });
+        if(supplier==null){
+            System.out.println("Failed to create supplier : " + newSupplierDto.getSupplierName());
+            return null;
+        }
+        return newSupplierDto;
     }
 
     @Override
-    // Update a supplier, save it to the repository, and return the updated
     public SupplierDto updateSupplier(SupplierDto updatedSupplierDto) {
-        // Check if the supplier exists
-        if (repository.readSupplier(updatedSupplierDto.getSupplierID()) == null) {
-            System.out.print("No supplier found with ID: " + updatedSupplierDto.getSupplierID());
-            return null;
-        }
-        Supplier supplier = toModel(updatedSupplierDto);
-        SupplierDto supplierDto = toDto(repository.updateSupplier(supplier));
-        this.save();
-        return supplierDto;
-
+        Supplier newSupplier=TransactionUtil.executeTransaction(em -> {
+            return repository.updateSupplier(toModel(updatedSupplierDto), em);
+        });
+        return toDto(newSupplier);
     }
 
     @Override
-    // Get a supplier by its ID
     public SupplierDto getSupplierByID(String supplierDtoID) {
-        if (repository.readSupplier(supplierDtoID) == null) {
-            System.out.print("No supplier found with ID: " + supplierDtoID);
+        Supplier supplier = TransactionUtil.executeTransaction(em -> {
+            return repository.readSupplier(supplierDtoID, em);
+        });
+        if (supplier != null) {
+            System.out.println("No supplier found with ID: " + supplierDtoID);
             return null;
         }
-        return toDto(repository.readSupplier(supplierDtoID));
+        return toDto(supplier);
+        
     }
 
     @Override
     // Delete a supplier by its ID
     public boolean deleteSupplier(String supplierDtoID) {
-        boolean result = repository.deleteSupplier(supplierDtoID);
-        this.save();
-        return result;
+        return TransactionUtil.executeTransaction(em -> {
+            return repository.deleteSupplier(supplierDtoID, em);
+        });
     }
 
     @Override
     // Get all suppliers in the repository
     public List<SupplierDto> getAllSuppliers() {
-        List<Supplier> suppliers = repository.getAllSuppliers().values().stream()
-                .collect(Collectors.toList());
+        List <Supplier> suppliers = TransactionUtil.executeTransaction(em -> {
+            return repository.getAllSuppliers(em);
+        });
         return suppliers.stream().map(supplier -> this.toDto(supplier))
                 .collect(Collectors.toList());
     }
@@ -91,9 +90,5 @@ public class SupplierService implements ISupplierService, IMapper<SupplierDto, S
         return new Supplier(dto.getSupplierID(), dto.getSupplierName());
     }
 
-    @Override
-    public void save() {
-        repository.save();
-    }
 
 }

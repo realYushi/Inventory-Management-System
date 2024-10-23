@@ -7,7 +7,6 @@ package me.yushi.inventorymanagementsystem.contoller;
 import java.util.List;
 import me.yushi.inventorymanagementsystem.Dto.InventoryTransactionDto;
 import me.yushi.inventorymanagementsystem.Dto.ProductDto;
-import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 import me.yushi.inventorymanagementsystem.service.InventoryTransactionService;
 import me.yushi.inventorymanagementsystem.service.ProductService;
 
@@ -20,18 +19,18 @@ public class InventoryTransactionController implements IInventoryTransactionCont
     InventoryTransactionService inventoryTransactionService;
     ProductService productService;
 
-    public InventoryTransactionController(IUnitOfWork unitOfWork) {
-        this.inventoryTransactionService = new InventoryTransactionService(unitOfWork);
-        this.productService = new ProductService(unitOfWork);
+    public InventoryTransactionController(InventoryTransactionService inventoryTransactionService, ProductService productService) {
+        this.inventoryTransactionService = inventoryTransactionService;
+        this.productService = productService;
     }
 
     @Override
     // Create a new inventory transaction, save it to the repository, and return the
     // created
-    public InventoryTransactionDto createInventoryTransaction(InventoryTransactionDto newIInventoryTransactionDto) {
+    public InventoryTransactionDto createInventoryTransaction(InventoryTransactionDto newInventoryTransactionDto) {
         // adjust the quantity of the product by the transation type
-        changingQuantity(newIInventoryTransactionDto, false);
-        return inventoryTransactionService.createInventoryTransaction(newIInventoryTransactionDto);
+        changingQuantity(newInventoryTransactionDto, false);
+        return inventoryTransactionService.createInventoryTransaction(newInventoryTransactionDto);
     }
 
     @Override

@@ -5,7 +5,6 @@
 package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
-import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
 import me.yushi.inventorymanagementsystem.Dto.ProductDto;
 
 /**
@@ -18,6 +17,6 @@ public interface IProductController{
     ProductDto getProductByID(String productID);
     boolean deleteProduct(String productID);
     List<ProductDto> getAllProducts();
-    CategoryDto getCategoryById(String cagetoryID);
-    List<CategoryDto> getAllCategory();
+    String getCategoryID(ProductDto productDto);
+    String getSupplierID(ProductDto productDto);
 }

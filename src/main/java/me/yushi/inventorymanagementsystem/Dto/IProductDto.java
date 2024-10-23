@@ -13,6 +13,7 @@ public interface IProductDto {
     String getUnit();
     String getName();
     String getCategoryID();
+    String getSupplierID();
     int getQuantity();
     double getPrice();
 }

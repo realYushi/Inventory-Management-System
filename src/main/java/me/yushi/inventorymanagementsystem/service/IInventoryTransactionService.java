@@ -17,7 +17,6 @@ public interface IInventoryTransactionService {
     InventoryTransactionDto getInventoryTransactionByID(String inventoryTransationID);
     boolean deleteInventoryTransaction(String inventoryTransationID);
     List<InventoryTransactionDto> getAllInventoryTransations();
-    void save();
     
     
 }

@@ -5,10 +5,7 @@
 package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
-import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
 import me.yushi.inventorymanagementsystem.Dto.ProductDto;
-import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
-import me.yushi.inventorymanagementsystem.service.CategoryService;
 import me.yushi.inventorymanagementsystem.service.ProductService;
 
 /**
@@ -17,34 +14,48 @@ import me.yushi.inventorymanagementsystem.service.ProductService;
  */
 public class ProductController implements IProductController {
     private ProductService productService;
-    private CategoryService categoryService;
 
-    public ProductController(IUnitOfWork unitOfWork) {
-        this.productService = new ProductService(unitOfWork);
-        this.categoryService = new CategoryService(unitOfWork);
+    public ProductController(ProductService productService ) {
+        this.productService = productService;
     }
 
     @Override
     // Create a new product
     public ProductDto createProduct(ProductDto newProductDto) {
+        if(newProductDto == null) {
+            System.out.println("ProductDto is null");
+            return null;
+        }
         return productService.createProduct(newProductDto);
     }
 
     @Override
     // Update a product
     public ProductDto updateProduct(ProductDto updatedProductDto) {
+        if(updatedProductDto == null) {
+            System.out.println("Updated ProductDto is null");
+            return null;
+        }
         return productService.updateProduct(updatedProductDto);
     }
 
     @Override
     // Get a product by its ID
     public ProductDto getProductByID(String productID) {
+        if(productID == null || productID.isEmpty()) {
+            System.out.println("Product ID is null or empty");
+            return null;
+        }
         return productService.getProductByID(productID);
     }
 
     @Override
     // Delete a product
     public boolean deleteProduct(String productID) {
+        if(productID == null || productID.isEmpty()) {
+            System.out.println("Product ID is null or empty");
+            return false;
+        }
         return productService.deleteProduct(productID);
     }
 
@@ -55,16 +66,21 @@ public class ProductController implements IProductController {
     }
 
     @Override
-    // Get a category by its ID
-    public CategoryDto getCategoryById(String categoryID) {
-        return categoryService.getCategoryByID(categoryID);
-
+    public String getCategoryID(ProductDto productDto) {
+        if(productDto == null) {
+            System.out.println("ProductDto is null");
+            return null;
+        }
+        return productDto.getCategoryID();
     }
 
     @Override
-    // Get all categories
-    public List<CategoryDto> getAllCategory() {
-        return categoryService.getAllCategorys();
+    public String getSupplierID(ProductDto productDto) {
+        if(productDto == null) {
+            System.out.println("ProductDto is null");
+            return null;
+        }
+        return productDto.getSupplierID();
     }
-
 }
+

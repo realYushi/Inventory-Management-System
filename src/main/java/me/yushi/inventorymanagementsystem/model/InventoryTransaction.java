@@ -25,16 +25,16 @@ public class InventoryTransaction implements IInventoryTransaction {
 
     @ManyToOne
     @JoinColumn(name = "productID", nullable = false)
-    private Product product;
+    private String productID;
     private int quantity;
     private Date date;
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
     private double price;
 
-    public InventoryTransaction(String transactionID, Product product, int quantity, Date date, TransactionType transactionType, double price) {
+    public InventoryTransaction(String transactionID, String productID, int quantity, Date date, TransactionType transactionType, double price) {
         this.transactionID = (transactionID==null?UUID.randomUUID().toString():transactionID);
-        this.product = product;
+        this.productID = productID;
         this.quantity = quantity;
         this.date = date;
         this.transactionType =transactionType; 
@@ -49,7 +49,7 @@ public class InventoryTransaction implements IInventoryTransaction {
 
     @Override
     public String getProductID() {
-        return this.product.getProductID();
+        return this.productID;
     }
 
 

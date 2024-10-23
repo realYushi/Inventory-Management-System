@@ -4,18 +4,17 @@
  */
 package me.yushi.inventorymanagementsystem.service;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
+
+import me.yushi.inventorymanagementsystem.database.TransactionUtil;
 import me.yushi.inventorymanagementsystem.model.FinancialSummary;
 import me.yushi.inventorymanagementsystem.model.IInventoryTransaction;
 import me.yushi.inventorymanagementsystem.model.InventorySummary;
 import me.yushi.inventorymanagementsystem.model.InventoryTransaction;
 import me.yushi.inventorymanagementsystem.model.Product;
-import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
 import me.yushi.inventorymanagementsystem.repository.InventoryTransactionRepository;
 import me.yushi.inventorymanagementsystem.repository.ProductRepository;
 
@@ -23,86 +22,76 @@ import me.yushi.inventorymanagementsystem.repository.ProductRepository;
  *
  * @author yushi
  */
-public class DashboardService implements IDashboardService {
+    public class DashboardService implements IDashboardService {
 
-    InventoryTransactionRepository inventoryTransactionRepository;
-    ProductRepository productRepository;
-    // Number of days to consider for recent transactions
-    private static final int TRANSATION_DATE_RANGE = 30;
-    // Profit rate
-    private static final double PROFIT_RATE = 1.2;
-    // Low stock trigger
-    private static final int LOW_STOCK_TRIGGER = 10;
-    // Recent transaction data
-    private List<InventoryTransaction> recentTransationData;
+        private final InventoryTransactionRepository inventoryTransactionRepository;
+        private final ProductRepository productRepository;
+        // Number of days to consider for recent transactions
+        private static final int TRANSACTION_DATE_RANGE = 30;
+        // Profit rate
+        private static final double PROFIT_RATE = 1.2;
+        // Low stock trigger
+        private static final int LOW_STOCK_TRIGGER = 10;
 
-    public DashboardService(IUnitOfWork unitOfWork) {
-        this.inventoryTransactionRepository = unitOfWork.getInventoryTransactionRepository();
-        this.productRepository = unitOfWork.getProductRepository();
-        recentTransationData = getRecentTransactionData();
-    }
-
-    @Override
-    public FinancialSummary getFinancialSummary() {
-        double totalSales = 0;
-        double totalCost = 0;
-        for (IInventoryTransaction t : recentTransationData) {
-            // Calculate total sales and total cost
-            switch (t.getTransactionType()) {
-                case SALE:
-                    // Calculate total sales, including profit
-                    totalSales = totalSales + (t.getPrice() * PROFIT_RATE);
-                    break;
-                case PURCHASE:
-                    totalCost = totalCost + t.getPrice();
-                    break;
-                case SPOILAGE:
-                    totalCost = totalCost + t.getPrice();
-                    break;
-                default:
-                    throw new AssertionError();
-            }
+        public DashboardService(InventoryTransactionRepository inventoryTransactionRepository,
+                ProductRepository productRepository) {
+            this.inventoryTransactionRepository = inventoryTransactionRepository;
+            this.productRepository = productRepository;
         }
-        return new FinancialSummary(totalSales, totalCost);
 
-    }
-
-    @Override
-    // Get inventory summary, including low stock
-    public InventorySummary getIentorySummary() {
-        List<Product> allData = productRepository.getAllProducts().values().stream().collect(Collectors.toList());
-        List<Product> lowStock = new ArrayList<>();
-        for (Product product : allData) {
-            // Check for low stock
-            if (product.getQuantity() < LOW_STOCK_TRIGGER) {
-                lowStock.add(product);
-            }
+        @Override
+        public FinancialSummary getFinancialSummary() {
+            List<InventoryTransaction> recentTransactions = getRecentTransactionData();
+            return calculateFinancialSummary(recentTransactions);
         }
-        return new InventorySummary(lowStock, recentTransationData);
 
+        @Override
+        public InventorySummary getInventorySummary() {
+            List<Product> allProducts = TransactionUtil.executeTransaction(em -> productRepository.getAllProducts(em));
+            List<Product> lowStockProducts = filterLowStockProducts(allProducts);
+            List<InventoryTransaction> recentTransactions = getRecentTransactionData();
+
+            return new InventorySummary(lowStockProducts, recentTransactions);
+        }
+
+        // Calculate financial summary based on transaction data
+        private FinancialSummary calculateFinancialSummary(List<InventoryTransaction> transactions) {
+            double totalSales = transactions.stream()
+                    .filter(t -> t.getTransactionType() == IInventoryTransaction.TransactionType.SALE)
+                    .mapToDouble(t -> t.getPrice() * PROFIT_RATE)
+                    .sum();
+
+            double totalCost = transactions.stream()
+                    .filter(t -> t.getTransactionType() == IInventoryTransaction.TransactionType.PURCHASE ||
+                            t.getTransactionType() == IInventoryTransaction.TransactionType.SPOILAGE)
+                    .mapToDouble(IInventoryTransaction::getPrice)
+                    .sum();
+
+            return new FinancialSummary(totalSales, totalCost);
+        }
+
+        // Get products that are low in stock
+        private List<Product> filterLowStockProducts(List<Product> products) {
+            return products.stream()
+                    .filter(product -> product.getQuantity() < LOW_STOCK_TRIGGER)
+                    .collect(Collectors.toList());
+        }
+
+        // Fetch recent transactions based on date range
+        private List<InventoryTransaction> getRecentTransactionData() {
+            Date endDate = getEndDate(TRANSACTION_DATE_RANGE);
+            return TransactionUtil.executeTransaction(em -> {
+                return inventoryTransactionRepository.getAllInventoryTransations(em)
+                        .stream()
+                        .filter(transaction -> transaction.getDate().after(endDate))
+                        .collect(Collectors.toList());
+            });
+        }
+
+        // Calculate the date range for recent transactions
+        private Date getEndDate(int daysAgo) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_MONTH, -daysAgo);
+            return calendar.getTime();
+        }
     }
-
-    // Get end date for recent transactions
-    private Date getEndDate(int dataRange) {
-        Date currentDate = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
-        // Subtract data range from current date
-        calendar.add(Calendar.DAY_OF_MONTH, -dataRange);
-        return calendar.getTime();
-
-    }
-
-    // Get recent transaction data
-    private List<InventoryTransaction> getRecentTransactionData() {
-        Date endDate = getEndDate(TRANSATION_DATE_RANGE);
-        Map<String, InventoryTransaction> allData = inventoryTransactionRepository.getAllInventoryTransations();
-        // Filter transactions by date
-        recentTransationData = allData.values().stream()
-                .filter(transation -> transation.getDate().after(endDate))
-                .collect(Collectors.toList());
-
-        return recentTransationData;
-    }
-
-}

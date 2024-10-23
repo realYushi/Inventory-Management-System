@@ -13,5 +13,5 @@ import me.yushi.inventorymanagementsystem.model.InventorySummary;
  */
 public interface IDashboardService {
     FinancialSummary getFinancialSummary();
-    InventorySummary getIentorySummary();
+    InventorySummary getInventorySummary();
 }

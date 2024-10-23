@@ -16,23 +16,23 @@ import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
  * @author yushi
  */
 public class CategoryService implements ICategoryService, IMapper<CategoryDto, Category> {
-    private CategoryRepository repository = new CategoryRepository();
+    private CategoryRepository repository;
 
-    public CategoryService() {
+    public CategoryService(CategoryRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     // Create a new category, save it to the repository, and return the created category
     public CategoryDto createCategory(CategoryDto newCategoryDto) {
-        Category category = toModel(newCategoryDto);
-        Category newCategory = TransactionUtil.executeTransaction(em -> {
-            return repository.createCategory(category, em);
+        Category category= TransactionUtil.executeTransaction(em -> {
+            return repository.createCategory(toModel(newCategoryDto), em);
         });
-        if (newCategory == null) {
+        if (category == null) {
             System.out.println("Failed to create category: " + newCategoryDto.getCategoryName());
             return null;
         }
-        return toDto(newCategory);
+        return newCategoryDto;
     }
 
     @Override
@@ -51,15 +51,14 @@ public class CategoryService implements ICategoryService, IMapper<CategoryDto, C
     @Override
     // Update a category, save it to the repository, and return the updated category
     public CategoryDto updateCategory(CategoryDto updatedCategoryDto) {
-        Category newCategory = toModel(updatedCategoryDto);
-        Category updatedCategory = TransactionUtil.executeTransaction(em -> {
-            return repository.updateCategory(newCategory, em);
+        Category newCategory= TransactionUtil.executeTransaction(em -> {
+            return repository.updateCategory(toModel(updatedCategoryDto), em);
         });
-        if (updatedCategory == null) {
+        if (newCategory== null) {
             System.out.println("Failed to update category: " + updatedCategoryDto.getCategoryName());
             return null;
         }
-        return toDto(updatedCategory);
+        return toDto(newCategory);
     }
 
     @Override

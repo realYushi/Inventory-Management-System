@@ -48,5 +48,16 @@ public class ProductRepository implements IProductRepository {
         return em.createQuery("SELECT p FROM Product p", Product.class).getResultList();
     }
 
+    @Override
+    public String getCategoryID(String productID, EntityManager em) {
+        return em.find(Product.class, productID).getCategoryID();
+    }
+
+    @Override
+    public String getSupplierID(String productID, EntityManager em) {
+        return em.find(Product.class, productID).getSupplierID();
+    }
+    
+
 
 }

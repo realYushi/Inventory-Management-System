@@ -5,74 +5,74 @@
 package me.yushi.inventorymanagementsystem.service;
 
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import me.yushi.inventorymanagementsystem.Dto.ProductDto;
+import me.yushi.inventorymanagementsystem.database.TransactionUtil;
 import me.yushi.inventorymanagementsystem.model.Product;
 import me.yushi.inventorymanagementsystem.repository.IProductRepository;
-import me.yushi.inventorymanagementsystem.repository.IUnitOfWork;
-
+import me.yushi.inventorymanagementsystem.repository.ProductRepository;
 /**
  *
  * @author yushi
  */
 public class ProductService implements IProductService, IMapper<ProductDto, Product> {
-
-    IProductRepository repository;
-
-    public ProductService(IUnitOfWork unitOfWork) {
-        this.repository = unitOfWork.getProductRepository();
+    ProductRepository repository  ;
+    public ProductService(ProductRepository repository) {
+        this.repository = repository;
     }
-
     @Override
-    // Create a new product, save it to the repository, and return the created
     public ProductDto createProduct(ProductDto newProductDto) {
-        Product product = toModel(newProductDto);
-        ProductDto productDto = toDto(repository.createProduct(product));
-        this.save();
-        return productDto;
+        Product createdProduct=TransactionUtil.executeTransaction(em -> {
+            return repository.createProduct(toModel(newProductDto), em);
+        });
+        if(createdProduct==null){
+            System.out.println("Failed to create product : " + newProductDto.getName());
+            return null;
+        }
+        return newProductDto;
     }
 
     @Override
     // Update a product, save it to the repository, and return the updated
     public ProductDto updateProduct(ProductDto updatedProductDto) {
-        // Check if the product exists
-        if (repository.readProduct(updatedProductDto.getProductID()) == null) {
-            System.out.print("No product found with ID: " + updatedProductDto.getProductID());
+        Product product = TransactionUtil.executeTransaction(em -> {
+            return repository.updateProduct(toModel(updatedProductDto), em);
+        });
+        if (product == null) {
+            System.out.println("Failed to update product: " + updatedProductDto.getName());
             return null;
-
         }
-        Product product = toModel(updatedProductDto);
-        ProductDto productDto = toDto(repository.updateProduct(product));
-        this.save();
-        return productDto;
+        
+        return updatedProductDto;
     }
 
     @Override
     // Get a product by its ID
     public ProductDto getProductByID(String productID) {
-        // Check if the product exists
-        if (repository.readProduct(productID) == null) {
-            System.out.print("No product found with ID: " + productID);
+        Product product = TransactionUtil.executeTransaction(em -> {
+            return repository.readProduct(productID, em);
+        });
+        if (product == null) {
+            System.out.println("No product found with ID: " + productID);
             return null;
         }
-        Product product = repository.readProduct(productID);
         return toDto(product);
     }
 
     @Override
     public boolean deleteProduct(String productID) {
-        boolean result = repository.deleteProduct(productID);
-        this.save();
-        return result;
+        return TransactionUtil.executeTransaction(em -> {
+            return repository.deleteProduct(productID, em);
+        });
     }
 
     @Override
     // Get all products
     public List<ProductDto> getAllProducts() {
-        List<Product> products = repository.getAllProducts().values().stream()
-                .collect(Collectors.toList());
-        return products.stream().map(product -> this.toDto(product))
-                .collect(Collectors.toList());
+        return TransactionUtil.executeTransaction(em -> {
+            return repository.getAllProducts(em).stream().map(this::toDto).collect(Collectors.toList());
+        });
     }
 
     @Override
@@ -80,6 +80,7 @@ public class ProductService implements IProductService, IMapper<ProductDto, Prod
     public ProductDto toDto(Product model) {
         return new ProductDto.Builder()
                 .categoryID(model.getCategoryID())
+                .supplierID(model.getSupplierID())
                 .name(model.getName())
                 .unit(model.getUnit())
                 .price(model.getPrice())
@@ -95,14 +96,14 @@ public class ProductService implements IProductService, IMapper<ProductDto, Prod
                 dto.getProductID(),
                 dto.getName(),
                 dto.getCategoryID(),
+                dto.getSupplierID(),
                 dto.getQuantity(),
                 dto.getUnit(),
-                dto.getPrice());
+                dto.getPrice()
+        );
+         
     }
 
-    @Override
-    public void save() {
-        repository.save();
-    }
+
 
 }

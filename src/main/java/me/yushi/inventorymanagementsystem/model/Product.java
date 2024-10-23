@@ -22,10 +22,10 @@ import jakarta.persistence.Table;
 public class Product implements IProduct {
     @ManyToOne
     @JoinColumn(name = "categoryID", nullable = false)
-    private Category category;
+    private String categoryID;
     @ManyToOne
     @JoinColumn(name = "supplierID", nullable = false)
-    private Supplier supplier;
+    private String supplierID;
     @Id
     private String productID;
     @Column(name = "name", nullable = false)
@@ -40,10 +40,10 @@ public class Product implements IProduct {
     public Product() {
     }
 
-    public Product(String productID, String name, Category category, Supplier supplier, int quantity, String unit,
+    public Product(String productID, String name, String categoryID, String supplierID, int quantity, String unit,
             double price) {
-        this.category = category;
-        this.supplier = supplier;
+        this.categoryID= categoryID;
+        this.supplierID= supplierID;
         this.productID = (productID == null ? UUID.randomUUID().toString() : productID);
         this.name = name;
         this.quantity = quantity;
@@ -68,7 +68,7 @@ public class Product implements IProduct {
 
     @Override
     public String getCategoryID() {
-        return this.category.getCategoryID();
+        return this.categoryID;
     }
 
     @Override
@@ -93,7 +93,7 @@ public class Product implements IProduct {
 
     @Override
     public String getSupplierID() {
-        return this.supplier.getSupplierID();
+        return this.supplierID;
     }
 
     @Override

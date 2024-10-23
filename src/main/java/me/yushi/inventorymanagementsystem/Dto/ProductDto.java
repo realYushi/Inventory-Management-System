@@ -13,6 +13,7 @@ public class ProductDto implements IProductDto {
     private final String productID;
     private final String name;
     private final String categoryID;
+    private final String supplierID;
     private final int quantity;
     private final String unit;
     private final double price;
@@ -24,6 +25,7 @@ public class ProductDto implements IProductDto {
         this.quantity = builder.quantity;
         this.unit = builder.unit;
         this.price = builder.price;
+        this.supplierID = builder.supplierID;
     }
 
     public static class Builder {
@@ -34,6 +36,7 @@ public class ProductDto implements IProductDto {
         private int quantity;
         private String unit;
         private double price;
+        private String supplierID;
 
         public Builder productID(String productID) {
             this.productID = productID;
@@ -62,6 +65,10 @@ public class ProductDto implements IProductDto {
 
         public Builder price(double price) {
             this.price = price;
+            return this;
+        }
+        public Builder supplierID(String supplierID) {
+            this.supplierID = supplierID;
             return this;
         }
 
@@ -100,6 +107,11 @@ public class ProductDto implements IProductDto {
     @Override
     public double getPrice() {
         return this.price;
+    }
+
+    @Override
+    public String getSupplierID() {
+        return this.supplierID;
     }
 
 

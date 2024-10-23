@@ -10,8 +10,6 @@ package me.yushi.inventorymanagementsystem.Dto;
  */
 public interface ICategoryDto {
     String getCategoryID();
-
     String getCategoryName();
-    String getSupplierID();
     
 }
