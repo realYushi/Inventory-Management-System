@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package me.yushi.inventorymanagementsystem.model;
 
 import java.util.Date;
@@ -14,31 +10,33 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-/**
- *
- * @author yushi
- */
 @Entity
 public class InventoryTransaction implements IInventoryTransaction {
- @Id
+    @Id
     private String transactionID;
 
     @ManyToOne
     @JoinColumn(name = "productID", nullable = false)
-    private String productID;
+    private Product product;
+
     private int quantity;
     private Date date;
+
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
+
     private double price;
 
+    public InventoryTransaction() {
+    }
+
     public InventoryTransaction(String transactionID, String productID, int quantity, Date date, TransactionType transactionType, double price) {
-        this.transactionID = (transactionID==null?UUID.randomUUID().toString():transactionID);
-        this.productID = productID;
+        this.transactionID = (transactionID == null ? UUID.randomUUID().toString() : transactionID);
         this.quantity = quantity;
         this.date = date;
-        this.transactionType =transactionType; 
-        this.price=price;
+        this.transactionType = transactionType;
+        this.price = price;
+        // Note: product needs to be set separately via setter
     }
 
     @Override
@@ -46,47 +44,47 @@ public class InventoryTransaction implements IInventoryTransaction {
         return this.transactionID;
     }
 
-
     @Override
     public String getProductID() {
-        return this.productID;
+        return this.product != null ? this.product.getProductID() : null;
     }
 
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Product getProduct() {
+        return this.product;
+    }
 
     @Override
     public int getQuantity() {
         return this.quantity;
-        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public Date getDate() {
         return this.date;
-        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void setDate(Date date) {
         this.date = date;
-        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public TransactionType getTransactionType() {
         return this.transactionType;
-        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void setTransactionType(TransactionType transactionType) {
         this.transactionType = transactionType;
-        // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
@@ -96,7 +94,6 @@ public class InventoryTransaction implements IInventoryTransaction {
 
     @Override
     public void setPrice(double price) {
-        this.price=price;
+        this.price = price;
     }
-
 }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package me.yushi.inventorymanagementsystem.model;
 
 import java.util.UUID;
@@ -13,27 +9,29 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-/**
- *
- * @author yushi
- */
 @Entity
 @Table(name = "Product")
 public class Product implements IProduct {
-    @ManyToOne
-    @JoinColumn(name = "categoryID", nullable = false)
-    private String categoryID;
-    @ManyToOne
-    @JoinColumn(name = "supplierID", nullable = false)
-    private String supplierID;
     @Id
     private String productID;
+
     @Column(name = "name", nullable = false)
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "categoryID", nullable = false)
+    private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "supplierID", nullable = false)
+    private Supplier supplier;
+
     @Column(name = "quantity", nullable = false)
     private int quantity;
+
     @Column(name = "unit", nullable = false)
     private String unit;
+
     @Column(name = "price", nullable = false)
     private double price;
 
@@ -42,13 +40,12 @@ public class Product implements IProduct {
 
     public Product(String productID, String name, String categoryID, String supplierID, int quantity, String unit,
             double price) {
-        this.categoryID= categoryID;
-        this.supplierID= supplierID;
         this.productID = (productID == null ? UUID.randomUUID().toString() : productID);
         this.name = name;
         this.quantity = quantity;
         this.unit = unit;
         this.price = price;
+        // Note: category and supplier need to be set separately via setters
     }
 
     @Override
@@ -68,7 +65,15 @@ public class Product implements IProduct {
 
     @Override
     public String getCategoryID() {
-        return this.categoryID;
+        return this.category != null ? this.category.getCategoryID() : null;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Category getCategory() {
+        return this.category;
     }
 
     @Override
@@ -93,7 +98,15 @@ public class Product implements IProduct {
 
     @Override
     public String getSupplierID() {
-        return this.supplierID;
+        return this.supplier != null ? this.supplier.getSupplierID() : null;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
+
+    public Supplier getSupplier() {
+        return this.supplier;
     }
 
     @Override
@@ -105,5 +118,4 @@ public class Product implements IProduct {
     public void setUnit(String unit) {
         this.unit = unit;
     }
-
 }

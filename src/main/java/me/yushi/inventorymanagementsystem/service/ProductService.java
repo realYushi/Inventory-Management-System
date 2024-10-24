@@ -5,12 +5,10 @@
 package me.yushi.inventorymanagementsystem.service;
 
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import me.yushi.inventorymanagementsystem.Dto.ProductDto;
 import me.yushi.inventorymanagementsystem.database.TransactionUtil;
 import me.yushi.inventorymanagementsystem.model.Product;
-import me.yushi.inventorymanagementsystem.repository.IProductRepository;
 import me.yushi.inventorymanagementsystem.repository.ProductRepository;
 /**
  *

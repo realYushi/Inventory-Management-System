@@ -1,49 +1,53 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package me.yushi.inventorymanagementsystem.database;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import org.hibernate.cfg.AvailableSettings;
-import org.hibernate.cfg.Environment;
 
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-/**
- *
- * @author yushi
- */
 public class HibernateUtil {
     private static EntityManagerFactory entityManagerFactory;
+    private static final String PERSISTENCE_UNIT_NAME = "Inventory-Management-Unit";
 
     public static EntityManagerFactory getEntityManagerFactory() {
         if (entityManagerFactory == null) {
-            Map<String, Object> settings = new HashMap<>();
-            settings.put("jakarta.persistence.jdbc.driver", "org.apache.derby.jdbc.EmbeddedDriver");
-            settings.put("jakarta.persistence.jdbc.url", "jdbc:derby:Inventory-Management-DB;create=true");
-            settings.put(Environment.DIALECT, "org.hibernate.dialect.DerbyDialect");
-            settings.put(Environment.HBM2DDL_AUTO, "update");
-
-            settings.put(AvailableSettings.LOADED_CLASSES, new Class<?>[]{
-                    me.yushi.inventorymanagementsystem.model.Product.class,
-                    me.yushi.inventorymanagementsystem.model.Category.class,
-                    me.yushi.inventorymanagementsystem.model.Supplier.class,
-                    me.yushi.inventorymanagementsystem.model.InventoryTransaction.class,
-        });
-
-            entityManagerFactory = Persistence.createEntityManagerFactory("Inventory-Management-Unit", settings);
-
+            try {
+                System.out.println("Attempting to create EntityManagerFactory...");
+                entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+                
+                if (entityManagerFactory == null) {
+                    throw new IllegalStateException("EntityManagerFactory creation returned null");
+                }
+                
+                System.out.println("EntityManagerFactory created successfully");
+                
+                // Test the connection
+                entityManagerFactory.createEntityManager().close();
+                System.out.println("Database connection test successful");
+                
+            } catch (Exception e) {
+                System.err.println("Error initializing Hibernate: " + e.getMessage());
+                e.printStackTrace();
+                
+                if (e.getCause() != null) {
+                    System.err.println("Caused by: " + e.getCause().getMessage());
+                    e.getCause().printStackTrace();
+                }
+                
+                entityManagerFactory = null;
+            }
         }
         return entityManagerFactory;
     }
 
     public static void shutdown() {
-        if (entityManagerFactory != null) {
-            entityManagerFactory.close();
+        if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
+            try {
+                System.out.println("Shutting down Hibernate...");
+                entityManagerFactory.close();
+                System.out.println("Hibernate shutdown complete");
+            } catch (Exception e) {
+                System.err.println("Error during Hibernate shutdown: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 }

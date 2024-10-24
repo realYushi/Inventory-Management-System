@@ -6,11 +6,26 @@
     <version>0.1</version>
     <packaging>jar</packaging>
     <dependencies>
+
         <dependency>
-            <groupId>com.googlecode.lanterna</groupId>
-            <artifactId>lanterna</artifactId>
-            <version>3.2.0-alpha1</version>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.5.2</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout-core</artifactId>
+            <version>11.4.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout-swing</artifactId>
+            <version>11.4.2</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
@@ -34,11 +49,7 @@
             <version>3.26.3</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.11.0</version>
-        </dependency>
+        
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
