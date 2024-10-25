@@ -4,7 +4,6 @@ import me.yushi.inventorymanagementsystem.contoller.DashBoardController;
 import me.yushi.inventorymanagementsystem.model.FinancialSummary;
 import me.yushi.inventorymanagementsystem.model.InventorySummary;
 import me.yushi.inventorymanagementsystem.model.Product;
-import me.yushi.inventorymanagementsystem.model.InventoryTransaction;
 
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
@@ -41,10 +40,8 @@ public class DashboardPanel extends JPanel {
 
         InventorySummary inventorySummary = controller.getInventorySummary();
         List<Product> lowStockProducts = inventorySummary.getLowStrockProducts();
-        List<InventoryTransaction> recentTransactions = inventorySummary.getRecentInventoryTransactions();
 
         addLowStockProducts(inventoryPanel, lowStockProducts);
-        addRecentTransactions(inventoryPanel, recentTransactions);
 
         return inventoryPanel;
     }
@@ -53,13 +50,6 @@ public class DashboardPanel extends JPanel {
         panel.add(new JLabel("Low Stock Products:"), WRAP);
         for (Product product : products) {
             panel.add(new JLabel("Product: " + product.getName()), WRAP);
-        }
-    }
-
-    private void addRecentTransactions(JPanel panel, List<InventoryTransaction> transactions) {
-        panel.add(new JLabel("Recent Transactions:"), WRAP);
-        for (InventoryTransaction transaction : transactions) {
-            panel.add(new JLabel("Transaction ID: " + transaction.getTransactionID()), WRAP);
         }
     }
 

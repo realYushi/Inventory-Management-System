@@ -1,7 +1,7 @@
 package me.yushi.inventorymanagementsystem.view;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import me.yushi.inventorymanagementsystem.contoller.CategoryController;
 import me.yushi.inventorymanagementsystem.contoller.DashBoardController;
 import me.yushi.inventorymanagementsystem.contoller.InventoryTransactionController;
@@ -12,7 +12,7 @@ import net.miginfocom.swing.MigLayout;
 public class APP extends JFrame {
     public APP(ProductController productController, CategoryController categoryController,
             SupplierController supplierController, InventoryTransactionController transactionController,DashBoardController dashBoardController) {
-        FlatDarculaLaf.setup();
+        FlatLightLaf.setup();
         this.setTitle("Inventory Management System");
         this.setSize(800, 600);
         this.setResizable(false);

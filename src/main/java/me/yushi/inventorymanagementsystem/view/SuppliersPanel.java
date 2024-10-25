@@ -82,7 +82,7 @@ public class SuppliersPanel extends JPanel {
         int result = JOptionPane.showConfirmDialog(this, DELETE_CONFIRMATION_MESSAGE, DELETE_SUPPLIER_TITLE, JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             supplierController.deleteSupplier(supplierID);
-            tableModel.removeRow(selectedRow);
+            refreshData();
         }
     }
 
@@ -108,11 +108,9 @@ public class SuppliersPanel extends JPanel {
     private void handleCreateSupplier(JTextField supplierIDField, JTextField nameField) {
         Supplier newSupplier = new Supplier("", nameField.getText());
         supplierController.createSupplier(newSupplier);
+        refreshData();
 
-        tableModel.addRow(new Object[] {
-                newSupplier.getSupplierID(),
-                newSupplier.getSupplierName()
-        });
+        
     }
 
     private void showUpdateSupplierDialog() {
@@ -140,8 +138,16 @@ public class SuppliersPanel extends JPanel {
         Supplier updatedSupplier = new Supplier(supplierIDField.getText(), nameField.getText());
 
         supplierController.updateSupplier(updatedSupplier);
+        refreshData();
 
-        tableModel.setValueAt(updatedSupplier.getSupplierID(), selectedRow, 0);
-        tableModel.setValueAt(updatedSupplier.getSupplierName(), selectedRow, 1);
+        
+    }
+    public void refreshData() {
+        List<Supplier> suppliers = supplierController.getAllSuppliers();
+        tableModel.setRowCount(0);
+
+        for (Supplier supplier : suppliers) {
+            tableModel.addRow(new Object[] { supplier.getSupplierID(), supplier.getSupplierName() });
+        }
     }
 }

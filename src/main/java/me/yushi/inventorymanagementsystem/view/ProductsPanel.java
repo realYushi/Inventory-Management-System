@@ -14,6 +14,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+
 import me.yushi.inventorymanagementsystem.contoller.CategoryController;
 import me.yushi.inventorymanagementsystem.contoller.ProductController;
 import me.yushi.inventorymanagementsystem.contoller.SupplierController;
@@ -47,28 +50,26 @@ public class ProductsPanel extends JPanel {
         this.categoryController = categoryController;
         this.productController = productController;
         this.supplierController = supplierController;
-
-        this.categories = categoryController.getAllCategorys().stream()
-                .collect(Collectors.toMap(Category::getCategoryID, category -> category));
-        this.suppliers = supplierController.getAllSuppliers().stream()
-                .collect(Collectors.toMap(Supplier::getSupplierID, supplier -> supplier));
-        this.products = productController.getAllProducts();
-
+        initialUI();
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                refreshData(); // Refresh data each time the panel is shown
+            }
+        });
+        
+    }
+    private void initialUI() {
         this.setLayout(new MigLayout("fill", "[grow]", "[80%][20%]"));
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                refreshData(); // Refresh data each time the panel is shown
+            }
+        });
 
-        Object[][] data = new Object[products.size()][7];
-        for (int i = 0; i < products.size(); i++) {
-            Product product = products.get(i);
-            data[i][0] = product.getProductID();
-            data[i][1] = product.getName();
-            data[i][2] = product.getCategory().getCategoryID();
-            data[i][3] = product.getSupplier().getSupplierID();
-            data[i][4] = product.getQuantity();
-            data[i][5] = product.getUnit();
-            data[i][6] = product.getPrice();
-        }
-        Object[][] transformedData = transformData(data);
-        tableModel = new DefaultTableModel(transformedData, COLUMN_NAMES) {
+        
+        tableModel = new DefaultTableModel(COLUMN_NAMES,0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -82,20 +83,8 @@ public class ProductsPanel extends JPanel {
         JPanel buttonPanel = createButtonPanel();
         this.add(buttonPanel, "cell 0 1, grow");
     }
+    
 
-    private Object[][] transformData(Object[][] data) {
-        Object[][] transformedData = new Object[data.length][7];
-        for (int i = 0; i < data.length; i++) {
-            transformedData[i][0] = data[i][0]; // Product ID
-            transformedData[i][1] = data[i][1]; // Product Name
-            transformedData[i][2] = findCategoryNameById((String) data[i][2]); // Category Name
-            transformedData[i][3] = findSupplierNameById((String) data[i][3]); // Supplier Name
-            transformedData[i][4] = data[i][4]; // Quantity
-            transformedData[i][5] = data[i][5]; // Unit
-            transformedData[i][6] = data[i][6]; // Price
-        }
-        return transformedData;
-    }
 
     private JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel(new MigLayout("fill", "[grow][grow][grow]", "[grow]"));
@@ -135,7 +124,7 @@ public class ProductsPanel extends JPanel {
                 JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             productController.deleteProduct(productID);
-            tableModel.removeRow(selectedRow);
+        refreshData();
         }
     }
 
@@ -196,6 +185,9 @@ public class ProductsPanel extends JPanel {
     private void handleCreateProduct(JTextField productIDField, JTextField nameField, JTextField quantityField,
             JTextField unitField, JTextField priceField, JComboBox<String> categoryComboBox,
             JComboBox<String> supplierComboBox) {
+            if( !validateProductFields(nameField, quantityField, unitField, priceField)) {
+                return;
+            }
         String selectedCategoryName = (String) categoryComboBox.getSelectedItem();
         String selectedSupplierName = (String) supplierComboBox.getSelectedItem();
 
@@ -209,9 +201,9 @@ public class ProductsPanel extends JPanel {
                 Double.parseDouble(priceField.getText()));
 
         productController.createProduct(newProduct);
+        refreshData();
 
-        tableModel.addRow(new Object[] { newProduct.getProductID(), newProduct.getName(), selectedCategoryName,
-                selectedSupplierName, newProduct.getQuantity(), newProduct.getUnit(), newProduct.getPrice() });
+      
     }
 
     private void showUpdateProductDialog() {
@@ -252,6 +244,9 @@ public class ProductsPanel extends JPanel {
     private void handleUpdateProduct(int selectedRow, JTextField productIDField, JTextField nameField,
             JTextField quantityField, JTextField unitField, JTextField priceField, JComboBox<String> categoryComboBox,
             JComboBox<String> supplierComboBox) {
+                if( !validateProductFields(nameField, quantityField, unitField, priceField)) {
+                    return;
+                }
         String selectedCategoryName = (String) categoryComboBox.getSelectedItem();
         String selectedSupplierName = (String) supplierComboBox.getSelectedItem();
 
@@ -265,13 +260,61 @@ public class ProductsPanel extends JPanel {
                 Double.parseDouble(priceField.getText()));
 
         productController.updateProduct(updatedProduct);
-
-        tableModel.setValueAt(updatedProduct.getProductID(), selectedRow, 0);
-        tableModel.setValueAt(updatedProduct.getName(), selectedRow, 1);
-        tableModel.setValueAt(selectedCategoryName, selectedRow, 2);
-        tableModel.setValueAt(selectedSupplierName, selectedRow, 3);
-        tableModel.setValueAt(updatedProduct.getQuantity(), selectedRow, 4);
-        tableModel.setValueAt(updatedProduct.getUnit(), selectedRow, 5);
-        tableModel.setValueAt(updatedProduct.getPrice(), selectedRow, 6);
+        refreshData();
+    }
+    public void refreshData() {
+        // Reload data from controllers
+        products = productController.getAllProducts();
+        categories = categoryController.getAllCategorys().stream()
+                .collect(Collectors.toMap(Category::getCategoryID, category -> category));
+        suppliers = supplierController.getAllSuppliers().stream()
+                .collect(Collectors.toMap(Supplier::getSupplierID, supplier -> supplier));
+    
+        // Clear current data in table model
+        tableModel.setRowCount(0);
+    
+        // Populate the table model with new data
+        for (Product product : products) {
+            tableModel.addRow(new Object[] {
+                product.getProductID(),
+                product.getName(),
+                findCategoryNameById(product.getCategory().getCategoryID()),
+                findSupplierNameById(product.getSupplier().getSupplierID()),
+                product.getQuantity(),
+                product.getUnit(),
+                product.getPrice()
+            });
+        }
+    }
+    private boolean validateProductFields(JTextField nameField, JTextField quantityField, JTextField unitField, JTextField priceField) {
+        if (nameField.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Name cannot be empty.", ERROR_MESSAGE, JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        try {
+            int quantity = Integer.parseInt(quantityField.getText().trim());
+            if (quantity < 0) {
+                JOptionPane.showMessageDialog(this, "Quantity cannot be negative.", ERROR_MESSAGE, JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Quantity must be a valid integer.", ERROR_MESSAGE, JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (unitField.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Unit cannot be empty.", ERROR_MESSAGE, JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        try {
+            double price = Double.parseDouble(priceField.getText().trim());
+            if (price < 0) {
+                JOptionPane.showMessageDialog(this, "Price cannot be negative.", ERROR_MESSAGE, JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Price must be a valid number.", ERROR_MESSAGE, JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 }

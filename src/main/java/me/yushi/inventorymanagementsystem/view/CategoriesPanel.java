@@ -81,7 +81,7 @@ public class CategoriesPanel extends JPanel {
         int result = JOptionPane.showConfirmDialog(this, DELETE_CONFIRMATION_MESSAGE, DELETE_CATEGORY_TITLE, JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             categoryController.deleteCategory(categoryID);
-            tableModel.removeRow(selectedRow);
+        refreshData();
         }
     }
 
@@ -105,13 +105,9 @@ public class CategoriesPanel extends JPanel {
     }
 
     private void handleCreateCategory(JTextField categoryIDField, JTextField nameField) {
-        Category newCategory = new Category("", nameField.getText());
+        Category newCategory = new Category(nameField.getText(), "");
         categoryController.createCategory(newCategory);
-
-        tableModel.addRow(new Object[] {
-                newCategory.getCategoryID(),
-                newCategory.getCategoryName()
-        });
+        refreshData();
     }
 
     private void showUpdateCategoryDialog() {
@@ -136,12 +132,22 @@ public class CategoriesPanel extends JPanel {
     }
 
     private void handleUpdateCategory(int selectedRow, JTextField categoryIDField, JTextField nameField) {
-        Category updatedCategory = new Category(categoryIDField.getText(), nameField.getText());
+        Category updatedCategory = new Category(nameField.getText(), categoryIDField.getText());
 
         categoryController.updateCategory(updatedCategory);
-
-        tableModel.setValueAt(updatedCategory.getCategoryID(), selectedRow, 0);
-        tableModel.setValueAt(updatedCategory.getCategoryName(), selectedRow, 1);
+        refreshData();
+    }
+    public void refreshData() {
+        // Reload data from the controller
+        this.categories = categoryController.getAllCategorys();
+    
+        // Clear the current data in the table model
+        tableModel.setRowCount(0);
+    
+        // Add updated category data to the table model
+        for (Category category : categories) {
+            tableModel.addRow(new Object[] { category.getCategoryID(), category.getCategoryName() });
+            System.out.println(category.getCategoryID());
+        }
     }
 }
-

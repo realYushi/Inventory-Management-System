@@ -120,7 +120,7 @@ public class TransactionsPanel extends JPanel {
         if (result == JOptionPane.YES_OPTION) {
             String productID = tableModel.getValueAt(selectedRow, 0).toString();
             transactionController.deleteInventoryTransaction(productID);
-            tableModel.removeRow(selectedRow);
+            refreshData();
         }
     }
 
@@ -172,10 +172,7 @@ public class TransactionsPanel extends JPanel {
                 Integer.parseInt(quantityField.getText()), datePicker.getDate(), (TransactionType) typeCombo.getSelectedItem(),
                 Double.parseDouble(priceField.getText()));
         transactionController.createInventoryTransaction(newTransaction);
-
-        tableModel.addRow(new Object[] { newTransaction.getTransactionID(),
-                findProductNameById(newTransaction.getProductID()), newTransaction.getQuantity(),
-                newTransaction.getDate(), newTransaction.getTransactionType(), newTransaction.getPrice() });
+        refreshData();
     }
 
     private void showUpdateTransactionDialog() {
@@ -220,12 +217,7 @@ public class TransactionsPanel extends JPanel {
                 Integer.parseInt(quantityField.getText()), datePicker.getDate(), (TransactionType) typeCombo.getSelectedItem(),
                 Double.parseDouble(priceField.getText()));
         transactionController.updateInventoryTransaction(updatedTransaction);
-
-        tableModel.setValueAt(findProductNameById(updatedTransaction.getProductID()), selectedRow, 0);
-        tableModel.setValueAt(updatedTransaction.getQuantity(), selectedRow, 1);
-        tableModel.setValueAt(updatedTransaction.getDate(), selectedRow, 2);
-        tableModel.setValueAt(updatedTransaction.getTransactionType(), selectedRow, 3);
-        tableModel.setValueAt(updatedTransaction.getPrice(), selectedRow, 4);
+        refreshData();
     }
 
     private String findProductIDByName(String productName) {
@@ -235,5 +227,19 @@ public class TransactionsPanel extends JPanel {
             }
         }
         return null;
+    }
+    private void refreshData() {
+        List<InventoryTransaction> updatedTransactions = transactionController.getAllInventoryTransations();
+        tableModel.setRowCount(0);
+        for (InventoryTransaction transaction : updatedTransactions) {
+            tableModel.addRow(new Object[]{
+                    transaction.getTransactionID(),
+                    findProductNameById(transaction.getProductID()),
+                    transaction.getQuantity(),
+                    transaction.getDate(),
+                    transaction.getTransactionType(),
+                    transaction.getPrice()
+            });
+        }
     }
 }
