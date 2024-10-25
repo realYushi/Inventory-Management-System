@@ -10,6 +10,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+
 import me.yushi.inventorymanagementsystem.contoller.SupplierController;
 import me.yushi.inventorymanagementsystem.model.Supplier;
 import net.miginfocom.swing.MigLayout;
@@ -30,23 +33,26 @@ public class SuppliersPanel extends JPanel {
 
     public SuppliersPanel(SupplierController supplierController) {
         this.supplierController = supplierController;
-        this.suppliers = supplierController.getAllSuppliers();
+        initialUI();
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                refreshData(); // Refresh data each time the panel is shown
+            }
+        });
+    }
 
+    private void initialUI() {
         this.setLayout(new MigLayout("fill", "[grow]", "[80%][20%]"));
 
         String[] columnNames = { "Supplier ID", "Supplier Name" };
-        Object[][] data = new Object[suppliers.size()][2];
-        for (int i = 0; i < suppliers.size(); i++) {
-            data[i][0] = suppliers.get(i).getSupplierID();
-            data[i][1] = suppliers.get(i).getSupplierName();
-        }
-        tableModel = new DefaultTableModel(data, columnNames) {
+        tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false; // Make all cells non-editable
             }
         };
-        
+
         supplierTable = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(supplierTable);
         this.add(scrollPane, "cell 0 0, grow");
@@ -106,11 +112,12 @@ public class SuppliersPanel extends JPanel {
     }
 
     private void handleCreateSupplier(JTextField supplierIDField, JTextField nameField) {
+        if (!validateSupplierFields(nameField)) {
+            return;
+        }
         Supplier newSupplier = new Supplier("", nameField.getText());
         supplierController.createSupplier(newSupplier);
         refreshData();
-
-        
     }
 
     private void showUpdateSupplierDialog() {
@@ -135,19 +142,28 @@ public class SuppliersPanel extends JPanel {
     }
 
     private void handleUpdateSupplier(int selectedRow, JTextField supplierIDField, JTextField nameField) {
+        if (!validateSupplierFields(nameField)) {
+            return;
+        }
         Supplier updatedSupplier = new Supplier(supplierIDField.getText(), nameField.getText());
-
         supplierController.updateSupplier(updatedSupplier);
         refreshData();
-
-        
     }
+
     public void refreshData() {
-        List<Supplier> suppliers = supplierController.getAllSuppliers();
+        suppliers = supplierController.getAllSuppliers();
         tableModel.setRowCount(0);
 
         for (Supplier supplier : suppliers) {
             tableModel.addRow(new Object[] { supplier.getSupplierID(), supplier.getSupplierName() });
         }
+    }
+
+    private boolean validateSupplierFields(JTextField nameField) {
+        if (nameField.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Name cannot be empty.", ERROR_MESSAGE, JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 }

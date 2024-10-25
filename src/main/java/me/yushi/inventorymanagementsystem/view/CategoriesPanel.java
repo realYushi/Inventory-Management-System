@@ -10,6 +10,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+
 import me.yushi.inventorymanagementsystem.contoller.CategoryController;
 import me.yushi.inventorymanagementsystem.model.Category;
 import net.miginfocom.swing.MigLayout;
@@ -22,6 +25,7 @@ public class CategoriesPanel extends JPanel {
     private static final String SELECT_CATEGORY_TO_UPDATE = "Please select a Category to update.";
     private static final String CREATE_NEW_CATEGORY_TITLE = "Create New Category";
     private static final String UPDATE_CATEGORY_TITLE = "Update Category";
+    private static final String[] COLUMN_NAMES = { "Category ID", "Category Name" };
 
     private List<Category> categories;
     private CategoryController categoryController;
@@ -30,22 +34,25 @@ public class CategoriesPanel extends JPanel {
 
     public CategoriesPanel(CategoryController categoryController) {
         this.categoryController = categoryController;
-        this.categories = categoryController.getAllCategorys();
+        initialUI();
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                refreshData(); // Refresh data each time the panel is shown
+            }
+        });
+    }
+
+    private void initialUI() {
         this.setLayout(new MigLayout("fill", "[grow]", "[80%][20%]"));
 
-        String[] columnNames = { "Category ID", "Category Name" };
-        Object[][] data = new Object[categories.size()][2];
-        for (int i = 0; i < categories.size(); i++) {
-            data[i][0] = categories.get(i).getCategoryID();
-            data[i][1] = categories.get(i).getCategoryName();
-        }
-        tableModel = new DefaultTableModel(data, columnNames) {
+        tableModel = new DefaultTableModel(COLUMN_NAMES, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false; // Make all cells non-editable
             }
         };
-        
+
         categoryTable = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(categoryTable);
         this.add(scrollPane, "cell 0 0, grow");
@@ -81,7 +88,7 @@ public class CategoriesPanel extends JPanel {
         int result = JOptionPane.showConfirmDialog(this, DELETE_CONFIRMATION_MESSAGE, DELETE_CATEGORY_TITLE, JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             categoryController.deleteCategory(categoryID);
-        refreshData();
+            refreshData();
         }
     }
 
@@ -105,6 +112,9 @@ public class CategoriesPanel extends JPanel {
     }
 
     private void handleCreateCategory(JTextField categoryIDField, JTextField nameField) {
+        if (!validateCategoryFields(nameField)) {
+            return;
+        }
         Category newCategory = new Category(nameField.getText(), "");
         categoryController.createCategory(newCategory);
         refreshData();
@@ -132,22 +142,32 @@ public class CategoriesPanel extends JPanel {
     }
 
     private void handleUpdateCategory(int selectedRow, JTextField categoryIDField, JTextField nameField) {
+        if (!validateCategoryFields(nameField)) {
+            return;
+        }
         Category updatedCategory = new Category(nameField.getText(), categoryIDField.getText());
-
         categoryController.updateCategory(updatedCategory);
         refreshData();
     }
+
     public void refreshData() {
         // Reload data from the controller
         this.categories = categoryController.getAllCategorys();
-    
+
         // Clear the current data in the table model
         tableModel.setRowCount(0);
-    
+
         // Add updated category data to the table model
         for (Category category : categories) {
             tableModel.addRow(new Object[] { category.getCategoryID(), category.getCategoryName() });
-            System.out.println(category.getCategoryID());
         }
+    }
+
+    private boolean validateCategoryFields(JTextField nameField) {
+        if (nameField.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Name cannot be empty.", ERROR_MESSAGE, JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 }
