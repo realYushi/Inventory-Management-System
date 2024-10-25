@@ -14,7 +14,7 @@
         <properties>
             <!-- Database connection settings -->
             <property name="jakarta.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:derby:Inventory-Management-DB;create=true"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:derby:Inventory-Management-DB;create=true;dataEncryption=false;territory=en_US;bootPassword=null"/>
             <property name="jakarta.persistence.jdbc.user" value=""/>
             <property name="jakarta.persistence.jdbc.password" value=""/>
             
@@ -26,6 +26,15 @@
             
             <!-- Connection pool settings -->
             <property name="hibernate.connection.pool_size" value="1"/>
+            
+            <!-- Transaction management -->
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform"/>
+            <property name="hibernate.current_session_context_class" value="thread"/>
+            
+            <!-- Additional Derby-specific settings -->
+            <property name="hibernate.connection.autocommit" value="false"/>
+            <property name="hibernate.connection.provider_disables_autocommit" value="true"/>
+            <property name="hibernate.connection.release_mode" value="after_transaction"/>
             
             <!-- Enable JPA compliance -->
             <property name="hibernate.jakarta.persistence.compliance" value="true"/>

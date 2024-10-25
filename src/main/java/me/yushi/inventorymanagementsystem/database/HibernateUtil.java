@@ -19,20 +19,13 @@ public class HibernateUtil {
                 
                 System.out.println("EntityManagerFactory created successfully");
                 
-                // Test the connection
-                entityManagerFactory.createEntityManager().close();
-                System.out.println("Database connection test successful");
-                
             } catch (Exception e) {
                 System.err.println("Error initializing Hibernate: " + e.getMessage());
-                e.printStackTrace();
-                
                 if (e.getCause() != null) {
                     System.err.println("Caused by: " + e.getCause().getMessage());
-                    e.getCause().printStackTrace();
                 }
-                
-                entityManagerFactory = null;
+                shutdown(); // Ensure cleanup if initialization fails
+                throw new RuntimeException("Failed to initialize database connection", e);
             }
         }
         return entityManagerFactory;
@@ -43,6 +36,7 @@ public class HibernateUtil {
             try {
                 System.out.println("Shutting down Hibernate...");
                 entityManagerFactory.close();
+                entityManagerFactory = null;
                 System.out.println("Hibernate shutdown complete");
             } catch (Exception e) {
                 System.err.println("Error during Hibernate shutdown: " + e.getMessage());
