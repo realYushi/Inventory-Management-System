@@ -5,8 +5,9 @@
 package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
-import me.yushi.inventorymanagementsystem.Dto.InventoryTransactionDto;
-import me.yushi.inventorymanagementsystem.Dto.ProductDto;
+
+import me.yushi.inventorymanagementsystem.model.InventoryTransaction;
+import me.yushi.inventorymanagementsystem.model.Product;
 import me.yushi.inventorymanagementsystem.service.InventoryTransactionService;
 import me.yushi.inventorymanagementsystem.service.ProductService;
 
@@ -27,23 +28,23 @@ public class InventoryTransactionController implements IInventoryTransactionCont
     @Override
     // Create a new inventory transaction, save it to the repository, and return the
     // created
-    public InventoryTransactionDto createInventoryTransaction(InventoryTransactionDto newInventoryTransactionDto) {
+    public InventoryTransaction createInventoryTransaction(InventoryTransaction newInventoryTransaction) {
         // adjust the quantity of the product by the transation type
-        changingQuantity(newInventoryTransactionDto, false);
-        return inventoryTransactionService.createInventoryTransaction(newInventoryTransactionDto);
+        changingQuantity(newInventoryTransaction, false);
+        return inventoryTransactionService.createInventoryTransaction(newInventoryTransaction);
     }
 
     @Override
     // Update an inventory transaction, save it to the repository, and return the
     // updated
-    public InventoryTransactionDto updateInventoryTransaction(InventoryTransactionDto updatedInventoryTransactionDto) {
-        changingQuantity(updatedInventoryTransactionDto, false);
-        return inventoryTransactionService.updateInventoryTransaction(updatedInventoryTransactionDto);
+    public InventoryTransaction updateInventoryTransaction(InventoryTransaction updatedInventoryTransaction) {
+        changingQuantity(updatedInventoryTransaction, false);
+        return inventoryTransactionService.updateInventoryTransaction(updatedInventoryTransaction);
     }
 
     @Override
     // Get an inventory transaction by its ID
-    public InventoryTransactionDto getInventoryTransactionByID(String inventoryTransationID) {
+    public InventoryTransaction getInventoryTransactionByID(String inventoryTransationID) {
         return inventoryTransactionService.getInventoryTransactionByID(inventoryTransationID);
     }
 
@@ -56,34 +57,34 @@ public class InventoryTransactionController implements IInventoryTransactionCont
 
     @Override
     // Get all inventory transactions
-    public List<InventoryTransactionDto> getAllInventoryTransations() {
+    public List<InventoryTransaction> getAllInventoryTransations() {
         return inventoryTransactionService.getAllInventoryTransations();
     }
 
     @Override
     // Get all products
-    public List<ProductDto> getAllProduct() {
+    public List<Product> getAllProduct() {
         return productService.getAllProducts();
     }
 
     @Override
     // Get a product by its ID
-    public ProductDto getProduct(String produdctID) {
+    public Product getProduct(String produdctID) {
         return productService.getProductByID(produdctID);
     }
 
     // Adjust the quantity of the product by the transation type, if isDelete is
     // true, then the quantity will be reversed
-    private void changingQuantity(InventoryTransactionDto transactionDto, boolean isDelete) {
-        String prodcutID = transactionDto.getProductID();
-        ProductDto targetProdut = productService.getProductByID(prodcutID);
+    private void changingQuantity(InventoryTransaction transaction, boolean isDelete) {
+        String prodcutID = transaction.getProductID();
+        Product targetProdut = productService.getProductByID(prodcutID);
         if(targetProdut==null){
             return;
         }
         int productQuantity = targetProdut.getQuantity();
-        int changedQuantity = transactionDto.getQuantity();
+        int changedQuantity = transaction.getQuantity();
         // adjust the quantity of the product by the transation type
-        switch (transactionDto.getTransactionType()) {
+        switch (transaction.getTransactionType()) {
             case SALE:
                 // If the transaction type is SALE, then the quantity of the product will be
                 // decreased
@@ -103,9 +104,9 @@ public class InventoryTransactionController implements IInventoryTransactionCont
                 throw new AssertionError();
         }
         // Update the product quantity
-        productService.updateProduct(new ProductDto.Builder().productID(targetProdut.getProductID())
-                .price(targetProdut.getPrice()).quantity(productQuantity).categoryID(targetProdut.getCategoryID())
-                .unit(targetProdut.getUnit()).name(targetProdut.getName()).build());
+        targetProdut.setQuantity(productQuantity);
+        
+        productService.updateProduct(targetProdut);
     }
 
 }

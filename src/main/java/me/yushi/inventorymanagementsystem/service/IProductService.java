@@ -5,16 +5,17 @@
 package me.yushi.inventorymanagementsystem.service;
 
 import java.util.List;
-import me.yushi.inventorymanagementsystem.Dto.ProductDto;
+
+import me.yushi.inventorymanagementsystem.model.Product;
 
 /**
  *
  * @author yushi
  */
 public interface IProductService {
-    ProductDto createProduct(ProductDto newProductDto);
-    ProductDto updateProduct(ProductDto updatedProductDto);
-    ProductDto getProductByID(String productID);
+    Product createProduct(Product newProduct);
+    Product updateProduct(Product updatedProduct);
+    Product getProductByID(String productID);
     boolean deleteProduct(String productID);
-    List<ProductDto> getAllProducts();
+    List<Product> getAllProducts();
 }

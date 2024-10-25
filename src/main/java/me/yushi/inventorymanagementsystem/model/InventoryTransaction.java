@@ -30,12 +30,13 @@ public class InventoryTransaction implements IInventoryTransaction {
     public InventoryTransaction() {
     }
 
-    public InventoryTransaction(String transactionID, String productID, int quantity, Date date, TransactionType transactionType, double price) {
-        this.transactionID = (transactionID == null ? UUID.randomUUID().toString() : transactionID);
+    public InventoryTransaction(String transactionID, Product product, int quantity, Date date, TransactionType transactionType, double price) {
+        this.transactionID = (transactionID == "" ? UUID.randomUUID().toString() : transactionID);
         this.quantity = quantity;
         this.date = date;
         this.transactionType = transactionType;
         this.price = price;
+        this.product = product;
         // Note: product needs to be set separately via setter
     }
 
@@ -46,7 +47,7 @@ public class InventoryTransaction implements IInventoryTransaction {
 
     @Override
     public String getProductID() {
-        return this.product != null ? this.product.getProductID() : null;
+        return  this.product.getProductID();
     }
 
     public void setProduct(Product product) {

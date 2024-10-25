@@ -17,6 +17,5 @@ public interface IProductRepository {
     Product updateProduct(Product updatedProduct,EntityManager em);
     boolean deleteProduct(String productID,EntityManager em);
     List<Product> getAllProducts(EntityManager em);
-    String getCategoryID(String productID,EntityManager em);
-    String getSupplierID(String productID,EntityManager em);
+    
 }

@@ -27,7 +27,7 @@ public class Category implements ICategory {
 
     public Category(String categoryName, String categoryID) {
         this.categoryName = categoryName;
-        this.categoryID = (categoryID == null ? UUID.randomUUID().toString() : categoryID);
+        this.categoryID = (categoryID == "" ? UUID.randomUUID().toString() : categoryID);
     }
 
     @Override

@@ -5,8 +5,6 @@
 package me.yushi.inventorymanagementsystem.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
 import me.yushi.inventorymanagementsystem.database.TransactionUtil;
 import me.yushi.inventorymanagementsystem.model.Category;
 import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
@@ -15,7 +13,7 @@ import me.yushi.inventorymanagementsystem.repository.CategoryRepository;
  *
  * @author yushi
  */
-public class CategoryService implements ICategoryService, IMapper<CategoryDto, Category> {
+public class CategoryService implements ICategoryService {
     private CategoryRepository repository;
 
     public CategoryService(CategoryRepository repository) {
@@ -23,21 +21,20 @@ public class CategoryService implements ICategoryService, IMapper<CategoryDto, C
     }
 
     @Override
-    // Create a new category, save it to the repository, and return the created category
-    public CategoryDto createCategory(CategoryDto newCategoryDto) {
-        Category category= TransactionUtil.executeTransaction(em -> {
-            return repository.createCategory(toModel(newCategoryDto), em);
+    public Category createCategory(Category newCategory) {
+        Category category = TransactionUtil.executeTransaction(em -> {
+            return repository.createCategory((newCategory), em);
         });
         if (category == null) {
-            System.out.println("Failed to create category: " + newCategoryDto.getCategoryName());
+            System.out.println("Failed to create category: " + newCategory.getCategoryName());
             return null;
         }
-        return newCategoryDto;
+        return category;
     }
 
     @Override
     // Get a category by its ID
-    public CategoryDto getCategoryByID(String categoryID) {
+    public Category getCategoryByID(String categoryID) {
         Category category = TransactionUtil.executeTransaction(em -> {
             return repository.readCategory(categoryID, em);
         });
@@ -45,20 +42,20 @@ public class CategoryService implements ICategoryService, IMapper<CategoryDto, C
             System.out.println("No category found with ID: " + categoryID);
             return null;
         }
-        return toDto(category);
+        return category;
     }
 
     @Override
     // Update a category, save it to the repository, and return the updated category
-    public CategoryDto updateCategory(CategoryDto updatedCategoryDto) {
+    public Category updateCategory(Category updatedCategory) {
         Category newCategory= TransactionUtil.executeTransaction(em -> {
-            return repository.updateCategory(toModel(updatedCategoryDto), em);
+            return repository.updateCategory((updatedCategory), em);
         });
         if (newCategory== null) {
-            System.out.println("Failed to update category: " + updatedCategoryDto.getCategoryName());
+            System.out.println("Failed to update category: " + updatedCategory.getCategoryName());
             return null;
         }
-        return toDto(newCategory);
+        return newCategory;
     }
 
     @Override
@@ -70,29 +67,11 @@ public class CategoryService implements ICategoryService, IMapper<CategoryDto, C
     }
 
     @Override
-    public List<CategoryDto> getAllCategorys() {
+    public List<Category> getAllCategorys() {
         List<Category> categories = TransactionUtil.executeTransaction(em -> {
             return repository.getAllCategories(em);
         });
-        List<CategoryDto> categoryDtos = categories.stream().map(this::toDto).collect(Collectors.toList());
-        return categoryDtos;
+        return categories;
 
     }
-
-    @Override
-    public CategoryDto toDto(Category model) {
-        // Convert a category model to a category DTO, and return the DTO
-        return new CategoryDto.Builder()
-                .categoryID(model.getCategoryID())
-                .categoryName(model.getCategoryName())
-                .build();
-    }
-
-    @Override
-    public Category toModel(CategoryDto dto) {
-        // Convert a category DTO to a category model, and return the model
-        return new Category(dto.getCategoryName(), dto.getCategoryID());
-    }
-
-
 }

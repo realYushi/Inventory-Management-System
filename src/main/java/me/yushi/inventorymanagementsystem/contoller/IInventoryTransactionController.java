@@ -5,21 +5,22 @@
 package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
-import me.yushi.inventorymanagementsystem.Dto.InventoryTransactionDto;
-import me.yushi.inventorymanagementsystem.Dto.ProductDto;
+
+import me.yushi.inventorymanagementsystem.model.InventoryTransaction;
+import me.yushi.inventorymanagementsystem.model.Product;
 
 /**
  *
  * @author yushi
  */
 public interface IInventoryTransactionController{
-    InventoryTransactionDto createInventoryTransaction(InventoryTransactionDto newIInventoryTransactionDto);
-    InventoryTransactionDto updateInventoryTransaction(InventoryTransactionDto updatedInventoryTransactionDto);
-    InventoryTransactionDto getInventoryTransactionByID(String inventoryTransationID);
+    InventoryTransaction createInventoryTransaction(InventoryTransaction newIInventoryTransaction);
+    InventoryTransaction updateInventoryTransaction(InventoryTransaction updatedInventoryTransaction);
+    InventoryTransaction getInventoryTransactionByID(String inventoryTransationID);
     boolean deleteInventoryTransaction(String inventoryTransationID);
-    List<InventoryTransactionDto> getAllInventoryTransations();
-    List<ProductDto> getAllProduct();
-    ProductDto getProduct(String produdctID);
+    List<InventoryTransaction> getAllInventoryTransations();
+    List<Product> getAllProduct();
+    Product getProduct(String produdctID);
     
     
 }

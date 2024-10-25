@@ -5,7 +5,8 @@
 package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
-import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
+
+import me.yushi.inventorymanagementsystem.model.Category;
 import me.yushi.inventorymanagementsystem.service.CategoryService;
 
 /**
@@ -21,18 +22,18 @@ public class CategoryController implements ICategoryController {
 
     @Override
     // Create a new category
-    public CategoryDto createCategory(CategoryDto newCategoryDto) {
-        if(newCategoryDto == null) {
-            System.out.println("CategoryDto is null");
+    public Category createCategory(Category newCategory) {
+        if(newCategory == null) {
+            System.out.println("Category is null");
             return null;
         }
-        return categoryService.createCategory(newCategoryDto);
+        return categoryService.createCategory(newCategory);
 
     }
 
     @Override
     // Get a category by its ID
-    public CategoryDto getCategoryByID(String categoryID) {
+    public Category getCategoryByID(String categoryID) {
         if(categoryID == null) {
             System.out.println("CategoryID is null");
             return null;
@@ -43,13 +44,13 @@ public class CategoryController implements ICategoryController {
 
     @Override
     // Update a category
-    public CategoryDto updateCategory(CategoryDto updatedCategoryDto) {
-        if (updatedCategoryDto == null) {
-            System.out.println("CategoryDto is null");
+    public Category updateCategory(Category updatedCategory) {
+        if (updatedCategory == null) {
+            System.out.println("Category is null");
             return null;
             
         }
-        return categoryService.updateCategory(updatedCategoryDto);
+        return categoryService.updateCategory(updatedCategory);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class CategoryController implements ICategoryController {
 
     @Override
     // Get all categories
-    public List<CategoryDto> getAllCategorys() {
+    public List<Category> getAllCategorys() {
         if(categoryService == null) {
             System.out.println("CategoryService is null");
             return null;

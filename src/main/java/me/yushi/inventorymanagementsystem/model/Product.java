@@ -38,14 +38,15 @@ public class Product implements IProduct {
     public Product() {
     }
 
-    public Product(String productID, String name, String categoryID, String supplierID, int quantity, String unit,
+    public Product(String productID, String name, Category category, Supplier supplier, int quantity, String unit,
             double price) {
-        this.productID = (productID == null ? UUID.randomUUID().toString() : productID);
+        this.productID = (productID == "" ? UUID.randomUUID().toString() : productID);
         this.name = name;
         this.quantity = quantity;
         this.unit = unit;
         this.price = price;
-        // Note: category and supplier need to be set separately via setters
+        this.category = category;
+        this.supplier = supplier;
     }
 
     @Override
@@ -63,10 +64,7 @@ public class Product implements IProduct {
         this.name = name;
     }
 
-    @Override
-    public String getCategoryID() {
-        return this.category != null ? this.category.getCategoryID() : null;
-    }
+   
 
     public void setCategory(Category category) {
         this.category = category;
@@ -96,10 +94,7 @@ public class Product implements IProduct {
         this.price = price;
     }
 
-    @Override
-    public String getSupplierID() {
-        return this.supplier != null ? this.supplier.getSupplierID() : null;
-    }
+    
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;

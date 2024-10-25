@@ -5,8 +5,6 @@
 package me.yushi.inventorymanagementsystem.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import me.yushi.inventorymanagementsystem.Dto.InventoryTransactionDto;
 import me.yushi.inventorymanagementsystem.database.TransactionUtil;
 import me.yushi.inventorymanagementsystem.model.InventoryTransaction;
 import me.yushi.inventorymanagementsystem.repository.InventoryTransactionRepository;
@@ -16,39 +14,39 @@ import me.yushi.inventorymanagementsystem.repository.InventoryTransactionReposit
  * @author yushi
  */
 public class InventoryTransactionService
-        implements IInventoryTransactionService, IMapper<InventoryTransactionDto, InventoryTransaction> {
+        implements IInventoryTransactionService  {
     private InventoryTransactionRepository repository;
     public InventoryTransactionService(InventoryTransactionRepository repository) {
         this.repository = repository; 
     }
 
     @Override
-    public InventoryTransactionDto createInventoryTransaction(InventoryTransactionDto newInventoryTransactionDto) {
+    public InventoryTransaction createInventoryTransaction(InventoryTransaction newInventoryTransaction) {
         InventoryTransaction inventoryTransaton = TransactionUtil.executeTransaction(em -> {
-            return repository.createInventoryTransaction(toModel(newInventoryTransactionDto), em);
+            return repository.createInventoryTransaction((newInventoryTransaction), em);
         }); 
         if(inventoryTransaton == null){
-            System.out.println("Failed to create inventory transaction: " + newInventoryTransactionDto.getTransactionID());
+            System.out.println("Failed to create inventory transaction: " + newInventoryTransaction.getTransactionID());
             return null;
         }
-        return newInventoryTransactionDto;
+        return newInventoryTransaction;
     }
 
     @Override
-    public InventoryTransactionDto updateInventoryTransaction(InventoryTransactionDto updatedInventoryTransactionDto) {
+    public InventoryTransaction updateInventoryTransaction(InventoryTransaction updatedInventoryTransaction) {
         InventoryTransaction inventoryTransaction = TransactionUtil.executeTransaction(em -> {
-            return repository.updateInventoryTransaction(toModel(updatedInventoryTransactionDto), em);
+            return repository.updateInventoryTransaction((updatedInventoryTransaction), em);
         }); 
         if(inventoryTransaction == null){
-            System.out.println("Failed to update inventory transaction: " + updatedInventoryTransactionDto.getTransactionID());
+            System.out.println("Failed to update inventory transaction: " + updatedInventoryTransaction.getTransactionID());
             return null;
         }
-        return updatedInventoryTransactionDto;
+        return updatedInventoryTransaction;
     }
 
     @Override
     // Get an inventory transaction by its ID
-    public InventoryTransactionDto getInventoryTransactionByID(String inventoryTransationID) {
+    public InventoryTransaction getInventoryTransactionByID(String inventoryTransationID) {
         InventoryTransaction inventoryTransaction = TransactionUtil.executeTransaction(em -> {
             return repository.readInventoryTransaction(inventoryTransationID, em);
         });
@@ -56,7 +54,7 @@ public class InventoryTransactionService
             System.out.println("No inventory transaction found with ID: " + inventoryTransationID);
             return null;
         }
-        return toDto(inventoryTransaction);
+        return inventoryTransaction;
     }
 
     @Override
@@ -68,68 +66,14 @@ public class InventoryTransactionService
     }
 
     @Override
-    // Get all inventory transactions, convert them to DTOs, and return the list of
-    // DTOs
-    public List<InventoryTransactionDto> getAllInventoryTransations() {
-        return TransactionUtil.executeTransaction(em -> {
-            return repository.getAllInventoryTransations(em).stream().map(this::toDto).collect(Collectors.toList());
+    public List<InventoryTransaction> getAllInventoryTransations() {
+        List<InventoryTransaction> inventoryTransactions = TransactionUtil.executeTransaction(em -> {
+            return repository.getAllInventoryTransations(em);
         });
+        return inventoryTransactions;
 
     }
 
-    @Override
-    // Convert a model to a DTO
-    public InventoryTransactionDto toDto(InventoryTransaction model) {
-        return new InventoryTransactionDto.Builder()
-                .transactionID(model.getTransactionID())
-                .productID(model.getProductID())
-                .date(model.getDate())
-                .quantity(model.getQuantity())
-                .transactionType(mapModelToDtoType(model.getTransactionType()))
-                .price(model.getPrice())
-                .build();
-    }
-
-    @Override
-    // Convert a DTO to a model
-    public InventoryTransaction toModel(InventoryTransactionDto dto) {
-        return new InventoryTransaction(
-                dto.getTransactionID(),
-                dto.getProductID(),
-                dto.getQuantity(),
-                dto.getDate(),
-                mapDtoToModelType(dto.getTransactionType()),
-                dto.getPrice());
-
-    }
-
-    // Convert the Enum type to model
-    private InventoryTransaction.TransactionType mapDtoToModelType(InventoryTransactionDto.TransactionType dtoType) {
-        switch (dtoType) {
-            case PURCHASE:
-                return InventoryTransaction.TransactionType.PURCHASE;
-            case SALE:
-                return InventoryTransaction.TransactionType.SALE;
-            case SPOILAGE:
-                return InventoryTransaction.TransactionType.SPOILAGE;
-            default:
-                throw new IllegalArgumentException("Unknown enum type: " + dtoType);
-        }
-    }
-
-    // Convert the Enum type to DTO
-    private InventoryTransactionDto.TransactionType mapModelToDtoType(InventoryTransaction.TransactionType modelType) {
-        switch (modelType) {
-            case PURCHASE:
-                return InventoryTransactionDto.TransactionType.PURCHASE;
-            case SALE:
-                return InventoryTransactionDto.TransactionType.SALE;
-            case SPOILAGE:
-                return InventoryTransactionDto.TransactionType.SPOILAGE;
-            default:
-                throw new IllegalArgumentException("Unknown enum type: " + modelType);
-        }
-    }
-
+     
 
 }

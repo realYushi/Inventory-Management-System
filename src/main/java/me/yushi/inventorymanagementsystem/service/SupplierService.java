@@ -6,7 +6,6 @@ package me.yushi.inventorymanagementsystem.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
 import me.yushi.inventorymanagementsystem.database.TransactionUtil;
 import me.yushi.inventorymanagementsystem.model.Supplier;
 import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
@@ -15,80 +14,63 @@ import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
  *
  * @author yushi
  */
-public class SupplierService implements ISupplierService, IMapper<SupplierDto, Supplier> {
+public class SupplierService implements ISupplierService {
     SupplierRepository repository;
+
     public SupplierService(SupplierRepository repository) {
         this.repository = repository;
     }
 
     @Override
     // Create a new supplier, save it to the repository, and return the created
-    public SupplierDto createSupplier(SupplierDto newSupplierDto) {
+    public Supplier createSupplier(Supplier newSupplier) {
 
-        Supplier supplier=TransactionUtil.executeTransaction(em -> {
-            return repository.createSupplier(toModel(newSupplierDto), em);
+        Supplier supplier = TransactionUtil.executeTransaction(em -> {
+            return repository.createSupplier((newSupplier), em);
         });
-        if(supplier==null){
-            System.out.println("Failed to create supplier : " + newSupplierDto.getSupplierName());
+        if (supplier == null) {
+            System.out.println("Failed to create supplier : " + newSupplier.getSupplierName());
             return null;
         }
-        return newSupplierDto;
+        return newSupplier;
     }
 
     @Override
-    public SupplierDto updateSupplier(SupplierDto updatedSupplierDto) {
-        Supplier newSupplier=TransactionUtil.executeTransaction(em -> {
-            return repository.updateSupplier(toModel(updatedSupplierDto), em);
+    public Supplier updateSupplier(Supplier updatedSupplier) {
+        Supplier newSupplier = TransactionUtil.executeTransaction(em -> {
+            return repository.updateSupplier((updatedSupplier), em);
         });
-        return toDto(newSupplier);
+        return newSupplier;
     }
 
     @Override
-    public SupplierDto getSupplierByID(String supplierDtoID) {
+    public Supplier getSupplierByID(String supplierID) {
         Supplier supplier = TransactionUtil.executeTransaction(em -> {
-            return repository.readSupplier(supplierDtoID, em);
+            return repository.readSupplier(supplierID, em);
         });
         if (supplier != null) {
-            System.out.println("No supplier found with ID: " + supplierDtoID);
+            System.out.println("No supplier found with ID: " + supplierID);
             return null;
         }
-        return toDto(supplier);
-        
+        return supplier;
+
     }
 
     @Override
     // Delete a supplier by its ID
-    public boolean deleteSupplier(String supplierDtoID) {
+    public boolean deleteSupplier(String supplierID) {
         return TransactionUtil.executeTransaction(em -> {
-            return repository.deleteSupplier(supplierDtoID, em);
+            return repository.deleteSupplier(supplierID, em);
         });
     }
 
     @Override
     // Get all suppliers in the repository
-    public List<SupplierDto> getAllSuppliers() {
-        List <Supplier> suppliers = TransactionUtil.executeTransaction(em -> {
+    public List<Supplier> getAllSuppliers() {
+        List<Supplier> suppliers = TransactionUtil.executeTransaction(em -> {
             return repository.getAllSuppliers(em);
         });
-        return suppliers.stream().map(supplier -> this.toDto(supplier))
-                .collect(Collectors.toList());
+        return suppliers;
     }
-
-    @Override
-    public SupplierDto toDto(Supplier model) {
-        if (model == null) {
-            return null;
-        }
-        return new SupplierDto.Builder()
-                .supplierID(model.getSupplierID())
-                .supplierName(model.getSupplierName())
-                .build();
-    }
-
-    @Override
-    public Supplier toModel(SupplierDto dto) {
-        return new Supplier(dto.getSupplierID(), dto.getSupplierName());
-    }
-
 
 }

@@ -1,6 +1,7 @@
 package me.yushi.inventorymanagementsystem.InventoryManagementSystem;
 
 import me.yushi.inventorymanagementsystem.contoller.CategoryController;
+import me.yushi.inventorymanagementsystem.contoller.DashBoardController;
 import me.yushi.inventorymanagementsystem.contoller.InventoryTransactionController;
 import me.yushi.inventorymanagementsystem.contoller.ProductController;
 import me.yushi.inventorymanagementsystem.contoller.SupplierController;
@@ -10,6 +11,7 @@ import me.yushi.inventorymanagementsystem.repository.InventoryTransactionReposit
 import me.yushi.inventorymanagementsystem.repository.ProductRepository;
 import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
 import me.yushi.inventorymanagementsystem.service.CategoryService;
+import me.yushi.inventorymanagementsystem.service.DashboardService;
 import me.yushi.inventorymanagementsystem.service.InventoryTransactionService;
 import me.yushi.inventorymanagementsystem.service.ProductService;
 import me.yushi.inventorymanagementsystem.service.SupplierService;
@@ -37,17 +39,19 @@ public class Main {
             CategoryService categoryService = new CategoryService(categoryRepository);
             SupplierService supplierService = new SupplierService(supplierRepository);
             InventoryTransactionService inventoryTransactionService = new InventoryTransactionService(inventoryTransactionRepository);
+            DashboardService dashboardService = new DashboardService(inventoryTransactionRepository, productRepository);
 
             // Initialize controllers
             ProductController productController = new ProductController(productService);
             CategoryController categoryController = new CategoryController(categoryService);
             SupplierController supplierController = new SupplierController(supplierService);
             InventoryTransactionController inventoryTransactionController = new InventoryTransactionController(inventoryTransactionService, productService);
+            DashBoardController dashBoardController = new DashBoardController(dashboardService);
 
             // Initialize and show GUI on EDT
             SwingUtilities.invokeLater(() -> {
                 try {
-                    APP app = new APP(productController, categoryController, supplierController, inventoryTransactionController);
+                    APP app = new APP(productController, categoryController, supplierController, inventoryTransactionController,dashBoardController );
                     app.setVisible(true);
                 } catch (Exception e) {
                     System.err.println("Error initializing GUI: " + e.getMessage());

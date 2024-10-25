@@ -1,13 +1,7 @@
 package me.yushi.inventorymanagementsystem.view;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -16,10 +10,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import me.yushi.inventorymanagementsystem.Dto.CategoryDto;
-import me.yushi.inventorymanagementsystem.Dto.ProductDto;
-import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
-import me.yushi.inventorymanagementsystem.model.Product;
+import me.yushi.inventorymanagementsystem.contoller.CategoryController;
+import me.yushi.inventorymanagementsystem.model.Category;
 import net.miginfocom.swing.MigLayout;
 
 public class CategoriesPanel extends JPanel {
@@ -31,13 +23,14 @@ public class CategoriesPanel extends JPanel {
     private static final String CREATE_NEW_CATEGORY_TITLE = "Create New Category";
     private static final String UPDATE_CATEGORY_TITLE = "Update Category";
 
-    private List<CategoryDto> categories;
+    private List<Category> categories;
+    private CategoryController categoryController;
     private DefaultTableModel tableModel;
     private JTable categoryTable;
 
-    public CategoriesPanel(List<CategoryDto> categories) {
-        this.categories = categories;
-
+    public CategoriesPanel(CategoryController categoryController) {
+        this.categoryController = categoryController;
+        this.categories = categoryController.getAllCategorys();
         this.setLayout(new MigLayout("fill", "[grow]", "[80%][20%]"));
 
         String[] columnNames = { "Category ID", "Category Name" };
@@ -87,10 +80,7 @@ public class CategoriesPanel extends JPanel {
         String categoryID = tableModel.getValueAt(selectedRow, 0).toString();
         int result = JOptionPane.showConfirmDialog(this, DELETE_CONFIRMATION_MESSAGE, DELETE_CATEGORY_TITLE, JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
-            // Delete the category from the backend
-            // categoryController.deleteCategory(categoryID);
-
-            // Remove the category from the table
+            categoryController.deleteCategory(categoryID);
             tableModel.removeRow(selectedRow);
         }
     }
@@ -109,19 +99,14 @@ public class CategoriesPanel extends JPanel {
 
     private JPanel createCategoryDialogPanel(JTextField categoryIDField, JTextField nameField) {
         JPanel panel = new JPanel(new MigLayout());
-        panel.add(new JLabel("Category ID:"), "wrap");
-        panel.add(categoryIDField, "wrap");
         panel.add(new JLabel("Name:"), "wrap");
         panel.add(nameField, "wrap");
         return panel;
     }
 
     private void handleCreateCategory(JTextField categoryIDField, JTextField nameField) {
-        CategoryDto newCategory = new CategoryDto.Builder()
-            .categoryID(categoryIDField.getText())
-            .categoryName(nameField.getText())
-            .build();
-        // categoryController.addCategory(newCategory);
+        Category newCategory = new Category("", nameField.getText());
+        categoryController.createCategory(newCategory);
 
         tableModel.addRow(new Object[] {
                 newCategory.getCategoryID(),
@@ -151,12 +136,9 @@ public class CategoriesPanel extends JPanel {
     }
 
     private void handleUpdateCategory(int selectedRow, JTextField categoryIDField, JTextField nameField) {
-        CategoryDto updatedCategory = new CategoryDto.Builder()
-            .categoryID(categoryIDField.getText())
-            .categoryName(nameField.getText())
-            .build();
+        Category updatedCategory = new Category(categoryIDField.getText(), nameField.getText());
 
-        // categoryController.updateCategory(updatedCategory);
+        categoryController.updateCategory(updatedCategory);
 
         tableModel.setValueAt(updatedCategory.getCategoryID(), selectedRow, 0);
         tableModel.setValueAt(updatedCategory.getCategoryName(), selectedRow, 1);

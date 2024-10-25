@@ -5,18 +5,19 @@
 package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
-import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
+
+import me.yushi.inventorymanagementsystem.model.Supplier;
 
 /**
  *
  * @author yushi
  */
 public interface ISupplierController {
-    SupplierDto createSupplier(SupplierDto newSupplierDto);
-    SupplierDto updateSupplier(SupplierDto updateSupplierDto);
-    SupplierDto getSupplierByID(String supplierID);
+    Supplier createSupplier(Supplier newSupplier);
+    Supplier updateSupplier(Supplier updateSupplier);
+    Supplier getSupplierByID(String supplierID);
     boolean deleteSupplier(String supplierID);
-    List<SupplierDto> getAllSuppliers();
+    List<Supplier> getAllSuppliers();
     
     
 }

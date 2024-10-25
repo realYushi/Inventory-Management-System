@@ -1,13 +1,7 @@
 package me.yushi.inventorymanagementsystem.view;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -16,7 +10,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import me.yushi.inventorymanagementsystem.Dto.SupplierDto;
+import me.yushi.inventorymanagementsystem.contoller.SupplierController;
+import me.yushi.inventorymanagementsystem.model.Supplier;
 import net.miginfocom.swing.MigLayout;
 
 public class SuppliersPanel extends JPanel {
@@ -28,12 +23,14 @@ public class SuppliersPanel extends JPanel {
     private static final String CREATE_NEW_SUPPLIER_TITLE = "Create New Supplier";
     private static final String UPDATE_SUPPLIER_TITLE = "Update Supplier";
 
-    private List<SupplierDto> suppliers;
+    private List<Supplier> suppliers;
+    private SupplierController supplierController;
     private DefaultTableModel tableModel;
     private JTable supplierTable;
 
-    public SuppliersPanel(List<SupplierDto> suppliers) {
-        this.suppliers = suppliers;
+    public SuppliersPanel(SupplierController supplierController) {
+        this.supplierController = supplierController;
+        this.suppliers = supplierController.getAllSuppliers();
 
         this.setLayout(new MigLayout("fill", "[grow]", "[80%][20%]"));
 
@@ -84,10 +81,7 @@ public class SuppliersPanel extends JPanel {
         String supplierID = tableModel.getValueAt(selectedRow, 0).toString();
         int result = JOptionPane.showConfirmDialog(this, DELETE_CONFIRMATION_MESSAGE, DELETE_SUPPLIER_TITLE, JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
-            // Delete the supplier from the backend
-            // supplierController.deleteSupplier(supplierID);
-
-            // Remove the supplier from the table
+            supplierController.deleteSupplier(supplierID);
             tableModel.removeRow(selectedRow);
         }
     }
@@ -106,19 +100,14 @@ public class SuppliersPanel extends JPanel {
 
     private JPanel createSupplierDialogPanel(JTextField supplierIDField, JTextField nameField) {
         JPanel panel = new JPanel(new MigLayout());
-        panel.add(new JLabel("Supplier ID:"), "wrap");
-        panel.add(supplierIDField, "wrap");
         panel.add(new JLabel("Name:"), "wrap");
         panel.add(nameField, "wrap");
         return panel;
     }
 
     private void handleCreateSupplier(JTextField supplierIDField, JTextField nameField) {
-        SupplierDto newSupplier = new SupplierDto.Builder()
-            .supplierID(supplierIDField.getText())
-            .supplierName(nameField.getText())
-            .build();
-        // supplierController.addSupplier(newSupplier);
+        Supplier newSupplier = new Supplier("", nameField.getText());
+        supplierController.createSupplier(newSupplier);
 
         tableModel.addRow(new Object[] {
                 newSupplier.getSupplierID(),
@@ -148,12 +137,9 @@ public class SuppliersPanel extends JPanel {
     }
 
     private void handleUpdateSupplier(int selectedRow, JTextField supplierIDField, JTextField nameField) {
-        SupplierDto updatedSupplier = new SupplierDto.Builder()
-            .supplierID(supplierIDField.getText())
-            .supplierName(nameField.getText())
-            .build();
+        Supplier updatedSupplier = new Supplier(supplierIDField.getText(), nameField.getText());
 
-        // supplierController.updateSupplier(updatedSupplier);
+        supplierController.updateSupplier(updatedSupplier);
 
         tableModel.setValueAt(updatedSupplier.getSupplierID(), selectedRow, 0);
         tableModel.setValueAt(updatedSupplier.getSupplierName(), selectedRow, 1);
