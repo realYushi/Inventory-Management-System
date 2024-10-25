@@ -39,7 +39,7 @@ public class BodyPanel extends JPanel{
         this.add(new ProductsPanel(categories,suppliers),"products");
         this.add(new CategoriesPanel(categories),"categories");
         this.add(new SuppliersPanel(suppliers),"suppliers");
-        this.add(new TransactionsPanel(transactions),"transactions");
+        this.add(new TransactionsPanel(transactions,products),"transactions");
 
 
         cardLayout.show(this,"dashboard");

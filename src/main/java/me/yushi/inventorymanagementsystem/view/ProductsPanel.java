@@ -31,7 +31,9 @@ public class ProductsPanel extends JPanel {
     private static final String SELECT_PRODUCT_TO_UPDATE = "Please select a product to update.";
     private static final String CREATE_NEW_PRODUCT_TITLE = "Create New Product";
     private static final String UPDATE_PRODUCT_TITLE = "Update Product";
-
+    private static final String[] COLUMN_NAMES = {
+        "Product ID", "Name", "Category", "Supplier", "Quantity", "Unit", "Price"
+    };
     private Map<String, CategoryDto> categories;
     private Map<String, SupplierDto> suppliers;
     private DefaultTableModel tableModel;
@@ -44,13 +46,12 @@ public class ProductsPanel extends JPanel {
 
         this.setLayout(new MigLayout("fill", "[grow]", "[80%][20%]"));
 
-        String[] columnNames = { "Product ID", "Name", "Category", "Supplier", "Quantity", "Unit", "Price" };
         Object data[][] = {
                 { 1, "Product 1", "1", "1", 10, "kg", 100 },
                 { 2, "Product 2", "2", "2", 20, "kg", 200 },
         };
         Object[][] transformedData = transformData(data);
-        tableModel = new DefaultTableModel(transformedData, columnNames) {
+        tableModel = new DefaultTableModel(transformedData, COLUMN_NAMES) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false; // Make all cells non-editable
