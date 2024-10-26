@@ -38,6 +38,13 @@ public class InventoryTransactionController implements IInventoryTransactionCont
     // Update an inventory transaction, save it to the repository, and return the
     // updated
     public InventoryTransaction updateInventoryTransaction(InventoryTransaction updatedInventoryTransaction) {
+        // First, reverse the effect of the old transaction
+        InventoryTransaction oldTransaction = inventoryTransactionService.getInventoryTransactionByID(updatedInventoryTransaction.getTransactionID());
+        if (oldTransaction != null) {
+            changingQuantity(oldTransaction, true);
+        }
+        
+        // Then apply the new transaction
         changingQuantity(updatedInventoryTransaction, false);
         return inventoryTransactionService.updateInventoryTransaction(updatedInventoryTransaction);
     }

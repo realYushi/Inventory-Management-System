@@ -17,6 +17,8 @@ import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 
 import org.jdesktop.swingx.JXDatePicker;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import me.yushi.inventorymanagementsystem.contoller.InventoryTransactionController;
 import me.yushi.inventorymanagementsystem.contoller.ProductController;
@@ -46,6 +48,13 @@ public class TransactionsPanel extends JPanel {
         this.transactionController = transactionController;
         this.productController = productController;
         initialUI();
+         this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                refreshData(); // Refresh data each time the panel is shown
+            }
+        });
+        
     }
 
     private void initialUI() {
