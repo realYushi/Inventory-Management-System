@@ -86,44 +86,43 @@ This system is particularly useful for small to medium-sized business owners loo
 
 ### Architecture
 
-Architecture Overview:
-![Architecture Overview](doc/architecture_uml.png)
-The project follows a layered architecture with clear separation of concerns:
+The project follows a layered architecture with JPA/Hibernate integration:
 
-- **Model**: Represents the data structures (e.g., Product, Category, Supplier, InventoryTransaction)
-- **Repository**: Handles data persistence and retrieval (e.g., ProductRepository, CategoryRepository)
-- **Service**: Contains business logic (e.g., ProductService, CategoryService)
-- **Controller**: Acts as an intermediary between the View and Service layers (e.g., ProductController, CategoryController)
-- **View**: Handles user interface and interaction (e.g., ProductView, CategoryView)
+#### Model Layer
+- **Entities**: 
+  - Product: Core product information management
+  - InventoryTransaction: Tracks inventory movements
+- **Interfaces**:
+  - IProduct: Product entity contract
+  - IInventoryTransaction: Transaction entity contract
+  - IFinancialSummary: Financial calculations interface
+  - IInventorySummary: Inventory status interface
 
-Design Patterns:
+#### Repository Layer
+Handles data persistence using JPA/Hibernate:
+- **IProductRepository**: 
+  - CRUD operations for products
+  - Product listing and search
+- **IInventoryTransactionRepository**:
+  - Transaction recording
+  - Historical data management
 
-- Utilizes the Unit of Work pattern for managing database transactions
-- Implements the Builder pattern for creating DTOs
-- Uses the Repository pattern for data access abstraction
+#### Database Integration
+- Uses JPA/Hibernate for ORM
+- EntityManagerFactory managed by HibernateUtil
+- Persistence unit: "Inventory-Management-Unit"
 
 Key Features:
+- Complete CRUD operations for inventory management
+- Transaction tracking and history
+- Financial calculations and reporting
+- Stock level monitoring
+- Interface-based design for maintainability
 
-- CRUD operations for Products, Categories, Suppliers, and Inventory Transactions
-- Text-based user interface using Lanterna library
-- File-based data persistence using JSON
-- Modular and extensible design
-
-Core Components:
-
-- **FileHandler**: Generic JSON file read/write operations
-- **UnitOfWork**: Coordinating work across multiple repositories
-- **APP**: Main application entry point and navigation
-- **DashboardService**: Providing summary data for the dashboard
-
-Data Flow:
-
-1. User interacts with View
-2. View calls Controller methods
-3. Controller uses Service layer for business logic
-4. Service layer interacts with Repository for data access
-5. Repository uses FileHandler for data persistence
-6. Results propagate back up the chain to the View
+Design Patterns:
+- Repository Pattern for data access
+- Interface Segregation Principle
+- Dependency Injection
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -131,8 +130,8 @@ Data Flow:
 
 - [Java](https://java.com)
 - [Maven](https://maven.apache.org/)
-- [Lanterna](https://github.com/mabe02/lanterna)
-- [Gson](https://github.com/google/gson)
+- [Hibernate](https://hibernate.org/)
+- [JPA](https://jakarta.ee/specifications/persistence/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -160,9 +159,11 @@ mvn -v
    ```sh
    mvn install
    ```
-3. Run the application
+3. Configure your database connection in `persistence.xml`
+
+4. Run the application using Maven
    ```sh
-   java -jar target/inventoryManagementSystem-0.1.jar
+   mvn exec:java
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -171,46 +172,40 @@ mvn -v
 
 ## Usage
 
-This Inventory Management System offers a comprehensive suite of features designed to manage and monitor inventory effectively for small to medium-sized businesses. Here's how you can utilize the system:
-
-### Dashboard
-
-![Dashboard](image/Dashboard.png)
-
-- **Financial Overview**: View a summary of total sales, costs, net profit, and gross margin percentage.
-- **Inventory Alerts**: Receive notifications for low stock levels to ensure you never run out of key products.
+The Inventory Management System provides a robust backend for inventory management with the following key features:
 
 ### Product Management
-
-![Product Management](image/Product.png)
-
-- **Manage Products**: Add, update, delete, and view products with details such as ID, name, category, quantity, unit, and price.
-
-### Category Management
-
-![Category Management](image/Category.png)
-
-- **Manage Categories**: Create, update, delete, and view categories. Each category can be associated with a specific supplier, helping to organize inventory better.
-
-### Supplier Management
-
-![Supplier Management](image/Supplier.png)
-
-- **Manage Suppliers**: Add, update, delete, and view supplier information. This helps in maintaining a good relationship with your suppliers and managing supply chain logistics.
+- Create, read, update, and delete products
+- Track product details including:
+  - Product ID
+  - Name
+  - Quantity
+  - Unit
+  - Price
 
 ### Inventory Transactions
+- Record and track inventory movements
+- Transaction details include:
+  - Transaction ID
+  - Product ID
+  - Quantity
+  - Date
+  - Price
 
-![Inventory Transactions](image/Transaction.png)
+### Financial Tracking
+- Calculate and monitor:
+  - Total sales
+  - Total costs
+  - Net profit
+  - Price adjustments
 
-- **Sales**: Record sales transactions to decrease product quantity and capture revenue.
-- **Purchases**: Log purchasing transactions to increase product quantity and manage costs.
-- **Spoilage**: Keep track of inventory spoilage to adjust stock levels and financial records accordingly.
+### Inventory Analytics
+- Monitor low stock products
+- Track recent transactions
+- Generate inventory summaries
+- Financial performance metrics
 
-The system's user interface is text-based, designed for use in a console or terminal environment, leveraging the Lanterna library for UI rendering.
-
-Data is persistently stored in JSON format across multiple files (product.json, category.json, transaction.json, supplier.json), ensuring that all information remains intact between sessions.
-
-For a deeper dive into the functionalities and user interaction flow, refer to the `APP.java` file within the project repository.
+The system uses JPA/Hibernate for reliable data persistence and provides a solid foundation for building inventory management solutions.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
