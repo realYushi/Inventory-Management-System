@@ -8,6 +8,7 @@ public class HibernateUtil {
     private static final String PERSISTENCE_UNIT_NAME = "Inventory-Management-Unit";
 
     public static EntityManagerFactory getEntityManagerFactory() {
+        // If the EntityManagerFactory has not been created yet, create it
         if (entityManagerFactory == null) {
             try {
                 System.out.println("Attempting to create EntityManagerFactory...");
@@ -24,7 +25,7 @@ public class HibernateUtil {
                 if (e.getCause() != null) {
                     System.err.println("Caused by: " + e.getCause().getMessage());
                 }
-                shutdown(); // Ensure cleanup if initialization fails
+                shutdown(); 
                 throw new RuntimeException("Failed to initialize database connection", e);
             }
         }
@@ -32,6 +33,7 @@ public class HibernateUtil {
     }
 
     public static void shutdown() {
+        // If the EntityManagerFactory is open, close it
         if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
             try {
                 System.out.println("Shutting down Hibernate...");

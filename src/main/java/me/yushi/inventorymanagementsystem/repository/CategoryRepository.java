@@ -17,7 +17,9 @@ public class CategoryRepository implements ICategoryRepository {
     public CategoryRepository() {
     }
 
+    // Business logic for CRUD operations on Category
     @Override
+
     public Category createCategory(Category newCategory,EntityManager em) {
         em.persist(newCategory);
         return newCategory;
@@ -49,6 +51,7 @@ public class CategoryRepository implements ICategoryRepository {
     public List<Category> getAllCategories(EntityManager em) {
         return em.createQuery("SELECT c FROM Category c", Category.class).getResultList();
     }
+    // Check if a category has linked products
     @Override
     public boolean haveLinkedProduct(String categoryID,EntityManager em){
         Category category = em.find(Category.class, categoryID);

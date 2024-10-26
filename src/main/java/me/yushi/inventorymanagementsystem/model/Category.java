@@ -27,7 +27,8 @@ public class Category implements ICategory {
 
     public Category(String categoryName, String categoryID) {
         this.categoryName = categoryName;
-        this.categoryID = (categoryID.isEmpty()? UUID.randomUUID().toString() : categoryID);
+        // if categoryID is empty, generate a uuid
+        this.categoryID = (categoryID.isEmpty() ? UUID.randomUUID().toString() : categoryID);
     }
 
     @Override

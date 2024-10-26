@@ -16,7 +16,7 @@ import me.yushi.inventorymanagementsystem.model.Supplier;
 public class SupplierRepository implements ISupplierRepository {
     public SupplierRepository() {
     }
-
+    //business logic for CRUD operations
     @Override
     public Supplier createSupplier(Supplier newSupplier,EntityManager em) {
         em.persist(newSupplier);
@@ -46,7 +46,7 @@ public class SupplierRepository implements ISupplierRepository {
     public List<Supplier> getAllSuppliers(EntityManager em) {
         return em.createQuery("SELECT s FROM Supplier s", Supplier.class).getResultList();
     }
-
+    // Check if a supplier has linked products
     @Override
     public boolean haveLinkedProduct(String supplierID, EntityManager em) {
         if(em.find(Supplier.class, supplierID).getProducts().isEmpty()){

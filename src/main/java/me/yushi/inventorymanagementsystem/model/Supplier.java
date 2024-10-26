@@ -25,7 +25,8 @@ public class Supplier implements ISupplier {
     }
 
     public Supplier(String supplierID, String supplierName) {
-        this.supplierID = (supplierID == "" ? UUID.randomUUID().toString() : supplierID);
+        // if supplierID is empty, generate a uuid
+        this.supplierID = (supplierID.isEmpty() ? UUID.randomUUID().toString() : supplierID);
         this.supplierName = supplierName;
     }
 

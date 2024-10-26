@@ -71,15 +71,16 @@ public class DashboardService implements IDashboardService {
 
     // Calculate financial summary based on transaction data
     private FinancialSummary calculateFinancialSummary(List<InventoryTransaction> transactions) {
+        // if transaction type is SALE, calculate profit, if PURCHASE or SPOILAGE, calculate cost
         double totalSales = transactions.stream()
                 .filter(t -> t.getTransactionType() == IInventoryTransaction.TransactionType.SALE)
-                .mapToDouble(t -> t.getPrice() * t.getQuantity() * PROFIT_RATE) // Include quantity in calculation
+                .mapToDouble(t -> t.getPrice() * t.getQuantity() * PROFIT_RATE) 
                 .sum();
 
         double totalCost = transactions.stream()
                 .filter(t -> t.getTransactionType() == IInventoryTransaction.TransactionType.PURCHASE ||
                         t.getTransactionType() == IInventoryTransaction.TransactionType.SPOILAGE)
-                .mapToDouble(t -> t.getPrice() * t.getQuantity()) // Include quantity in calculation
+                .mapToDouble(t -> t.getPrice() * t.getQuantity()) 
                 .sum();
 
         return new FinancialSummary(totalSales, totalCost);

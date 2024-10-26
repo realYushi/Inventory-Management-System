@@ -16,7 +16,7 @@ import me.yushi.inventorymanagementsystem.model.InventoryTransaction;
 public class InventoryTransactionRepository implements IInventoryTransactionRepository {
     public InventoryTransactionRepository(){
     }
-
+    //business logic for CRUD operations
     @Override
     public InventoryTransaction createInventoryTransaction(InventoryTransaction newInventoryTransaction,EntityManager em) {
         em.persist(newInventoryTransaction);

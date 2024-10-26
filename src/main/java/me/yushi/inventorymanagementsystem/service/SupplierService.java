@@ -20,8 +20,8 @@ public class SupplierService implements ISupplierService {
         this.repository = repository;
     }
 
+    // Business logic for CRUD operations
     @Override
-    // Create a new supplier, save it to the repository, and return the created
     public Supplier createSupplier(Supplier newSupplier) {
 
         Supplier supplier = TransactionUtil.executeTransaction(em -> {
@@ -56,7 +56,6 @@ public class SupplierService implements ISupplierService {
     }
 
     @Override
-    // Delete a supplier by its ID
     public boolean deleteSupplier(String supplierID) {
         return TransactionUtil.executeTransaction(em -> {
             return repository.deleteSupplier(supplierID, em);
@@ -64,7 +63,6 @@ public class SupplierService implements ISupplierService {
     }
 
     @Override
-    // Get all suppliers in the repository
     public List<Supplier> getAllSuppliers() {
         List<Supplier> suppliers = TransactionUtil.executeTransaction(em -> {
             return repository.getAllSuppliers(em);

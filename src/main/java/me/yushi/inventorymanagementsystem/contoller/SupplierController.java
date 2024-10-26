@@ -1,11 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package me.yushi.inventorymanagementsystem.contoller;
 
 import java.util.List;
-
 import me.yushi.inventorymanagementsystem.model.Supplier;
 import me.yushi.inventorymanagementsystem.service.SupplierService;
 
@@ -20,8 +15,8 @@ public class SupplierController implements ISupplierController {
         this.supplierService = supplierService;
     }
 
+    // Business logic for CRUD operations
     @Override
-    // Create a new supplier
     public Supplier createSupplier(Supplier newSupplier) {
         if (newSupplier == null) {
             System.err.println("Error: Supplier cannot be null");
@@ -31,7 +26,6 @@ public class SupplierController implements ISupplierController {
     }
 
     @Override
-    // Update a supplier
     public Supplier updateSupplier(Supplier updateSupplier) {
         if (updateSupplier == null) {
             System.err.println("Error: Supplier cannot be null");
@@ -41,7 +35,6 @@ public class SupplierController implements ISupplierController {
     }
 
     @Override
-    // Get a supplier by its ID
     public Supplier getSupplierByID(String supplierID) {
         if (supplierID == null || supplierID.isEmpty()) {
             System.err.println("Error: SupplierID cannot be null or empty");
@@ -51,7 +44,6 @@ public class SupplierController implements ISupplierController {
     }
 
     @Override
-    // Delete a supplier
     public boolean deleteSupplier(String supplierID) {
         if (supplierID == null || supplierID.isEmpty()) {
             System.err.println("Error: SupplierID cannot be null or empty");
@@ -61,7 +53,6 @@ public class SupplierController implements ISupplierController {
     }
 
     @Override
-    // Get all suppliers
     public List<Supplier> getAllSuppliers() {
         return supplierService.getAllSuppliers();
     }

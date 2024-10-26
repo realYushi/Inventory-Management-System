@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package me.yushi.inventorymanagementsystem.contoller;
 
 import me.yushi.inventorymanagementsystem.model.FinancialSummary;
@@ -17,7 +13,7 @@ public class DashBoardController implements IDashBoardController {
     IDashboardService service;
 
     public DashBoardController(DashboardService dashboardService) {
-        this.service= dashboardService;
+        this.service = dashboardService;
     }
 
     @Override

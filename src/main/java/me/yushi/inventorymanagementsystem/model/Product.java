@@ -29,10 +29,9 @@ public class Product implements IProduct {
     @ManyToOne
     @JoinColumn(name = "supplierID", nullable = false)
     private Supplier supplier;
-    
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InventoryTransaction> transactions = new ArrayList<>();
-
 
     @Column(name = "quantity", nullable = false)
     private int quantity;
@@ -48,7 +47,8 @@ public class Product implements IProduct {
 
     public Product(String productID, String name, Category category, Supplier supplier, int quantity, String unit,
             double price) {
-        this.productID = (productID == "" ? UUID.randomUUID().toString() : productID);
+        // if productID is empty, generate a uuid
+        this.productID = (productID.isEmpty() ? UUID.randomUUID().toString() : productID);
         this.name = name;
         this.quantity = quantity;
         this.unit = unit;
@@ -71,8 +71,6 @@ public class Product implements IProduct {
     public void setName(String name) {
         this.name = name;
     }
-
-   
 
     public void setCategory(Category category) {
         this.category = category;
@@ -102,8 +100,6 @@ public class Product implements IProduct {
         this.price = price;
     }
 
-    
-
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
     }
@@ -121,6 +117,7 @@ public class Product implements IProduct {
     public void setUnit(String unit) {
         this.unit = unit;
     }
+
     public List<InventoryTransaction> getTransactions() {
         return transactions;
     }

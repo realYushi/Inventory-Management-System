@@ -13,19 +13,20 @@ import me.yushi.inventorymanagementsystem.repository.InventoryTransactionReposit
  *
  * @author yushi
  */
-public class InventoryTransactionService
-        implements IInventoryTransactionService  {
+public class InventoryTransactionService implements IInventoryTransactionService {
     private InventoryTransactionRepository repository;
+
     public InventoryTransactionService(InventoryTransactionRepository repository) {
-        this.repository = repository; 
+        this.repository = repository;
     }
 
+    // Business logic for CRUD operations
     @Override
     public InventoryTransaction createInventoryTransaction(InventoryTransaction newInventoryTransaction) {
         InventoryTransaction inventoryTransaton = TransactionUtil.executeTransaction(em -> {
             return repository.createInventoryTransaction((newInventoryTransaction), em);
-        }); 
-        if(inventoryTransaton == null){
+        });
+        if (inventoryTransaton == null) {
             System.out.println("Failed to create inventory transaction: " + newInventoryTransaction.getTransactionID());
             return null;
         }
@@ -36,21 +37,21 @@ public class InventoryTransactionService
     public InventoryTransaction updateInventoryTransaction(InventoryTransaction updatedInventoryTransaction) {
         InventoryTransaction inventoryTransaction = TransactionUtil.executeTransaction(em -> {
             return repository.updateInventoryTransaction((updatedInventoryTransaction), em);
-        }); 
-        if(inventoryTransaction == null){
-            System.out.println("Failed to update inventory transaction: " + updatedInventoryTransaction.getTransactionID());
+        });
+        if (inventoryTransaction == null) {
+            System.out.println(
+                    "Failed to update inventory transaction: " + updatedInventoryTransaction.getTransactionID());
             return null;
         }
         return updatedInventoryTransaction;
     }
 
     @Override
-    // Get an inventory transaction by its ID
     public InventoryTransaction getInventoryTransactionByID(String inventoryTransationID) {
         InventoryTransaction inventoryTransaction = TransactionUtil.executeTransaction(em -> {
             return repository.readInventoryTransaction(inventoryTransationID, em);
         });
-        if(inventoryTransaction == null){
+        if (inventoryTransaction == null) {
             System.out.println("No inventory transaction found with ID: " + inventoryTransationID);
             return null;
         }
@@ -58,7 +59,6 @@ public class InventoryTransactionService
     }
 
     @Override
-    // Delete an inventory transaction by its ID
     public boolean deleteInventoryTransaction(String inventoryTransationID) {
         return TransactionUtil.executeTransaction(em -> {
             return repository.deleteInventoryTransaction(inventoryTransationID, em);
@@ -73,7 +73,5 @@ public class InventoryTransactionService
         return inventoryTransactions;
 
     }
-
-     
 
 }

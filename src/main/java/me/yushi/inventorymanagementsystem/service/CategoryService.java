@@ -20,6 +20,7 @@ public class CategoryService implements ICategoryService {
         this.repository = repository;
     }
 
+    // Business logic for CRUD operations on categories
     @Override
     public Category createCategory(Category newCategory) {
         Category category = TransactionUtil.executeTransaction(em -> {
@@ -33,12 +34,11 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    // Get a category by its ID
     public Category getCategoryByID(String categoryID) {
         Category category = TransactionUtil.executeTransaction(em -> {
             return repository.readCategory(categoryID, em);
         });
-        if(category == null) {
+        if (category == null) {
             System.out.println("No category found with ID: " + categoryID);
             return null;
         }
@@ -46,12 +46,11 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    // Update a category, save it to the repository, and return the updated category
     public Category updateCategory(Category updatedCategory) {
-        Category newCategory= TransactionUtil.executeTransaction(em -> {
+        Category newCategory = TransactionUtil.executeTransaction(em -> {
             return repository.updateCategory((updatedCategory), em);
         });
-        if (newCategory== null) {
+        if (newCategory == null) {
             System.out.println("Failed to update category: " + updatedCategory.getCategoryName());
             return null;
         }
@@ -59,7 +58,6 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    // Delete a category by its ID
     public boolean deleteCategory(String categoryID) {
         return TransactionUtil.executeTransaction(em -> {
             return repository.deleteCategory(categoryID, em);

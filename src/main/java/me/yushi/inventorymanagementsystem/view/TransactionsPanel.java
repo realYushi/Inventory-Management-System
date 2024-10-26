@@ -28,6 +28,7 @@ import net.miginfocom.swing.MigLayout;
 import me.yushi.inventorymanagementsystem.model.IInventoryTransaction.TransactionType;
 
 public class TransactionsPanel extends JPanel {
+    // Constants, messages and variables
     private static final String ERROR_MESSAGE = "Error";
     private static final String DELETE_CONFIRMATION_MESSAGE = "Are you sure you want to delete this transaction?";
     private static final String DELETE_TRANSACTION_TITLE = "Delete Transaction";
@@ -44,17 +45,19 @@ public class TransactionsPanel extends JPanel {
     private InventoryTransactionController transactionController;
     private ProductController productController;
 
-    public TransactionsPanel(InventoryTransactionController transactionController, ProductController productController) {
+    public TransactionsPanel(InventoryTransactionController transactionController,
+            ProductController productController) {
         this.transactionController = transactionController;
         this.productController = productController;
         initialUI();
-         this.addComponentListener(new ComponentAdapter() {
+        // Add a listener to refresh data each time the panel is shown
+        this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
-                refreshData(); // Refresh data each time the panel is shown
+                refreshData();
             }
         });
-        
+
     }
 
     private void initialUI() {
@@ -65,11 +68,12 @@ public class TransactionsPanel extends JPanel {
                 return false;
             }
         };
-
+        // Create a table with the table model
         transactionTable = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(transactionTable);
         this.add(scrollPane, "cell 0 0, grow");
 
+        // Create a button panel and add it to the main panel
         JPanel buttonPanel = createButtonPanel();
         this.add(buttonPanel, "cell 0 1, grow");
 
@@ -84,7 +88,7 @@ public class TransactionsPanel extends JPanel {
         buttonPanel.add(addButton, "cell 0 0, grow");
         buttonPanel.add(updateButton, "cell 1 0, grow");
         buttonPanel.add(deleteButton, "cell 2 0, grow");
-
+        // Add action listeners to the buttons
         addButton.addActionListener(e -> showCreateTransactionDialog());
         deleteButton.addActionListener(e -> showDeleteConfirmationDialog());
         updateButton.addActionListener(e -> showUpdateTransactionDialog());
@@ -94,11 +98,13 @@ public class TransactionsPanel extends JPanel {
 
     private void showDeleteConfirmationDialog() {
         int selectedRow = transactionTable.getSelectedRow();
+        // Check if a row is selected
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, SELECT_TRANSACTION_TO_DELETE, ERROR_MESSAGE, JOptionPane.ERROR_MESSAGE);
             return;
         }
 
+        // Show a confirmation dialog before deleting the transaction
         int result = JOptionPane.showConfirmDialog(this, DELETE_CONFIRMATION_MESSAGE, DELETE_TRANSACTION_TITLE,
                 JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
@@ -112,10 +118,10 @@ public class TransactionsPanel extends JPanel {
         JComboBox<String> productCombo = createProductComboBox();
         JTextField quantityField = new JTextField(10);
         JComboBox<TransactionType> typeCombo = new JComboBox<>(TransactionType.values());
+        // Set the date format and create a date picker
         JXDatePicker datePicker = new JXDatePicker();
         datePicker.setFormats(new SimpleDateFormat("dd-MM-yyyy"));
         JPanel panel = createTransactionDialogPanel(productCombo, quantityField, datePicker, typeCombo);
-
         int result = JOptionPane.showConfirmDialog(this, panel, CREATE_NEW_TRANSACTION_TITLE,
                 JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
@@ -132,11 +138,13 @@ public class TransactionsPanel extends JPanel {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         String transactionID = tableModel.getValueAt(selectedRow, 0).toString();
         String productName = tableModel.getValueAt(selectedRow, 1).toString();
-        String dataString = tableModel.getValueAt(selectedRow, 3).toString();
+        // Get the data from the selected row
+        String dateString = tableModel.getValueAt(selectedRow, 3).toString();
         int quantity = (int) tableModel.getValueAt(selectedRow, 2);
+        // Parse the date string
         Date date;
         try {
-            date = dateFormat.parse(dataString);
+            date = dateFormat.parse(dateString);
         } catch (ParseException e) {
             JOptionPane.showMessageDialog(this, "Error parsing date.", ERROR_MESSAGE, JOptionPane.ERROR_MESSAGE);
             return;
@@ -146,7 +154,9 @@ public class TransactionsPanel extends JPanel {
         JComboBox<String> productCombo = createProductComboBox();
         productCombo.setSelectedItem(productName);
         JTextField quantityField = new JTextField(String.valueOf(quantity), 10);
+
         JXDatePicker datePicker = new JXDatePicker();
+        // Set the date format and set the date
         datePicker.setFormats(dateFormat);
         datePicker.setDate(date);
         JComboBox<TransactionType> typeCombo = new JComboBox<>(TransactionType.values());
@@ -182,12 +192,15 @@ public class TransactionsPanel extends JPanel {
         return productComboBox;
     }
 
-    private void handleCreateTransaction(JComboBox<String> productCombo, JTextField quantityField, JXDatePicker datePicker,
-            JComboBox<TransactionType> typeCombo) {
+    private void handleCreateTransaction(JComboBox<String> productCombo, JTextField quantityField,
+            JXDatePicker datePicker, JComboBox<TransactionType> typeCombo) {
         String productID = findProductIDByName((String) productCombo.getSelectedItem());
         Product product = productController.getProductByID(productID);
+        // Create a new transaction object
         InventoryTransaction newTransaction = new InventoryTransaction("", product,
-                Integer.parseInt(quantityField.getText()), datePicker.getDate(), (TransactionType) typeCombo.getSelectedItem(), product.getPrice());
+                Integer.parseInt(quantityField.getText()), datePicker.getDate(),
+                (TransactionType) typeCombo.getSelectedItem(), product.getPrice());
+        // Call the controller to create the transaction
         transactionController.createInventoryTransaction(newTransaction);
         refreshData();
     }
@@ -197,8 +210,11 @@ public class TransactionsPanel extends JPanel {
         String productID = findProductIDByName((String) productCombo.getSelectedItem());
         Product product = productController.getProductByID(productID);
 
+        // Create an updated transaction object
         InventoryTransaction updatedTransaction = new InventoryTransaction(transactionID, product,
-                Integer.parseInt(quantityField.getText()), datePicker.getDate(), (TransactionType) typeCombo.getSelectedItem(), product.getPrice());
+                Integer.parseInt(quantityField.getText()), datePicker.getDate(),
+                (TransactionType) typeCombo.getSelectedItem(), product.getPrice());
+        // Call the controller to update the transaction
         transactionController.updateInventoryTransaction(updatedTransaction);
         refreshData();
     }
@@ -220,18 +236,14 @@ public class TransactionsPanel extends JPanel {
     private void refreshData() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         transactions = transactionController.getAllInventoryTransations();
-        products = productController.getAllProducts().stream()
-                .collect(Collectors.toMap(Product::getProductID, p -> p));
+        products = productController.getAllProducts().stream().collect(Collectors.toMap(Product::getProductID, p -> p));
 
         tableModel.setRowCount(0);
+        // Add the transactions to the table model
         for (InventoryTransaction transaction : transactions) {
-            tableModel.addRow(new Object[]{
-                    transaction.getTransactionID(),
-                    findProductNameById(transaction.getProductID()),
-                    transaction.getQuantity(),
-                    dateFormat.format(transaction.getDate()),
-                    transaction.getTransactionType()
-            });
+            tableModel.addRow(new Object[] { transaction.getTransactionID(),
+                    findProductNameById(transaction.getProductID()), transaction.getQuantity(),
+                    dateFormat.format(transaction.getDate()), transaction.getTransactionType() });
         }
     }
 }

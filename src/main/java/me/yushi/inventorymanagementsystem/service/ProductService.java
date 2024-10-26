@@ -8,21 +8,25 @@ import java.util.List;
 import me.yushi.inventorymanagementsystem.database.TransactionUtil;
 import me.yushi.inventorymanagementsystem.model.Product;
 import me.yushi.inventorymanagementsystem.repository.ProductRepository;
+
 /**
  *
  * @author yushi
  */
 public class ProductService implements IProductService {
-    ProductRepository repository  ;
+    ProductRepository repository;
+
     public ProductService(ProductRepository repository) {
         this.repository = repository;
     }
+
+    // Business logic for CRUD operations
     @Override
     public Product createProduct(Product newProduct) {
-        Product createdProduct=TransactionUtil.executeTransaction(em -> {
+        Product createdProduct = TransactionUtil.executeTransaction(em -> {
             return repository.createProduct((newProduct), em);
         });
-        if(createdProduct==null){
+        if (createdProduct == null) {
             System.out.println("Failed to create product : " + newProduct.getName());
             return null;
         }
@@ -30,7 +34,6 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    // Update a product, save it to the repository, and return the updated
     public Product updateProduct(Product updatedProduct) {
         Product product = TransactionUtil.executeTransaction(em -> {
             return repository.updateProduct((updatedProduct), em);
@@ -39,12 +42,11 @@ public class ProductService implements IProductService {
             System.out.println("Failed to update product: " + updatedProduct.getName());
             return null;
         }
-        
+
         return updatedProduct;
     }
 
     @Override
-    // Get a product by its ID
     public Product getProductByID(String productID) {
         Product product = TransactionUtil.executeTransaction(em -> {
             return repository.readProduct(productID, em);
@@ -64,7 +66,6 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    // Get all products
     public List<Product> getAllProducts() {
         List<Product> products = TransactionUtil.executeTransaction(em -> {
             return repository.getAllProducts(em);
@@ -74,11 +75,7 @@ public class ProductService implements IProductService {
             return null;
         }
         return products;
-        
-        
+
     }
-
-    
-
 
 }

@@ -64,7 +64,7 @@ public class DashboardPanel extends JPanel {
         List<Product> lowStockProducts = inventorySummary.getLowStrockProducts();
 
         // Create table for low stock products
-        String[] columns = {"Product Name", "Current Stock", "Category"};
+        String[] columns = { "Product Name", "Current Stock", "Category" };
         DefaultTableModel model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -73,25 +73,22 @@ public class DashboardPanel extends JPanel {
         };
 
         for (Product product : lowStockProducts) {
-            model.addRow(new Object[]{
-                product.getName(),
-                product.getQuantity(),
-                product.getCategory().getCategoryName()
-            });
+            model.addRow(
+                    new Object[] { product.getName(), product.getQuantity(), product.getCategory().getCategoryName() });
         }
 
         JTable table = new JTable(model);
         table.setFillsViewportHeight(true);
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(300, 200));
-        
+
         // Add warning label if there are low stock products
         if (!lowStockProducts.isEmpty()) {
             JLabel warningLabel = new JLabel("⚠️ Products requiring restock!");
             warningLabel.setForeground(Color.RED);
             inventoryPanel.add(warningLabel, "wrap");
         }
-        
+
         inventoryPanel.add(scrollPane, "grow");
         return inventoryPanel;
     }
@@ -104,11 +101,11 @@ public class DashboardPanel extends JPanel {
 
         // Create a more visually appealing financial summary
         JPanel statsPanel = new JPanel(new MigLayout("fillx", "[][grow]", "[]10[]10[]10[]"));
-        
+
         addFinancialData(statsPanel, "Total Sales:", CURRENCY_FORMAT.format(financialSummary.getTotalSales()));
         addFinancialData(statsPanel, "Total Cost:", CURRENCY_FORMAT.format(financialSummary.getTotalCost()));
         addFinancialData(statsPanel, "Net Profit:", CURRENCY_FORMAT.format(financialSummary.getNetProfit()));
-        
+
         // Add gross margin with color coding
         double margin = financialSummary.getGrossMarginPercentage();
         JLabel marginLabel = new JLabel(String.format("%.1f%%", margin));
@@ -133,7 +130,7 @@ public class DashboardPanel extends JPanel {
         List<InventoryTransaction> recentTransactions = inventorySummary.getRecentInventoryTransactions();
 
         // Create table for recent transactions
-        String[] columns = {"Date", "Product", "Type", "Quantity", "Amount"};
+        String[] columns = { "Date", "Product", "Type", "Quantity", "Amount" };
         DefaultTableModel model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -142,19 +139,15 @@ public class DashboardPanel extends JPanel {
         };
 
         for (InventoryTransaction transaction : recentTransactions) {
-            model.addRow(new Object[]{
-                DATE_FORMAT.format(transaction.getDate()),
-                transaction.getProduct().getName(),
-                transaction.getTransactionType(),
-                transaction.getQuantity(),
-                CURRENCY_FORMAT.format(transaction.getPrice())
-            });
+            model.addRow(new Object[] { DATE_FORMAT.format(transaction.getDate()), transaction.getProduct().getName(),
+                    transaction.getTransactionType(), transaction.getQuantity(),
+                    CURRENCY_FORMAT.format(transaction.getPrice()) });
         }
 
         JTable table = new JTable(model);
         table.setFillsViewportHeight(true);
         JScrollPane scrollPane = new JScrollPane(table);
-        
+
         transactionsPanel.add(scrollPane, "grow");
         return transactionsPanel;
     }

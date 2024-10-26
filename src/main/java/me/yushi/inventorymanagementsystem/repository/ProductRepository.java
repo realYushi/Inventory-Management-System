@@ -16,7 +16,7 @@ public class ProductRepository implements IProductRepository {
 
     public ProductRepository() {
     }
-
+    //business logic for CRUD operations
     @Override
     public Product createProduct(Product newProduct,EntityManager em) {
         em.persist(newProduct);
