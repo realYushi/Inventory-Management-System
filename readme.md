@@ -32,7 +32,7 @@
     <img src="image/logo.webp" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">Inventory Management System</h3>
+  <h3 align="center">Inventory Management System</h3>
 
   <p align="center">
     An advanced tool designed to simplify the complexities of inventory management.
@@ -55,8 +55,10 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
-        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#key-features">Key Features</a></li>
+        <li><a href="#screenshots">Screenshots</a></li>
         <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
     <li>
@@ -66,8 +68,7 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#project-structure">Project Structure</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -76,178 +77,193 @@
 
 <!-- ABOUT THE PROJECT -->
 
-https://github.com/user-attachments/assets/3d6fc573-3c93-4331-8179-b140dcfbc6c0
-
 ## About The Project
 
-The Inventory Management System is a personal project developed to handle the intricacies of managing inventory across various categories and suppliers. It offers a detailed and intuitive interface for monitoring product details, transactions, and stock levels, ensuring that inventory management is both efficient and straightforward.
+The **Inventory Management System** is a desktop application crafted to streamline inventory management for small to medium-sized businesses. It features a user-friendly interface designed to simplify the tracking and organization of products, categories, suppliers, and inventory transactions, all while providing key insights for effective decision-making.
 
-This system is particularly useful for small to medium-sized business owners looking to digitize their inventory processes and enhance operational efficiency.
+### Key Features
+
+- **Dashboard Overview**
+
+  - Comprehensive financial summary, including real-time sales, costs, and profit insights
+  - Alerts for low stock levels
+  - Quick access to recent transactions for up-to-date monitoring
+
+- **Product Management**
+
+  - Full suite of CRUD (Create, Read, Update, Delete) operations
+  - Seamless product association with categories and suppliers
+  - Real-time stock level monitoring
+  - Easy tracking of units, pricing, and product details
+
+- **Category Management**
+
+  - Efficient product categorization and organization
+  - Management of category-supplier relationships
+  - Reporting and insights based on product categories
+
+- **Supplier Management**
+
+  - Centralized supplier information management
+  - Tracking of supplier-product relationships
+  - Integrated contact management for streamlined communication
+
+- **Inventory Transactions**
+  - Sales tracking with revenue insights
+  - Purchase management with cost monitoring
+  - Spoilage tracking for accurate inventory maintenance
+
+### Screenshots
+
+#### Dashboard View
+
+![Dashboard](image/Dashboard.png)
+Monitor your business metrics at a glance with our intuitive dashboard.
+
+#### Product Management
+
+![Product Management](image/Product.png)
+Efficiently manage your product inventory with detailed tracking.
+
+#### Category Management
+
+![Category Management](image/Category.png)
+Organize products into categories for better inventory control.
+
+#### Supplier Management
+
+![Supplier Management](image/Supplier.png)
+Keep track of your suppliers and their associated products.
+
+#### Transaction Management
+
+![Transaction Management](image/Transaction.png)
+Record and track all inventory movements with ease.
 
 ### Architecture
 
-The project follows a layered architecture with JPA/Hibernate integration:
+![Architecture Overview](doc/architecture.png)
 
-#### Model Layer
-- **Entities**: 
-  - Product: Core product information management
-  - InventoryTransaction: Tracks inventory movements
-- **Interfaces**:
-  - IProduct: Product entity contract
-  - IInventoryTransaction: Transaction entity contract
-  - IFinancialSummary: Financial calculations interface
-  - IInventorySummary: Inventory status interface
+The application follows a layered architecture:
+
+- **View Layer**: Swing-based user interface components providing intuitive interaction
+- **Controller Layer**: Handles user input and coordinates between View and Service layers
+- **Service Layer**: Implements core business logic and transaction management
+- **Repository Layer**: Manages data access and persistence using Hibernate/JPA
+- **Model Layer**: Contains domain entities and business rules
+- **Database Layer**: Apache Derby database for reliable data storage
+
+#### View Layer (UI)
+
+- Swing-based user interface components
+- Responsive panel layouts
+- User input handling
+- Real-time updates
+
+#### Controller Layer
+
+- User input processing
+- View-Service coordination
+- Input validation
+- Error handling
+
+#### Service Layer
+
+- Business logic implementation
+- Transaction management
+- Data validation
+- Cross-cutting concerns
 
 #### Repository Layer
-Handles data persistence using JPA/Hibernate:
-- **IProductRepository**: 
-  - CRUD operations for products
-  - Product listing and search
-- **IInventoryTransactionRepository**:
-  - Transaction recording
-  - Historical data management
 
-#### Database Integration
-- Uses JPA/Hibernate for ORM
-- EntityManagerFactory managed by HibernateUtil
-- Persistence unit: "Inventory-Management-Unit"
+- Data access interfaces
+- Hibernate/JPA implementation
+- Transaction handling
+- Query optimization
 
-Key Features:
-- Complete CRUD operations for inventory management
-- Transaction tracking and history
-- Financial calculations and reporting
-- Stock level monitoring
-- Interface-based design for maintainability
+#### Model Layer
 
-Design Patterns:
-- Repository Pattern for data access
-- Interface Segregation Principle
-- Dependency Injection
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+- Entity classes with JPA annotations
+- Business logic validation
+- Relationship mappings
+- Data integrity rules
 
 ### Built With
 
-- [Java](https://java.com)
-- [Maven](https://maven.apache.org/)
-- [Hibernate](https://hibernate.org/)
-- [JPA](https://jakarta.ee/specifications/persistence/)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- GETTING STARTED -->
+- Java 11
+- Swing (UI Framework)
+- Hibernate/JPA (Persistence)
+- Apache Derby (Database)
+- Maven (Build Tool)
+- JUnit & Mockito (Testing)
 
 ## Getting Started
 
-To get a local copy up and running follow these simple steps.
-
 ### Prerequisites
 
-This project uses Maven to manage dependencies. Ensure Maven is installed:
-
-```sh
-mvn -v
-```
+- Java JDK 11 or higher
+- Maven 3.6 or higher
+- Apache Derby Database
 
 ### Installation
 
-1. Clone the repo
-   ```sh
+1. Clone the repository
+
+   ```bash
    git clone https://github.com/realYushi/Inventory-Management-System.git
    ```
-2. Install Maven dependencies
-   ```sh
-   mvn install
-   ```
-3. Configure your database connection in `persistence.xml`
 
-4. Run the application using Maven
-   ```sh
-   mvn exec:java
+2. Navigate to project directory
+
+   ```bash
+   cd Inventory-Management-System
    ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+3. Build the project
 
-<!-- USAGE EXAMPLES -->
+   ```bash
+   mvn clean install
+   ```
 
-## Usage
+4. Run the application
 
-The Inventory Management System provides a robust backend for inventory management with the following key features:
+   ```bash
+   java -jar target/inventoryManagementSystem-0.1.jar
+   ```
 
-### Product Management
-- Create, read, update, and delete products
-- Track product details including:
-  - Product ID
-  - Name
-  - Quantity
-  - Unit
-  - Price
+## Project Structure
 
-### Inventory Transactions
-- Record and track inventory movements
-- Transaction details include:
-  - Transaction ID
-  - Product ID
-  - Quantity
-  - Date
-  - Price
-
-### Financial Tracking
-- Calculate and monitor:
-  - Total sales
-  - Total costs
-  - Net profit
-  - Price adjustments
-
-### Inventory Analytics
-- Monitor low stock products
-- Track recent transactions
-- Generate inventory summaries
-- Financial performance metrics
-
-The system uses JPA/Hibernate for reliable data persistence and provides a solid foundation for building inventory management solutions.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- ROADMAP -->
-
-## Roadmap
-
-- [ ] Add GUI support
-- [ ] Implement Database support for data persistence
-- [ ] Integrate with external APIs for order management
-
-See the [open issues](https://github.com/realYushi/Inventory-Management-System/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- LICENSE -->
+```plaintext
+src/
+└── main/
+    ├── java/me/yushi/inventorymanagementsystem/
+    │   ├── controller/ # UI Controllers
+    │   ├── model/ # Entity Classes
+    │   ├── repository/ # Data Access Layer
+    │   ├── service/ # Business Logic
+    │   └── view/ # Swing UI Components
+    └── resources/
+        └── META-INF/
+            └── persistence.xml # JPA Configuration
+```
 
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- CONTACT -->
-
 ## Contact
 
 Yushi Cui - realYushi@gmail.com
 
-LinkedIn: [https://www.linkedin.com/in/yushi-cui-6043aa285/](https://www.linkedin.com/in/yushi-cui-6043aa285/)
-
 Project Link: [https://github.com/realYushi/Inventory-Management-System](https://github.com/realYushi/Inventory-Management-System)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- ACKNOWLEDGMENTS -->
 
 ## Acknowledgments
 
-- [Lanterna](https://github.com/mabe02/lanterna)
+- [Hibernate](https://hibernate.org/)
+- [Apache Derby](https://db.apache.org/derby/)
 - [Maven](https://maven.apache.org/)
-- [Gson](https://github.com/google/gson)
+- [JUnit](https://junit.org/)
+- [Mockito](https://site.mockito.org/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

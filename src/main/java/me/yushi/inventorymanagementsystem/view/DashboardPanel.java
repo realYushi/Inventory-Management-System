@@ -64,7 +64,7 @@ public class DashboardPanel extends JPanel {
         List<Product> lowStockProducts = inventorySummary.getLowStrockProducts();
 
         // Create table for low stock products
-        String[] columns = { "Product Name", "Current Stock", "Category" };
+        String[] columns = { "Product", "Stock", "Category" };
         DefaultTableModel model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {

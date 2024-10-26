@@ -1,0 +1,64 @@
+@startuml Architecture
+
+' Styling
+skinparam componentStyle uml2
+skinparam packageStyle rectangle
+skinparam backgroundColor white
+skinparam monochrome true
+
+package "View Layer" {
+    [Swing UI Components]
+}
+
+package "Controller Layer" {
+    [Controllers]
+}
+
+package "Service Layer" {
+    [Business Logic Services]
+}
+
+package "Repository Layer" {
+    [Data Access Layer]
+}
+
+package "Model Layer" {
+    [Domain Models]
+}
+
+package "Database" {
+    [Hibernate/JPA]
+    database "Derby DB"
+}
+
+' Layer Dependencies
+[Swing UI Components] --> [Controllers]
+[Controllers] --> [Business Logic Services]
+[Business Logic Services] --> [Data Access Layer]
+[Data Access Layer] --> [Domain Models]
+[Data Access Layer] --> [Hibernate/JPA]
+[Hibernate/JPA] --> [Derby DB]
+
+' Key Features
+note right of [Swing UI Components]
+  - Dashboard
+  - Product Management
+  - Category Management
+  - Supplier Management
+  - Transaction Management
+end note
+
+note right of [Business Logic Services]
+  - Inventory Management
+  - Financial Calculations
+  - Transaction Processing
+  - Stock Level Monitoring
+end note
+
+note right of [Data Access Layer]
+  - CRUD Operations
+  - Transaction Management
+  - Query Optimization
+end note
+
+@enduml
