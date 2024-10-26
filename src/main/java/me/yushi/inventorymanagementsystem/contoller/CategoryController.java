@@ -73,4 +73,9 @@ public class CategoryController implements ICategoryController {
         return categoryService.getAllCategorys();
     }
 
+    @Override
+    public boolean haveLinkedProduct(String categoryID) {
+        return categoryService.haveLinkedProduct(categoryID);
+    }
+
 }

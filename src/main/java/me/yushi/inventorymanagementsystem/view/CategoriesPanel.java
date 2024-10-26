@@ -85,6 +85,10 @@ public class CategoriesPanel extends JPanel {
         }
 
         String categoryID = tableModel.getValueAt(selectedRow, 0).toString();
+        if (categoryController.haveLinkedProduct(categoryID)) {
+            JOptionPane.showMessageDialog(this, "Cannot delete category as it is linked to existing products.", ERROR_MESSAGE, JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         int result = JOptionPane.showConfirmDialog(this, DELETE_CONFIRMATION_MESSAGE, DELETE_CATEGORY_TITLE, JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             categoryController.deleteCategory(categoryID);

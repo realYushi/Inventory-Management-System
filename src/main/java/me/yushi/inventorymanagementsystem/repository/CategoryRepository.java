@@ -49,5 +49,13 @@ public class CategoryRepository implements ICategoryRepository {
     public List<Category> getAllCategories(EntityManager em) {
         return em.createQuery("SELECT c FROM Category c", Category.class).getResultList();
     }
+    @Override
+    public boolean haveLinkedProduct(String categoryID,EntityManager em){
+        Category category = em.find(Category.class, categoryID);
+        if(category.getProducts().isEmpty()){
+            return false;
+        }
+        return true;
+    }
 
 }

@@ -18,4 +18,5 @@ public interface ICategoryController{
     Category updateCategory(Category updatedCategory);
     boolean deleteCategory(String categoryID);
     List<Category> getAllCategorys();
+    boolean haveLinkedProduct(String categoryID);
 }

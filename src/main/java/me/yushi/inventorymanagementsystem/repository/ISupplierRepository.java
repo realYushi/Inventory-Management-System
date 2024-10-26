@@ -17,5 +17,6 @@ public interface ISupplierRepository {
     Supplier updateSupplier(Supplier updatedSupplier,EntityManager em);
     boolean deleteSupplier(String supplierID,EntityManager em);
     List<Supplier>getAllSuppliers(EntityManager em);
+    boolean haveLinkedProduct(String supplierID,EntityManager em);
     
 }

@@ -18,4 +18,5 @@ public interface ISupplierService {
     Supplier getSupplierByID(String supplierID);
     boolean deleteSupplier(String supplierID);
     List<Supplier> getAllSuppliers();
+    boolean haveLinkedProduct(String supplierID);
 }

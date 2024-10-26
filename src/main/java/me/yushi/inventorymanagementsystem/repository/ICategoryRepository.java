@@ -19,4 +19,5 @@ public interface ICategoryRepository {
     Category updateCategory(Category newCategory,EntityManager em);
     boolean deleteCategory(String categoryID,EntityManager em);
     List<Category> getAllCategories(EntityManager em);
+    boolean haveLinkedProduct(String categoryID,EntityManager em);
 }

@@ -33,7 +33,7 @@ public class TransactionsPanel extends JPanel {
     private static final String SELECT_TRANSACTION_TO_UPDATE = "Please select a Transaction to update.";
     private static final String CREATE_NEW_TRANSACTION_TITLE = "Create New Transaction";
     private static final String UPDATE_TRANSACTION_TITLE = "Update Transaction";
-    private static final String[] COLUMN_NAMES = { "TransactionID", "Product", "Quantity", "Date", "Type", "Price" };
+    private static final String[] COLUMN_NAMES = { "TransactionID", "Product", "Quantity", "Date", "Type" };
 
     private List<InventoryTransaction> transactions;
     private Map<String, Product> products;
@@ -103,15 +103,14 @@ public class TransactionsPanel extends JPanel {
         JComboBox<String> productCombo = createProductComboBox();
         JTextField quantityField = new JTextField(10);
         JComboBox<TransactionType> typeCombo = new JComboBox<>(TransactionType.values());
-        JTextField priceField = new JTextField(10);
         JXDatePicker datePicker = new JXDatePicker();
         datePicker.setFormats(new SimpleDateFormat("dd-MM-yyyy"));
-        JPanel panel = createTransactionDialogPanel(productCombo, quantityField, datePicker, typeCombo, priceField);
+        JPanel panel = createTransactionDialogPanel(productCombo, quantityField, datePicker, typeCombo);
 
         int result = JOptionPane.showConfirmDialog(this, panel, CREATE_NEW_TRANSACTION_TITLE,
                 JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
-            handleCreateTransaction(productCombo, quantityField, datePicker, typeCombo, priceField);
+            handleCreateTransaction(productCombo, quantityField, datePicker, typeCombo);
         }
     }
 
@@ -134,7 +133,6 @@ public class TransactionsPanel extends JPanel {
             return;
         }
         TransactionType type = (TransactionType) tableModel.getValueAt(selectedRow, 4);
-        double price = (double) tableModel.getValueAt(selectedRow, 5);
 
         JComboBox<String> productCombo = createProductComboBox();
         productCombo.setSelectedItem(productName);
@@ -144,19 +142,17 @@ public class TransactionsPanel extends JPanel {
         datePicker.setDate(date);
         JComboBox<TransactionType> typeCombo = new JComboBox<>(TransactionType.values());
         typeCombo.setSelectedItem(type);
-        JTextField priceField = new JTextField(String.valueOf(price), 10);
 
-        JPanel panel = createTransactionDialogPanel(productCombo, quantityField, datePicker, typeCombo, priceField);
+        JPanel panel = createTransactionDialogPanel(productCombo, quantityField, datePicker, typeCombo);
 
         int result = JOptionPane.showConfirmDialog(this, panel, UPDATE_TRANSACTION_TITLE, JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
-            handleUpdateTransaction(selectedRow, productCombo, quantityField, datePicker, typeCombo, priceField,
-                    transactionID);
+            handleUpdateTransaction(selectedRow, productCombo, quantityField, datePicker, typeCombo, transactionID);
         }
     }
 
     private JPanel createTransactionDialogPanel(JComboBox<String> productCombo, JTextField quantityField,
-            JXDatePicker datePicker, JComboBox<TransactionType> typeCombo, JTextField priceField) {
+            JXDatePicker datePicker, JComboBox<TransactionType> typeCombo) {
         JPanel panel = new JPanel(new MigLayout());
         panel.add(new JLabel("Product:"), "wrap");
         panel.add(productCombo, "wrap");
@@ -178,24 +174,22 @@ public class TransactionsPanel extends JPanel {
     }
 
     private void handleCreateTransaction(JComboBox<String> productCombo, JTextField quantityField, JXDatePicker datePicker,
-            JComboBox<TransactionType> typeCombo, JTextField priceField) {
+            JComboBox<TransactionType> typeCombo) {
         String productID = findProductIDByName((String) productCombo.getSelectedItem());
         Product product = productController.getProductByID(productID);
         InventoryTransaction newTransaction = new InventoryTransaction("", product,
-                Integer.parseInt(quantityField.getText()), datePicker.getDate(), (TransactionType) typeCombo.getSelectedItem(),
-                Double.parseDouble(priceField.getText()));
+                Integer.parseInt(quantityField.getText()), datePicker.getDate(), (TransactionType) typeCombo.getSelectedItem(), product.getPrice());
         transactionController.createInventoryTransaction(newTransaction);
         refreshData();
     }
 
     private void handleUpdateTransaction(int selectedRow, JComboBox<String> productCombo, JTextField quantityField,
-            JXDatePicker datePicker, JComboBox<TransactionType> typeCombo, JTextField priceField, String transactionID) {
+            JXDatePicker datePicker, JComboBox<TransactionType> typeCombo, String transactionID) {
         String productID = findProductIDByName((String) productCombo.getSelectedItem());
         Product product = productController.getProductByID(productID);
 
         InventoryTransaction updatedTransaction = new InventoryTransaction(transactionID, product,
-                Integer.parseInt(quantityField.getText()), datePicker.getDate(), (TransactionType) typeCombo.getSelectedItem(),
-                Double.parseDouble(priceField.getText()));
+                Integer.parseInt(quantityField.getText()), datePicker.getDate(), (TransactionType) typeCombo.getSelectedItem(), product.getPrice());
         transactionController.updateInventoryTransaction(updatedTransaction);
         refreshData();
     }
@@ -227,8 +221,7 @@ public class TransactionsPanel extends JPanel {
                     findProductNameById(transaction.getProductID()),
                     transaction.getQuantity(),
                     dateFormat.format(transaction.getDate()),
-                    transaction.getTransactionType(),
-                    transaction.getPrice()
+                    transaction.getTransactionType()
             });
         }
     }

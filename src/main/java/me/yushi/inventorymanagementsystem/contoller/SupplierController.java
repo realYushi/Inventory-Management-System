@@ -65,4 +65,10 @@ public class SupplierController implements ISupplierController {
     public List<Supplier> getAllSuppliers() {
         return supplierService.getAllSuppliers();
     }
+
+    @Override
+    public boolean haveLinkedProduct(String supplierID) {
+        return supplierService.haveLinkedProduct(supplierID);
+    }
+
 }

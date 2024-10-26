@@ -85,6 +85,10 @@ public class SuppliersPanel extends JPanel {
         }
 
         String supplierID = tableModel.getValueAt(selectedRow, 0).toString();
+        if(supplierController.haveLinkedProduct(supplierID)) {
+            JOptionPane.showMessageDialog(this, "Cannot delete supplier with linked products.", ERROR_MESSAGE, JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         int result = JOptionPane.showConfirmDialog(this, DELETE_CONFIRMATION_MESSAGE, DELETE_SUPPLIER_TITLE, JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             supplierController.deleteSupplier(supplierID);

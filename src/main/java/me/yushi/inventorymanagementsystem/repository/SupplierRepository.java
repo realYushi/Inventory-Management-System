@@ -47,5 +47,13 @@ public class SupplierRepository implements ISupplierRepository {
         return em.createQuery("SELECT s FROM Supplier s", Supplier.class).getResultList();
     }
 
+    @Override
+    public boolean haveLinkedProduct(String supplierID, EntityManager em) {
+        if(em.find(Supplier.class, supplierID).getProducts().isEmpty()){
+            return false;
+        }
+        return true;
+    }
+
 
 }

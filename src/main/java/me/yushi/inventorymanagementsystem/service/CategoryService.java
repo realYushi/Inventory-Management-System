@@ -74,4 +74,11 @@ public class CategoryService implements ICategoryService {
         return categories;
 
     }
+
+    @Override
+    public boolean haveLinkedProduct(String categoryID) {
+        return TransactionUtil.executeTransaction(em -> {
+            return repository.haveLinkedProduct(categoryID, em);
+        });
+    }
 }

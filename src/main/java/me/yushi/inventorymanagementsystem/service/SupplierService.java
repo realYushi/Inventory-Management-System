@@ -5,7 +5,6 @@
 package me.yushi.inventorymanagementsystem.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import me.yushi.inventorymanagementsystem.database.TransactionUtil;
 import me.yushi.inventorymanagementsystem.model.Supplier;
 import me.yushi.inventorymanagementsystem.repository.SupplierRepository;
@@ -71,6 +70,13 @@ public class SupplierService implements ISupplierService {
             return repository.getAllSuppliers(em);
         });
         return suppliers;
+    }
+
+    @Override
+    public boolean haveLinkedProduct(String supplierID) {
+        return TransactionUtil.executeTransaction(em -> {
+            return repository.haveLinkedProduct(supplierID, em);
+        });
     }
 
 }
