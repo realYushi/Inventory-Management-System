@@ -76,9 +76,7 @@
 
 <!-- ABOUT THE PROJECT -->
 
-
 https://github.com/user-attachments/assets/3d6fc573-3c93-4331-8179-b140dcfbc6c0
-
 
 ## About The Project
 
@@ -92,31 +90,31 @@ Architecture Overview:
 ![Architecture Overview](doc/architecture_uml.png)
 The project follows a layered architecture with clear separation of concerns:
 
--   **Model**: Represents the data structures (e.g., Product, Category, Supplier, InventoryTransaction)
--   **Repository**: Handles data persistence and retrieval (e.g., ProductRepository, CategoryRepository)
--   **Service**: Contains business logic (e.g., ProductService, CategoryService)
--   **Controller**: Acts as an intermediary between the View and Service layers (e.g., ProductController, CategoryController)
--   **View**: Handles user interface and interaction (e.g., ProductView, CategoryView)
+- **Model**: Represents the data structures (e.g., Product, Category, Supplier, InventoryTransaction)
+- **Repository**: Handles data persistence and retrieval (e.g., ProductRepository, CategoryRepository)
+- **Service**: Contains business logic (e.g., ProductService, CategoryService)
+- **Controller**: Acts as an intermediary between the View and Service layers (e.g., ProductController, CategoryController)
+- **View**: Handles user interface and interaction (e.g., ProductView, CategoryView)
 
 Design Patterns:
 
--   Utilizes the Unit of Work pattern for managing database transactions
--   Implements the Builder pattern for creating DTOs
--   Uses the Repository pattern for data access abstraction
+- Utilizes the Unit of Work pattern for managing database transactions
+- Implements the Builder pattern for creating DTOs
+- Uses the Repository pattern for data access abstraction
 
 Key Features:
 
--   CRUD operations for Products, Categories, Suppliers, and Inventory Transactions
--   Text-based user interface using Lanterna library
--   File-based data persistence using JSON
--   Modular and extensible design
+- CRUD operations for Products, Categories, Suppliers, and Inventory Transactions
+- Text-based user interface using Lanterna library
+- File-based data persistence using JSON
+- Modular and extensible design
 
 Core Components:
 
--   **FileHandler**: Generic JSON file read/write operations
--   **UnitOfWork**: Coordinating work across multiple repositories
--   **APP**: Main application entry point and navigation
--   **DashboardService**: Providing summary data for the dashboard
+- **FileHandler**: Generic JSON file read/write operations
+- **UnitOfWork**: Coordinating work across multiple repositories
+- **APP**: Main application entry point and navigation
+- **DashboardService**: Providing summary data for the dashboard
 
 Data Flow:
 
@@ -131,10 +129,10 @@ Data Flow:
 
 ### Built With
 
--   [Java](https://java.com)
--   [Maven](https://maven.apache.org/)
--   [Lanterna](https://github.com/mabe02/lanterna)
--   [Gson](https://github.com/google/gson)
+- [Java](https://java.com)
+- [Maven](https://maven.apache.org/)
+- [Lanterna](https://github.com/mabe02/lanterna)
+- [Gson](https://github.com/google/gson)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -155,17 +153,17 @@ mvn -v
 ### Installation
 
 1. Clone the repo
-    ```sh
-    git clone https://github.com/realYushi/Inventory-Management-System.git
-    ```
+   ```sh
+   git clone https://github.com/realYushi/Inventory-Management-System.git
+   ```
 2. Install Maven dependencies
-    ```sh
-    mvn install
-    ```
+   ```sh
+   mvn install
+   ```
 3. Run the application
-    ```sh
-    java -jar target/inventoryManagementSystem-0.1.jar
-    ```
+   ```sh
+   java -jar target/inventoryManagementSystem-0.1.jar
+   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -179,34 +177,34 @@ This Inventory Management System offers a comprehensive suite of features design
 
 ![Dashboard](image/Dashboard.png)
 
--   **Financial Overview**: View a summary of total sales, costs, net profit, and gross margin percentage.
--   **Inventory Alerts**: Receive notifications for low stock levels to ensure you never run out of key products.
+- **Financial Overview**: View a summary of total sales, costs, net profit, and gross margin percentage.
+- **Inventory Alerts**: Receive notifications for low stock levels to ensure you never run out of key products.
 
 ### Product Management
 
 ![Product Management](image/Product.png)
 
--   **Manage Products**: Add, update, delete, and view products with details such as ID, name, category, quantity, unit, and price.
+- **Manage Products**: Add, update, delete, and view products with details such as ID, name, category, quantity, unit, and price.
 
 ### Category Management
 
 ![Category Management](image/Category.png)
 
--   **Manage Categories**: Create, update, delete, and view categories. Each category can be associated with a specific supplier, helping to organize inventory better.
+- **Manage Categories**: Create, update, delete, and view categories. Each category can be associated with a specific supplier, helping to organize inventory better.
 
 ### Supplier Management
 
 ![Supplier Management](image/Supplier.png)
 
--   **Manage Suppliers**: Add, update, delete, and view supplier information. This helps in maintaining a good relationship with your suppliers and managing supply chain logistics.
+- **Manage Suppliers**: Add, update, delete, and view supplier information. This helps in maintaining a good relationship with your suppliers and managing supply chain logistics.
 
 ### Inventory Transactions
 
 ![Inventory Transactions](image/Transaction.png)
 
--   **Sales**: Record sales transactions to decrease product quantity and capture revenue.
--   **Purchases**: Log purchasing transactions to increase product quantity and manage costs.
--   **Spoilage**: Keep track of inventory spoilage to adjust stock levels and financial records accordingly.
+- **Sales**: Record sales transactions to decrease product quantity and capture revenue.
+- **Purchases**: Log purchasing transactions to increase product quantity and manage costs.
+- **Spoilage**: Keep track of inventory spoilage to adjust stock levels and financial records accordingly.
 
 The system's user interface is text-based, designed for use in a console or terminal environment, leveraging the Lanterna library for UI rendering.
 
@@ -220,9 +218,9 @@ For a deeper dive into the functionalities and user interaction flow, refer to t
 
 ## Roadmap
 
--   [ ] Add GUI support
--   [ ] Implement Database support for data persistence
--   [ ] Integrate with external APIs for order management
+- [ ] Add GUI support
+- [ ] Implement Database support for data persistence
+- [ ] Integrate with external APIs for order management
 
 See the [open issues](https://github.com/realYushi/Inventory-Management-System/issues) for a full list of proposed features (and known issues).
 
@@ -252,9 +250,9 @@ Project Link: [https://github.com/realYushi/Inventory-Management-System](https:/
 
 ## Acknowledgments
 
--   [Lanterna](https://github.com/mabe02/lanterna)
--   [Maven](https://maven.apache.org/)
--   [Gson](https://github.com/google/gson)
+- [Lanterna](https://github.com/mabe02/lanterna)
+- [Maven](https://maven.apache.org/)
+- [Gson](https://github.com/google/gson)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
