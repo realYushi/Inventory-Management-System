@@ -77,6 +77,10 @@
 
 <!-- ABOUT THE PROJECT -->
 
+
+https://github.com/user-attachments/assets/c8d1d705-c805-4316-9c4d-ebea37b78d1e
+
+
 ## About The Project
 
 The **Inventory Management System** is a desktop application crafted to streamline inventory management for small to medium-sized businesses. It features a user-friendly interface designed to simplify the tracking and organization of products, categories, suppliers, and inventory transactions, all while providing key insights for effective decision-making.
